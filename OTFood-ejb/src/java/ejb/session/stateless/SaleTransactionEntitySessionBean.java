@@ -8,9 +8,11 @@ package ejb.session.stateless;
 import entity.IngredientEntity;
 import entity.MealEntity;
 import entity.OTUserEntity;
+import entity.ReviewEntity;
 import entity.SaleTransactionEntity;
 import entity.SaleTransactionLineEntity;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -20,8 +22,13 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import util.exception.CreateNewSaleTransactionException;
 import util.exception.IngredientDeductException;
+import util.exception.InputDataValidationException;
 import util.exception.NoSaleTransactionFoundException;
 import util.exception.UpdateSaleTransactionException;
 import util.exception.UserNotFoundException;
@@ -39,41 +46,63 @@ public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySe
     @EJB(name = "IngredientEntitySessionBeanLocal")
     private IngredientEntitySessionBeanLocal ingredientEntitySessionBeanLocal;
 
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
     
     @PersistenceContext(unitName = "OTFood-ejbPU")
     private EntityManager em;
     
-    public Long createNewSaleTransaction(Long userId, SaleTransactionEntity saleTransaction) throws CreateNewSaleTransactionException {
-        if (saleTransaction != null) {
-            try {
-                OTUserEntity user = oTUserEntitySessionBeanLocal.retrieveUserById(userId);
-                saleTransaction.setUser(user);
-                user.getSaleTransaction().add(saleTransaction);
-                em.persist(saleTransaction);
-                for (int i = 0; i < saleTransaction.getTotalLineItem(); i++) {
-                    SaleTransactionLineEntity lineItem = saleTransaction.getSaleTransactionLineItemEntities().get(i);
-                    em.persist(lineItem);
-                    for (int j = 0; j < lineItem.getQuantity(); j++) {
-                        MealEntity meal = lineItem.getMeal();
-                        List<IngredientEntity> ingredients = meal.getIngredients();
-                        for (IngredientEntity ingredient : ingredients) {
-                            ingredientEntitySessionBeanLocal.deductStockQuantity(ingredient.getIngredientId(), 1);
+    public SaleTransactionEntitySessionBean() {
+        this.validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
+    }
+    
+    @Override
+    public Long createNewSaleTransaction(Long userId, SaleTransactionEntity saleTransaction) throws CreateNewSaleTransactionException, InputDataValidationException {
+        Set<ConstraintViolation<SaleTransactionEntity>> constraintViolations = validator.validate(saleTransaction);
+        if (constraintViolations.isEmpty()) {
+            if (saleTransaction != null) {
+                try {
+                    OTUserEntity user = oTUserEntitySessionBeanLocal.retrieveUserById(userId);
+                    saleTransaction.setUser(user);
+                    user.getSaleTransaction().add(saleTransaction);
+                    em.persist(saleTransaction);
+                    for (int i = 0; i < saleTransaction.getTotalLineItem(); i++) {
+                        SaleTransactionLineEntity lineItem = saleTransaction.getSaleTransactionLineItemEntities().get(i);
+                        em.persist(lineItem);
+                        for (int j = 0; j < lineItem.getQuantity(); j++) {
+                            MealEntity meal = lineItem.getMeal();
+                            List<IngredientEntity> ingredients = meal.getIngredients();
+                            for (IngredientEntity ingredient : ingredients) {
+                                ingredientEntitySessionBeanLocal.deductStockQuantity(ingredient.getIngredientId(), 1);
+                            }
                         }
                     }
+                    em.flush();
+                    return saleTransaction.getSaleTransactionId();
+                } catch (UserNotFoundException ex) {
+                    throw new CreateNewSaleTransactionException("Error: User not found!");
+                } catch (IngredientDeductException ex) {
+                    throw new CreateNewSaleTransactionException("Error: deduct quantity error!");
                 }
-                em.flush();
-                return saleTransaction.getSaleTransactionId();
-            } catch (UserNotFoundException ex) {
-                throw new CreateNewSaleTransactionException("Error: User not found!");
-            } catch (IngredientDeductException ex) {
-                throw new CreateNewSaleTransactionException("Error: deduct quantity error!");
+            } else {
+                throw new CreateNewSaleTransactionException("Error: saleTransaction provided is null!");
             }
         } else {
-            throw new CreateNewSaleTransactionException("Error: saleTransaction provided is null!");
+            throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
     
-    
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<SaleTransactionEntity>> constraintViolations) {
+        String msg = "Input data validation error!:";
+
+        for (ConstraintViolation constraintViolation : constraintViolations) {
+            msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; " + constraintViolation.getMessage();
+        }
+
+        return msg;
+    }
+    @Override
     public List<SaleTransactionEntity> retrieveAllSaleTransaction() throws NoSaleTransactionFoundException {
         try {
             Query query = em.createQuery("SELECT st FROM SaleTransactionEntity st");
@@ -83,6 +112,7 @@ public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySe
         }
     }
     
+    @Override
     public List<SaleTransactionEntity> retrieveSaleTransactionsByUserId(Long userId) throws NoSaleTransactionFoundException {
         try {
             Query query = em.createQuery("SELECT st FROM OTUserEntity user JOIN user.saleTransaction st WHERE user.UserId = :userId");
@@ -94,6 +124,7 @@ public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySe
         }
     }
     
+    @Override
     public SaleTransactionEntity retrieveSaleTransactionByUserId(Long userId, Long transactionId) throws NoSaleTransactionFoundException {
         try {
             Query query = em.createQuery("SELECT st FROM OTUserEntity user JOIN user.saleTransaction st WHERE user.UserId = :userId AND st.saleTransactionId = :saleTransactionId");
@@ -106,6 +137,7 @@ public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySe
         }   
     }
     
+    @Override
     public void updateSaleTransaction(Long userId, SaleTransactionEntity saleTransaction) throws UpdateSaleTransactionException {
         try {
             OTUserEntity user = oTUserEntitySessionBeanLocal.retrieveUserById(userId);

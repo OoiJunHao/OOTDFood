@@ -55,6 +55,7 @@ public class AddressEntitySessionBean implements AddressEntitySessionBeanLocal {
     }
     
 
+    @Override
     public Long addAddressWithUserId(AddressEntity address, Long userId) throws UnknownPersistenceException, InputDataValidationException, UserNotFoundException, AddressExistException {
         Set<ConstraintViolation<AddressEntity>> constraintViolations = validator.validate(address);
         if (constraintViolations.isEmpty()) {
@@ -93,6 +94,7 @@ public class AddressEntitySessionBean implements AddressEntitySessionBeanLocal {
         return msg;
     }
     
+    @Override
     public List<AddressEntity> retrieveAddressesByUserId(Long userId) throws NoAddressFoundException, UserNotFoundException {
         try{
             OTUserEntity user = oTUserEntitySessionBeanLocal.retrieveUserById(userId);
@@ -105,6 +107,7 @@ public class AddressEntitySessionBean implements AddressEntitySessionBeanLocal {
         }
     }
     
+    @Override
     public AddressEntity retrieveAddressByUserId(long userId, Long addressId) throws UserNotFoundException, NoAddressFoundException {
          try{
             OTUserEntity user = oTUserEntitySessionBeanLocal.retrieveUserById(userId);
@@ -118,6 +121,7 @@ public class AddressEntitySessionBean implements AddressEntitySessionBeanLocal {
         }
     }
     
+    @Override
     public void removeAddressByUserId(Long userId, Long addressId) throws UserNotFoundException, NoAddressFoundException, DeleteAddressException {
         OTUserEntity user = oTUserEntitySessionBeanLocal.retrieveUserById(userId);
         AddressEntity addressToBeRemoved = retrieveAddressByUserId(userId, addressId);
@@ -129,6 +133,7 @@ public class AddressEntitySessionBean implements AddressEntitySessionBeanLocal {
         }
     }
     
+    @Override
     public void updateAddressByUserId(Long userId, AddressEntity newAddress) throws NoAddressFoundException, UserNotFoundException, UpdateAddressException {
         OTUserEntity user = oTUserEntitySessionBeanLocal.retrieveUserById(userId);
         AddressEntity currentAddressEntity = retrieveAddressByUserId(userId, newAddress.getAddressId());

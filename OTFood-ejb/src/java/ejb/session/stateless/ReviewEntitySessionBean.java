@@ -55,6 +55,7 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
         validator = validatorFactory.getValidator();
     }
     
+    @Override
     public Long addReview(ReviewEntity review, Long userId, Long mealId) throws ReviewExistException, UnknownPersistenceException, UserNotFoundException, InputDataValidationException {
         Set<ConstraintViolation<ReviewEntity>> constraintViolations = validator.validate(review);
         if (constraintViolations.isEmpty()) {
@@ -96,6 +97,7 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
         return msg;
     }
     
+    @Override
     public List<ReviewEntity> retrieveReviewsByUserId(Long userId) throws NoReviewFoundException {
         try {
             Query query = em.createQuery("SELECT r FROM OTUserEntity user JOIN user.reviews r WHERE user.UserId = :userId");
@@ -107,6 +109,7 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
         }
     }
     
+    @Override
     public List<ReviewEntity> retrieveReviewsByMealId(Long mealId) throws NoReviewFoundException {
         try {
             Query query = em.createQuery("SELECT r FROM MealEntity meal JOIN meal.reviews r WHERE meal.mealId = :mealId");
@@ -118,6 +121,7 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
         }
     }
     
+    @Override
     public ReviewEntity retrieveReviewByUserId(Long userId, Long reviewId) throws NoReviewFoundException {
         try {
             Query query = em.createQuery("SELECT r FROM OTUserEntity user JOIN user.reviews r WHERE user.UserId = :userId AND r.reviewId = :reviewId");
@@ -130,6 +134,7 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
         }
     }
     
+    @Override
     public ReviewEntity retrieveReviewByMealId(Long mealId, Long reviewId) throws NoReviewFoundException {
         try {
             Query query = em.createQuery("SELECT r FROM MealEntity meal JOIN meal.reviews r WHERE meal.mealId = :mealId AND r.reviewId = :reviewId");
@@ -142,6 +147,7 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
         }
     }
     
+    @Override
     public void deleteReviewByUserId(Long userId, Long reviewId) throws UserNotFoundException, NoReviewFoundException, DeleteReviewException {
         OTUserEntity user = oTUserEntitySessionBeanLocal.retrieveUserById(userId);
         ReviewEntity reviewToBeDeleted = retrieveReviewByUserId(userId, reviewId);
@@ -155,6 +161,7 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
         }
     }
     
+    @Override
     public void editReviewByUserId(Long userId, ReviewEntity review) throws NoReviewFoundException, UserNotFoundException, UpdateReviewException {
         OTUserEntity user = oTUserEntitySessionBeanLocal.retrieveUserById(userId);
         ReviewEntity currentReview = retrieveReviewByUserId(userId, review.getReviewId());

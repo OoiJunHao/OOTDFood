@@ -9,6 +9,7 @@ import entity.SaleTransactionEntity;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.CreateNewSaleTransactionException;
+import util.exception.InputDataValidationException;
 import util.exception.NoSaleTransactionFoundException;
 import util.exception.UpdateSaleTransactionException;
 
@@ -19,7 +20,7 @@ import util.exception.UpdateSaleTransactionException;
 @Local
 public interface SaleTransactionEntitySessionBeanLocal {
 
-    public Long createNewSaleTransaction(Long userId, SaleTransactionEntity saleTransaction) throws CreateNewSaleTransactionException;
+    public Long createNewSaleTransaction(Long userId, SaleTransactionEntity saleTransaction) throws CreateNewSaleTransactionException, InputDataValidationException;
 
     public List<SaleTransactionEntity> retrieveAllSaleTransaction() throws NoSaleTransactionFoundException;
 
