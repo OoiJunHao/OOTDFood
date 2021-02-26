@@ -61,7 +61,8 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
         if (constraintViolations.isEmpty()) {
             try {
                 OTUserEntity user = oTUserEntitySessionBeanLocal.retrieveUserById(userId);
-                MealEntity meal = //add Meal retrieve by Id method here
+                //MealEntity meal = add Meal retrieve by Id method MAKE NECESSARY CHANGES HERE!!
+                MealEntity meal = new MealEntity(); //this is a stub
                 user.getReviews().add(review);
                 meal.getReviews().add(review);
                 review.setUser(user);
