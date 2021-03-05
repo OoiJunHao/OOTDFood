@@ -6,20 +6,25 @@
 package ejb.session.stateless;
 
 import entity.IngredientEntity;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
+import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
-import util.exception.IngredientDeductException;
-import util.exception.IngredientNotFoundException;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import util.exception.IngredientEntityExistsException;
+import util.exception.IngredientEntityNotFoundException;
+import util.exception.InputDataValidationException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
- * @author benny
+ * @author yuntiangu
  */
 @Stateless
 public class IngredientEntitySessionBean implements IngredientEntitySessionBeanLocal {
@@ -27,30 +32,77 @@ public class IngredientEntitySessionBean implements IngredientEntitySessionBeanL
     @PersistenceContext(unitName = "OTFood-ejbPU")
     private EntityManager em;
 
-    public IngredientEntity retrieveIngredientById(Long ingredientId) throws IngredientNotFoundException {
-        try {
-            Query query = em.createQuery("SELECT i FROM IngredientEntity i WHERE i.ingredientId = :ingredientId");
-            query.setParameter("ingredientId", ingredientId);
-            IngredientEntity retrievedIngredient = (IngredientEntity) query.getSingleResult();
-            return retrievedIngredient;
-        } catch (NoResultException | NonUniqueResultException ex) {
-            throw new IngredientNotFoundException("ingredient Id: " + ingredientId + " has no ingredient!");
-        }
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
+
+    public IngredientEntitySessionBean() {
+        validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
     }
-    
-    public void deductStockQuantity(Long ingredientId, Integer amountToDeduct) throws IngredientDeductException {
-        try {
-            IngredientEntity ingredient = retrieveIngredientById(ingredientId);
-            if (amountToDeduct <= ingredient.getStockQuantity()) {
-                Integer amountLeft = ingredient.getStockQuantity() - amountToDeduct;
-                ingredient.setStockQuantity(amountLeft);
-            } else {
-                throw new IngredientDeductException("The amount to deduct is more than the current stock quantity!");
+
+    @Override
+    public Long createIngredientEntityForMeal(IngredientEntity ingre) throws IngredientEntityExistsException, UnknownPersistenceException, InputDataValidationException {
+
+        Set<ConstraintViolation<IngredientEntity>> constraintViolations = validator.validate(ingre);
+        if (constraintViolations.isEmpty()) {
+            try {
+
+                em.persist(ingre);
+                em.flush();
+
+                return ingre.getIngredientId();
+            } catch (PersistenceException ex) {
+                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                        throw new IngredientEntityExistsException();
+                    } else {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    }
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
             }
-        } catch (IngredientNotFoundException ex) {
-            throw new IngredientDeductException("Ingredient provided cannot be found!");
+        } else {
+            throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+        }
+
+    }
+
+    @Override
+    public List<IngredientEntity> retrieveAllIngredients() {
+        Query query = em.createQuery("SELECT i FROM IngredientEntity i");
+        return query.getResultList();
+    }
+
+    @Override 
+    public List<IngredientEntity> retrieveIngredientsWithMatchingName (String inputName) {
+        Query query = em.createQuery("SELECT i FROM IngredientEntity i WHERE i.name LIKE '%:inputName%'");
+        query.setParameter("inputName", inputName);
+        return query.getResultList();
+    }
+
+    @Override
+    public IngredientEntity retrieveIngredientById(Long ingreId) throws IngredientEntityNotFoundException {
+        IngredientEntity ingre = em.find(IngredientEntity.class, ingreId);
+        if (ingre != null) {
+            return ingre;
+        } else {
+            throw new IngredientEntityNotFoundException("Ingredient Entity ID " + ingreId + " does not exist!");
         }
     }
+
+
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<IngredientEntity>> constraintViolations) {
+        String msg = "Input data validation error!:";
+
+        for (ConstraintViolation constraintViolation : constraintViolations) {
+            msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; " + constraintViolation.getMessage();
+        }
+
+        return msg;
+    }
+
+}
 
     
 }
