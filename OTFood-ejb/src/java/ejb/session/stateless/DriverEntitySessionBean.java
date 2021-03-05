@@ -5,7 +5,7 @@
  */
 package ejb.session.stateless;
 
-import entity.IngredientEntity;
+import entity.DriverEntity;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.Stateless;
@@ -17,8 +17,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import util.exception.IngredientEntityExistsException;
-import util.exception.IngredientEntityNotFoundException;
+import util.exception.DriverExistsException;
+import util.exception.DriverNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
 
@@ -27,7 +27,7 @@ import util.exception.UnknownPersistenceException;
  * @author yuntiangu
  */
 @Stateless
-public class IngredientEntitySessionBean implements IngredientEntitySessionBeanLocal {
+public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
 
     @PersistenceContext(unitName = "OTFood-ejbPU")
     private EntityManager em;
@@ -35,26 +35,25 @@ public class IngredientEntitySessionBean implements IngredientEntitySessionBeanL
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
 
-    public IngredientEntitySessionBean() {
+    public DriverEntitySessionBean() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
     }
 
     @Override
-    public Long createIngredientEntityForMeal(IngredientEntity ingre) throws IngredientEntityExistsException, UnknownPersistenceException, InputDataValidationException {
-
-        Set<ConstraintViolation<IngredientEntity>> constraintViolations = validator.validate(ingre);
+    public Long createNewDriver(DriverEntity driver) throws UnknownPersistenceException, InputDataValidationException, DriverExistsException {
+        Set<ConstraintViolation<DriverEntity>> constraintViolations = validator.validate(driver);
         if (constraintViolations.isEmpty()) {
             try {
 
-                em.persist(ingre);
+                em.persist(driver);
                 em.flush();
 
-                return ingre.getIngredientId();
+                return driver.getDriverId();
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                        throw new IngredientEntityExistsException();
+                        throw new DriverExistsException();
                     } else {
                         throw new UnknownPersistenceException(ex.getMessage());
                     }
@@ -65,34 +64,33 @@ public class IngredientEntitySessionBean implements IngredientEntitySessionBeanL
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
-
     }
-
+    
     @Override
-    public List<IngredientEntity> retrieveAllIngredients() {
-        Query query = em.createQuery("SELECT i FROM IngredientEntity i");
+    public List<DriverEntity> retrieveAllDrivers() {
+        Query query = em.createQuery("SELECT d FROM DriverEntity d");
         return query.getResultList();
     }
-
-    @Override 
-    public List<IngredientEntity> retrieveIngredientsWithMatchingName (String inputName) {
-        Query query = em.createQuery("SELECT i FROM IngredientEntity i WHERE i.name LIKE '%:inputName%'");
-        query.setParameter("inputName", inputName);
-        return query.getResultList();
-    }
-
+    
     @Override
-    public IngredientEntity retrieveIngredientById(Long ingreId) throws IngredientEntityNotFoundException {
-        IngredientEntity ingre = em.find(IngredientEntity.class, ingreId);
-        if (ingre != null) {
-            return ingre;
+    public DriverEntity retrieveDriverById(Long driverId) throws DriverNotFoundException {
+        DriverEntity driver = em.find(DriverEntity.class, driverId);
+        if (driver != null) {
+            return driver;
         } else {
-            throw new IngredientEntityNotFoundException("Ingredient Entity ID " + ingreId + " does not exist!");
+            throw new DriverNotFoundException("Driver ID " + driverId + " does not exists!");
         }
     }
+    
+    @Override 
+    public List<DriverEntity> retrieveDriverByName(String driverName) {
+        Query query = em.createQuery("SELECT d FROM DriverEntity d WHERE (d.firstname LIKE '%:driverName%') OR (d.lastName LIKE '%:driverName%')");
+        query.setParameter("driverName", driverName);
+        return query.getResultList();
+    }
+    
 
-
-    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<IngredientEntity>> constraintViolations) {
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<DriverEntity>> constraintViolations) {
         String msg = "Input data validation error!:";
 
         for (ConstraintViolation constraintViolation : constraintViolations) {
@@ -103,4 +101,3 @@ public class IngredientEntitySessionBean implements IngredientEntitySessionBeanL
     }
 
 }
-
