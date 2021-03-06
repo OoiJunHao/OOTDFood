@@ -1,12 +1,32 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
-</html>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./Template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">\
+    
+    <ui:define name="css">
+      <h:outputStylesheet name="indexCss.css" library="css"/>
+   </ui:define>
+    <ui:define name="content">
+        <div id="mainIntroduction">
+            <h:outputText class="slogan" value="No more Overtime Blues"/>
+            <h:outputText class="appname" value="OOTD Food"/>
+            <p:commandButton class="orderbutton" value="Order Now"></p:commandButton>
+        </div>
+        <p:separator />
+        <div id ="benefits">
+            
+        </div>
+        <p:separator/>
+        <div id="bestseller">
+            <h1>TEST BOTTOM</h1>
+        </div>
+        <p:separator/>
+        <div id="reviews">
+            <h1>Test Last</h1>
+        </div>
+    </ui:define>
 
+</ui:composition>

@@ -49,9 +49,9 @@ public class MealEntity implements Serializable {
     @Min(0)
     private Integer calorie;
 
-    @ManyToMany(mappedBy = "meals")
+    @ManyToMany
     private List<OTUserEntity> users;
-    @ManyToMany(mappedBy = "meals")
+    @ManyToMany
     private List<CategoryEntity> categories;
     @OneToMany(mappedBy = "meal", fetch = FetchType.EAGER)
     private List<ReviewEntity> reviews;

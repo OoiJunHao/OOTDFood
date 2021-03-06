@@ -74,7 +74,7 @@ public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySe
                             MealEntity meal = lineItem.getMeal();
                             List<IngredientEntity> ingredients = meal.getIngredients();
                             for (IngredientEntity ingredient : ingredients) {
-                                ingredientEntitySessionBeanLocal.deductStockQuantity(ingredient.getIngredientId(), 1);
+                                //ingredientEntitySessionBeanLocal.deductStockQuantity(ingredient.getIngredientId(), 1);
                             }
                         }
                     }
@@ -82,8 +82,6 @@ public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySe
                     return saleTransaction.getSaleTransactionId();
                 } catch (UserNotFoundException ex) {
                     throw new CreateNewSaleTransactionException("Error: User not found!");
-                } catch (IngredientDeductException ex) {
-                    throw new CreateNewSaleTransactionException("Error: deduct quantity error!");
                 }
             } else {
                 throw new CreateNewSaleTransactionException("Error: saleTransaction provided is null!");

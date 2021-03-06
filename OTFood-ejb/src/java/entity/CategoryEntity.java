@@ -43,7 +43,7 @@ public class CategoryEntity implements Serializable {
     @Column(nullable = true)
     private CategoryEnum type;
 
-    @ManyToMany(mappedBy = "categoris")
+    @ManyToMany(mappedBy = "categories")
     private List<MealEntity> meals;
 
     public CategoryEntity() {
