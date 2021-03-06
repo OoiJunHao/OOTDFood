@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.MealEntity;
 import entity.OTUserEntity;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
@@ -118,6 +119,22 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
             msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; " + constraintViolation.getMessage();
         }
         return msg;
+    }
+    
+    public List<MealEntity> sortMealEntityByRating() {
+        Query query = em.createQuery("SELECT meals FROM MealEntity meals ORDER BY meals.averageRating DESC");
+        return query.getResultList();
+    }
+    
+    public List<MealEntity> retrieveTop5MealEntityByRating() {
+        List<MealEntity> sortedList = sortMealEntityByRating();
+        List<MealEntity> top5Meals = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            if (sortedList.get(i).getAverageRating() >= 4) {
+                top5Meals.add(sortedList.get(i));
+            }
+        }
+        return top5Meals;
     }
 
 }
