@@ -27,5 +27,7 @@ public interface DriverEntitySessionBeanLocal {
     public List<DriverEntity> retrieveDriverByName(String driverName);
 
     public Long createNewDriver(DriverEntity driver) throws UnknownPersistenceException, InputDataValidationException, DriverExistsException;
+
+    public boolean setDriverActiveToFalse(Long driverId) throws DriverNotFoundException;
     
 }

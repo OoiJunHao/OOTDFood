@@ -49,7 +49,7 @@ public class IngredientEntity implements Serializable {
     public IngredientEntity() {
     }
 
-    public IngredientEntity(Long ingredientId, String name, BigDecimal price, Integer calorie, IngredientTypeEnum type) {
+    public IngredientEntity(String name, BigDecimal price, Integer calorie, IngredientTypeEnum type) {
         this.ingredientId = ingredientId;
         this.name = name;
         this.price = price;
