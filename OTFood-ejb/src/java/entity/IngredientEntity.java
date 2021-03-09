@@ -50,7 +50,6 @@ public class IngredientEntity implements Serializable {
     }
 
     public IngredientEntity(String name, BigDecimal price, Integer calorie, IngredientTypeEnum type) {
-        this.ingredientId = ingredientId;
         this.name = name;
         this.price = price;
         this.calorie = calorie;
