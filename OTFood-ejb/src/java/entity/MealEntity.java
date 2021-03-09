@@ -53,6 +53,10 @@ public class MealEntity implements Serializable {
     @Max(5)
     @NotNull
     private Integer averageRating;
+    @Column(nullable = false, length = 24)
+    @Size(min = 0)
+    @NotNull
+    private String name;
 
     @ManyToMany
     private List<OTUserEntity> users;
@@ -70,13 +74,14 @@ public class MealEntity implements Serializable {
         ingredients = new ArrayList<>();
     }
 
-    public MealEntity(BigDecimal price, String description, boolean isStarred, Integer calorie) {
+    public MealEntity(String name, BigDecimal price, String description, boolean isStarred, Integer calorie) {
         this();
         this.price = price;
         this.description = description;
         this.isStarred = isStarred;
         this.calorie = calorie;
         this.averageRating = 5;
+        this.name = name;
     }
 
     public List<IngredientEntity> getIngredients() {
@@ -158,6 +163,16 @@ public class MealEntity implements Serializable {
     public void setAverageRating(Integer averageRating) {
         this.averageRating = averageRating;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    
 
     @Override
     public int hashCode() {

@@ -5,6 +5,7 @@
  */
 package ejb.session.stateless;
 
+import entity.BentoEntity;
 import entity.MealEntity;
 import entity.OTUserEntity;
 import java.util.ArrayList;
@@ -75,6 +76,12 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
+    
+    public Long createNewMeal(MealEntity meal) {
+        em.persist(meal);
+        em.flush();
+        return meal.getMealId();
+    }
 
     @Override
     public MealEntity retrieveMealById(Long mealId) throws MealNotFoundException{
@@ -130,11 +137,11 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
         List<MealEntity> sortedList = sortMealEntityByRating();
         List<MealEntity> top5Meals = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            if (sortedList.get(i).getAverageRating() >= 4) {
-                top5Meals.add(sortedList.get(i));
-            }
+            top5Meals.add(sortedList.get(i));
         }
         return top5Meals;
     }
+    
+   
 
 }

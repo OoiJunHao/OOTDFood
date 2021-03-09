@@ -27,8 +27,8 @@ public class CYOBEntity extends MealEntity implements Serializable {
         super();
     }
 
-    public CYOBEntity(BigDecimal price, String description, boolean isStarred, Integer calorie) {
-        super(price, description, isStarred, calorie);
+    public CYOBEntity(String name, BigDecimal price, String description, boolean isStarred, Integer calorie) {
+        super(name, price, description, isStarred, calorie);
     }
 
     @Override

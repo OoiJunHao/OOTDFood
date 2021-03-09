@@ -9,6 +9,7 @@ import entity.AddressEntity;
 import entity.MealEntity;
 import entity.OTUserEntity;
 import entity.ReviewEntity;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -27,6 +28,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.exception.DeleteReviewException;
 import util.exception.InputDataValidationException;
+import util.exception.MealNotFoundException;
 import util.exception.NoReviewFoundException;
 import util.exception.ReviewExistException;
 import util.exception.UnknownPersistenceException;
@@ -41,8 +43,13 @@ import util.exception.UserNotFoundException;
 @Stateless
 public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
 
+    @EJB(name = "MealEntitySessionBeanLocal")
+    private MealEntitySessionBeanLocal mealEntitySessionBeanLocal;
+
     @EJB(name = "OTUserEntitySessionBeanLocal")
     private OTUserEntitySessionBeanLocal oTUserEntitySessionBeanLocal;
+    
+    
 
     @PersistenceContext(unitName = "OTFood-ejbPU")
     private EntityManager em;
@@ -61,8 +68,7 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
         if (constraintViolations.isEmpty()) {
             try {
                 OTUserEntity user = oTUserEntitySessionBeanLocal.retrieveUserById(userId);
-                //MealEntity meal = add Meal retrieve by Id method MAKE NECESSARY CHANGES HERE!!
-                MealEntity meal = new MealEntity(); //this is a stub
+                MealEntity meal = mealEntitySessionBeanLocal.retrieveMealById(mealId);
                 user.getReviews().add(review);
                 meal.getReviews().add(review);
                 review.setUser(user);
@@ -81,6 +87,8 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
             } catch (UserNotFoundException ex) {
+                throw new UserNotFoundException(ex.getMessage());
+            } catch (MealNotFoundException ex) {
                 throw new UserNotFoundException(ex.getMessage());
             }
         } else {
@@ -174,5 +182,22 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
         }
     }
     
+    public List<ReviewEntity> top2ReviewsForTop5Meals() {
+        List<ReviewEntity> listOfReviews = new ArrayList<>();
+        List<MealEntity> top5Meals = mealEntitySessionBeanLocal.retrieveTop5MealEntityByRating();
+        for (MealEntity meal: top5Meals) {
+            List<ReviewEntity> top2 = retrieveTop2ReviewsOfMeal(meal.getMealId());
+            listOfReviews.addAll(top2);
+        }
+        return listOfReviews;
+        
+    }
+    
+    private List<ReviewEntity> retrieveTop2ReviewsOfMeal(long mealId) {
+        Query query = em.createQuery("SELECT review FROM MealEntity meal JOIN meal.reviews review WHERE meal.mealId = :mealId ORDER BY review.rating DESC");
+        query.setParameter("mealId", mealId);
+        query.setMaxResults(2);
+        return query.getResultList();
+    }
     
 }
