@@ -107,13 +107,13 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
 
     @Override
     public List<MealEntity> retrieveAllMeals() {
-        Query query = em.createQuery("SELECT m FROM MealEntity");
+        Query query = em.createQuery("SELECT m FROM MealEntity m");
         return query.getResultList();
     }
 
     @Override
     public List<MealEntity> retrieveMealsByCategory(String catName) {
-        Query query = em.createQuery("SELECT m FROM MealEntity m WHERE :inCatName IN (m.categories)");
+        Query query = em.createQuery("SELECT m FROM MealEntity m, IN (m.categories) c WHERE :inCatName = c");
         query.setParameter("inCatName", catName);
 
         return query.getResultList();
@@ -133,6 +133,7 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
         return query.getResultList();
     }
 
+    @Override
     public List<MealEntity> retrieveTop5MealEntityByRating() {
         List<MealEntity> sortedList = sortMealEntityByRating();
         List<MealEntity> top5Meals = new ArrayList<>();
