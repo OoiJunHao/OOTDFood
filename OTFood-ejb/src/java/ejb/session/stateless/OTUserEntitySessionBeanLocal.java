@@ -36,4 +36,6 @@ public interface OTUserEntitySessionBeanLocal {
 
     public void updatePassword(OTUserEntity user, String oldPassword, String newPassword) throws InvalidLoginCredentialException, UserNotFoundException;
 
+    public OTUserEntity login(String email, String password) throws InvalidLoginCredentialException, UserNotFoundException;
+
 }
