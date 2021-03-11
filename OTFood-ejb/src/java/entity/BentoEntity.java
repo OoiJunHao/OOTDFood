@@ -24,27 +24,15 @@ public class BentoEntity extends MealEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(nullable = false, length = 24)
-    @Size(min = 0)
-    @NotNull
-    private String name;
-
+    
     public BentoEntity() {
         super();
     }
 
     public BentoEntity(String name, BigDecimal price, String description, boolean isStarred, Integer calorie) {
-        super(price, description, isStarred, calorie);
-        this.name = name;
+        super(name, price, description, isStarred, calorie);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @Override
     public int hashCode() {

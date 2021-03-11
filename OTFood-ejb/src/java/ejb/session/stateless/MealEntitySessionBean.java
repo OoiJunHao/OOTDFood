@@ -5,8 +5,10 @@
  */
 package ejb.session.stateless;
 
+import entity.BentoEntity;
 import entity.MealEntity;
 import entity.OTUserEntity;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
@@ -74,6 +76,12 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
+    
+    public Long createNewMeal(MealEntity meal) {
+        em.persist(meal);
+        em.flush();
+        return meal.getMealId();
+    }
 
     @Override
     public MealEntity retrieveMealById(Long mealId) throws MealNotFoundException{
@@ -119,5 +127,21 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
         }
         return msg;
     }
+    
+    public List<MealEntity> sortMealEntityByRating() {
+        Query query = em.createQuery("SELECT meals FROM MealEntity meals ORDER BY meals.averageRating DESC");
+        return query.getResultList();
+    }
+    
+    public List<MealEntity> retrieveTop5MealEntityByRating() {
+        List<MealEntity> sortedList = sortMealEntityByRating();
+        List<MealEntity> top5Meals = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            top5Meals.add(sortedList.get(i));
+        }
+        return top5Meals;
+    }
+    
+   
 
 }

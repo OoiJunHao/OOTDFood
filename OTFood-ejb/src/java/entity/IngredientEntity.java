@@ -45,6 +45,9 @@ public class IngredientEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private IngredientTypeEnum type;
+    @NotNull
+    @Min(0)
+    private Integer stockQuantity;
 
     public IngredientEntity() {
     }
@@ -56,7 +59,24 @@ public class IngredientEntity implements Serializable {
         this.calorie = calorie;
         this.type = type;
     }
+    
+    public IngredientEntity(Long ingredientId, String name, BigDecimal price, Integer calorie, IngredientTypeEnum type, Integer stockQuantity) {
+        this.ingredientId = ingredientId;
+        this.name = name;
+        this.price = price;
+        this.calorie = calorie;
+        this.type = type;
+        this.stockQuantity = stockQuantity;
+    }
 
+    public Integer getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public void setStockQuantity(Integer stockQuantity) {
+        this.stockQuantity = stockQuantity;
+    }
+    
     public String getName() {
         return name;
     }

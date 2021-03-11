@@ -20,6 +20,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -48,11 +49,21 @@ public class MealEntity implements Serializable {
     @NotNull
     @Min(0)
     private Integer calorie;
+    @Min(0)
+    @Max(5)
+    @NotNull
+    private Integer averageRating;
+    @Column(nullable = false, length = 24)
+    @Size(min = 0)
+    @NotNull
+    private String name;
 
+
+    @ManyToMany
     private List<OTUserEntity> users;
-    @ManyToMany(mappedBy = "meals")
+    @ManyToMany
     private List<CategoryEntity> categories;
-    @OneToMany(mappedBy = "meal", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "meal")
     private List<ReviewEntity> reviews;
     @ManyToMany
     private List<IngredientEntity> ingredients;
@@ -64,12 +75,14 @@ public class MealEntity implements Serializable {
         ingredients = new ArrayList<>();
     }
 
-    public MealEntity(BigDecimal price, String description, boolean isStarred, Integer calorie) {
+    public MealEntity(String name, BigDecimal price, String description, boolean isStarred, Integer calorie) {
         this();
         this.price = price;
         this.description = description;
         this.isStarred = isStarred;
         this.calorie = calorie;
+        this.averageRating = 5;
+        this.name = name;
     }
 
     public List<IngredientEntity> getIngredients() {
@@ -144,6 +157,24 @@ public class MealEntity implements Serializable {
         this.mealId = mealId;
     }
 
+    public Integer getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(Integer averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -167,6 +198,14 @@ public class MealEntity implements Serializable {
     @Override
     public String toString() {
         return "entity.MealEntity[ id=" + mealId + " ]";
+    }
+    
+    public Integer calculateAverageRating() {
+        Integer totalRatings = 0;
+        for (int i = 0; i < this.reviews.size(); i++) {
+            totalRatings += this.reviews.get(i).getRating();
+        }
+        return (int)(totalRatings/this.reviews.size());
     }
 
 }

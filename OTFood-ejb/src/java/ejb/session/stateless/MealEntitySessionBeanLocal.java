@@ -30,5 +30,9 @@ public interface MealEntitySessionBeanLocal {
     public Long createNewMealForUser(Long userId, MealEntity meal) throws UnknownPersistenceException, InputDataValidationException, UserNotFoundException, MealExistsException;
 
     public List<MealEntity> retrieveMealsByCategory(String catName);
+
+    public Long createNewMeal(MealEntity meal);
+
+    public List<MealEntity> retrieveTop5MealEntityByRating();
     
 }

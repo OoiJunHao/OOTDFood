@@ -73,14 +73,14 @@ public class IngredientEntitySessionBean implements IngredientEntitySessionBeanL
         Query query = em.createQuery("SELECT i FROM IngredientEntity i");
         return query.getResultList();
     }
-    
+
     @Override 
     public List<IngredientEntity> retrieveIngredientsWithMatchingName (String inputName) {
         Query query = em.createQuery("SELECT i FROM IngredientEntity i WHERE i.name LIKE '%:inputName%'");
         query.setParameter("inputName", inputName);
         return query.getResultList();
     }
-    
+
     @Override
     public IngredientEntity retrieveIngredientById(Long ingreId) throws IngredientEntityNotFoundException {
         IngredientEntity ingre = em.find(IngredientEntity.class, ingreId);
@@ -90,7 +90,7 @@ public class IngredientEntitySessionBean implements IngredientEntitySessionBeanL
             throw new IngredientEntityNotFoundException("Ingredient Entity ID " + ingreId + " does not exist!");
         }
     }
-    
+
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<IngredientEntity>> constraintViolations) {
         String msg = "Input data validation error!:";
@@ -103,3 +103,4 @@ public class IngredientEntitySessionBean implements IngredientEntitySessionBeanL
     }
 
 }
+

@@ -13,10 +13,6 @@ import util.exception.IngredientEntityNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
 
-/**
- *
- * @author yuntiangu
- */
 @Local
 public interface IngredientEntitySessionBeanLocal {
 
@@ -27,5 +23,5 @@ public interface IngredientEntitySessionBeanLocal {
     public IngredientEntity retrieveIngredientById(Long ingreId) throws IngredientEntityNotFoundException;
 
     public Long createIngredientEntityForMeal(IngredientEntity ingre) throws IngredientEntityExistsException, UnknownPersistenceException, InputDataValidationException;
-    
+
 }
