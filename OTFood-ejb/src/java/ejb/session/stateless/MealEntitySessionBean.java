@@ -76,7 +76,8 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-    
+
+    @Override
     public Long createNewMeal(MealEntity meal) {
         em.persist(meal);
         em.flush();
@@ -84,7 +85,7 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
     }
 
     @Override
-    public MealEntity retrieveMealById(Long mealId) throws MealNotFoundException{
+    public MealEntity retrieveMealById(Long mealId) throws MealNotFoundException {
         MealEntity meal = em.find(MealEntity.class, mealId);
         if (meal != null) {
             return meal;
@@ -92,7 +93,7 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
             throw new MealNotFoundException("Meal Entity Id " + mealId + " does not exist!");
         }
     }
-    
+
     @Override
     public List<MealEntity> retrieveAllMealsOrderedByUser(Long userId) throws UserNotFoundException {
         try {
@@ -103,22 +104,21 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
             throw new UserNotFoundException("User Id " + userId + " does not exist!");
         }
     }
-    
+
     @Override
     public List<MealEntity> retrieveAllMeals() {
         Query query = em.createQuery("SELECT m FROM MealEntity");
         return query.getResultList();
     }
-    
+
     @Override
     public List<MealEntity> retrieveMealsByCategory(String catName) {
         Query query = em.createQuery("SELECT m FROM MealEntity m WHERE :inCatName IN (m.categories)");
         query.setParameter("inCatName", catName);
-        
+
         return query.getResultList();
     }
-    
-    
+
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<MealEntity>> constraintViolations) {
         String msg = "Input data validation error!:";
 
@@ -127,12 +127,12 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
         }
         return msg;
     }
-    
+
     public List<MealEntity> sortMealEntityByRating() {
         Query query = em.createQuery("SELECT meals FROM MealEntity meals ORDER BY meals.averageRating DESC");
         return query.getResultList();
     }
-    
+
     public List<MealEntity> retrieveTop5MealEntityByRating() {
         List<MealEntity> sortedList = sortMealEntityByRating();
         List<MealEntity> top5Meals = new ArrayList<>();
@@ -141,7 +141,5 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
         }
         return top5Meals;
     }
-    
-   
 
 }
