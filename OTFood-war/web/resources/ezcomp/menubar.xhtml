@@ -7,7 +7,7 @@
       xmlns:cc="http://xmlns.jcp.org/jsf/composite">
 
 
-    <h:outputStylesheet library="css" name="header.css"/>
+    <h:outputStylesheet library="css" name="default.css"/>
     <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
 
 
@@ -20,6 +20,8 @@
         <p:growl>
             <p:autoUpdate/>
         </p:growl>
+        <!--        <div id ="menubar" class="ui-g-12" style="width: 100%; margin: 0%">-->
+
 
         <h:panelGroup rendered="#{sessionScope.isLogin == false}">
             <h:form>
@@ -201,5 +203,6 @@
                 </h:form>
             </h:panelGroup>
         </h:form>
+        <!--        </div>-->
     </cc:implementation>
 </html>

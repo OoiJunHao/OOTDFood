@@ -159,6 +159,39 @@
 
                 </p:panelGrid>
             </p:dialog>
+
+            <!-- shopping cart functionality needs to be developed-->
+            <h:panelGroup rendered="#{sessionScope.isLogin == true}">
+                <h:form id="logoutForm">
+                    <p:menuButton  value="Profile" style="height: auto; width: auto; float: right">
+                        <p:menuitem value="Profile" outcome="/userPages/profile.xhtml" icon="fa fa-user"/>
+                        <p:menuitem value="View Transaction History" outcome="/userPages/transactionHistory.xhtml" icon="fa fa-money"/>
+                        <!--                        <hr/>-->
+                        <p:menuitem >
+
+                        </p:menuitem>
+
+                    </p:menuButton>
+                    <p:commandButton icon="fa fa-sign-out" value="Logout" actionListener="#{loginManagedBean.logout}" style="float: right;" type="button"/>
+                    <p:commandButton icon="fa fa-shopping-cart" onclick="PF('dialogCart').show()" style="float: right;" />
+                    <br/>
+                    <br/>
+
+                    <p:menubar>
+                        <p:menuitem value="Home" outcome="/index.xhtml" style="margin: 35px 20px 50px 20px; font-weight: 900" />
+                        <p:menuitem value="About" outcome="/userPages/about.xhtml" style="margin: 35px 40px 50px 40px; font-weight: 900"/>
+                        <p:menuitem outcome="/index.xhtml">
+                            <p:graphicImage library="images" name="ootdLogo.png" alt="ootdLogo" height="10%" width="10%" style=" display: block; margin-left: auto; margin-right: auto;"/>
+                        </p:menuitem>
+
+                        <p:submenu label="Meal" style="margin: 35px 40px 50px 20px; font-weight: 900">
+                            <p:menuitem value="Bento" outcome="/userPages/bento.xhtml"/>
+                            <p:menuitem value="Create Your Own Bento" outcome="/userPages/cyob.xhtml"/>
+                        </p:submenu>
+                        <p:menuitem value="FAQ" outcome="/userPages/faq.xhtml" style="margin: 35px 20px 50px 20px; font-weight: 900"/>
+                    </p:menubar>
+                </h:form>
+            </h:panelGroup>
         </h:form>
     </h:body>
 </ui:composition>
