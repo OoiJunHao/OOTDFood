@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite">
+
+
+    <h:outputStylesheet library="css" name="header.css"/>
+    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <p:growl>
+            <p:autoUpdate/>
+        </p:growl>
+
+        <h:panelGroup rendered="#{sessionScope.isLogin == false}">
+            <h:form>
+                <p:commandButton value="Login" type="button" onclick="PF('dialogLogin').show()" style="float: right;" icon="fa fa-sign-in"/> &nbsp;
+                <p:commandButton value="Register" type="button" onclick="PF('dialogRegister').show()" style="float: right;" icon="fa fa-user-plus"/>
+
+                <br/>
+                <br/>
+
+                <!--outcome links may need to change in the future when developed-->
+
+                <p:menubar>
+                    <p:menuitem value="Home" outcome="/index.xhtml" style="margin: 35px 20px 50px 60px; font-weight: 900" />
+                    <p:menuitem value="About" outcome="/userPages/about.xhtml" style="margin: 35px 30px 50px 35px; font-weight: 900"/>
+                    <p:menuitem outcome="/index.xhtml" style="width: 20%; align-content: center; margin-left: 40%">
+                        <p:graphicImage library="images" name="ootdLogo.png" alt="ootdLogo" height="70%" width="70%" style=" display: block; margin-left: auto; margin-right: auto;"/>
+                    </p:menuitem>
+
+                    <p:submenu label="Meal" style="margin: 35px 40px 50px 20px; font-weight: bolder">
+                        <p:menuitem value="Bento" outcome="/userPages/bento.xhtml"/>
+                        <p:menuitem value="Create Your Own Bento" outcome="/userPages/cyob.xhtml"/>
+                    </p:submenu>
+                    <p:menuitem value="FAQ" outcome="/userPages/faq.xhtml" style="margin: 35px 40px 50px 20px; font-weight: 900"/>
+                </p:menubar>
+            </h:form>
+        </h:panelGroup>
+
+
+
+        <h:form id ="loginForm">
+            <p:dialog id="dialogLogin" widgetVar="dialogLogin" header="Login" closable="true" height="120" draggable="false" resizable="false">
+                <p:outputLabel for="email" value="Email"/>&nbsp;
+                <p:inputText id="email" value="#{loginManagedBean.email}" size="16" required="true" requiredMessage="Email is required">
+                </p:inputText>
+                <br/>
+                <br/>
+                <p:outputLabel for="password" value="Password"/>&nbsp;
+                <p:password id="password" value="#{loginManagedBean.password}" size="16" required="true" requiredMessage="Password is required">
+                    <f:validateLength minimum="4"/>
+                </p:password>
+                <br/>
+                <br/>
+                <p:commandButton type="reset" value="Clear" icon="pi pi-undo" />&nbsp;
+                <p:commandButton type="submit" value="Submit" process="@form" actionListener="#{loginManagedBean.login}" icon="pi pi-sign-in" />
+
+                <p:growl>
+                    <p:autoUpdate />
+                </p:growl>
+            </p:dialog>
+        </h:form>
+
+        <h:form id ="formCreateNewCustomer">
+
+            <p:dialog id="dialogRegister" widgetVar="dialogRegister" header="Register As New User" closable ="true">
+                <p:messages id="messagesCreateNewCustomer" redisplay="false" />
+
+                <p:panelGrid>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="firstName" value="First Name: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="firstName" value="#{userManagementManagedBean.newUser.firstname}" required="true" requiredMessage="First Name is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="firstName" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="lastName" value="Last Name: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="lastName" value="#{userManagementManagedBean.newUser.lastName}" required="true" requiredMessage="Last Name is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="lastName" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="email" value="Email: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="email" value="#{userManagementManagedBean.newUser.email}" required="true" requiredMessage="Email is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="email" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="contactNum" value="Contact Number: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="contactNum" value="#{userManagementManagedBean.newUser.contactNum}" required="true" requiredMessage="Unit Price is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="contactNum" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="dob" value="Date of Birth: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:datePicker id="dob" value="#{userManagementManagedBean.newUser.dob}" mindate="#{dateManagedBean.minDate}" monthNavigator="true" yearNavigator="true" required="true" requiredMessage="Date of Birth is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="dob" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="password" value="Password: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:password id="password" value="#{userManagementManagedBean.newUser.password}" required="true" requiredMessage="Password is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="password" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="password2" value="Retype Password: " style="font-weight: bold;"/>
+                        </p:column>
+                        <p:column>
+                            <p:password id="password2" value="#{userManagementManagedBean.checkingPassword}" required="true" requiredMessage="Password is required"/>
+                        </p:column>
+                        <p:column>
+                            <p:message for="password2"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:commandButton type="reset" value="Clear" icon="fa fa-undo"/>&nbsp;
+                            <p:commandButton  value="Create New Account" actionListener="#{userManagementManagedBean.createNewUser}"  icon="fa fa-sign-in"/>
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+            </p:dialog>
+
+            <!-- shopping cart functionality needs to be developed-->
+            <h:panelGroup rendered="#{sessionScope.isLogin == true}">
+                <h:form>
+                    <p:menuButton  value="Profile" style="height: auto; width: auto; float: right">
+                        <p:menuitem value="Profile" outcome="/userPages/profile.xhtml" icon="fa fa-user"/>
+                        <p:menuitem value="View Transaction History" outcome="/userPages/transactionHistory.xhtml" icon="fa fa-money"/>
+                        <!--                        <hr/>-->
+                        <p:menuitem icon="fa fa-sign-out" value="Logout" actionListener="#{loginManagedBean.logout}"/>
+                    </p:menuButton>
+                    <p:commandButton icon="fa fa-shopping-cart" onclick="PF('dialogCart').show()" style="float: right;" />
+                    <br/>
+                    <br/>
+
+                    <p:menubar>
+                        <p:menuitem value="Home" outcome="/index.xhtml" style="margin: 35px 20px 50px 60px; font-weight: 900" />
+                        <p:menuitem value="About" outcome="/userPages/about.xhtml" style="margin: 35px 30px 50px 35px; font-weight: 900"/>
+                        <p:menuitem outcome="/index.xhtml" style="width: 20%; align-content: center; margin-left: 40%">
+                            <p:graphicImage library="images" name="ootdLogo.png" alt="ootdLogo" height="70%" width="70%" style=" display: block; margin-left: auto; margin-right: auto;"/>
+                        </p:menuitem>
+
+                        <p:submenu label="Meal" style="margin: 35px 40px 50px 20px; font-weight: bolder">
+                            <p:menuitem value="Bento" outcome="/userPages/bento.xhtml"/>
+                            <p:menuitem value="Create Your Own Bento" outcome="/userPages/cyob.xhtml"/>
+                        </p:submenu>
+                        <p:menuitem value="FAQ" outcome="/userPages/faq.xhtml" style="margin: 35px 40px 50px 20px; font-weight: 900"/>
+                    </p:menubar>
+                </h:form>
+            </h:panelGroup>
+        </h:form>
+    </cc:implementation>
+</html>

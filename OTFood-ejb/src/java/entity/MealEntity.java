@@ -49,7 +49,6 @@ public class MealEntity implements Serializable {
     @Min(0)
     private Integer calorie;
 
-    @ManyToMany(mappedBy = "meals")
     private List<OTUserEntity> users;
     @ManyToMany(mappedBy = "meals")
     private List<CategoryEntity> categories;
