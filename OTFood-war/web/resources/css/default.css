@@ -29,7 +29,12 @@ a:link:hover, a:visited:hover  {
 }
 
 #menubar {
+    color: pink;
+    display: inline-block;
+    background-color: red;
     height: 100%;
+    width: 100%;
+    margin: 0 0 0 0;
 }
 
 #content {
