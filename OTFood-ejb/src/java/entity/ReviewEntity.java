@@ -64,6 +64,14 @@ public class ReviewEntity implements Serializable {
         this.reviewDate = reviewDate;
     }
 
+    public MealEntity getMeal() {
+        return meal;
+    }
+
+    public void setMeal(MealEntity meal) {
+        this.meal = meal;
+    }
+    
     public Integer getRating() {
         return rating;
     }

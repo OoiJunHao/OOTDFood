@@ -86,6 +86,7 @@ public class OTUserEntity implements Serializable {
     }
 
     public OTUserEntity(String email, String password, Long contactNum, String firstname, String lastName, Date dob, String profilePic) {
+        this();
         this.email = email;
         this.password = password;
         this.contactNum = contactNum;

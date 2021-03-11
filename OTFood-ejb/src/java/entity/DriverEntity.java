@@ -67,6 +67,9 @@ public class DriverEntity implements Serializable {
     @DecimalMin("0.00")
     @Digits(integer = 9, fraction = 2)
     private BigDecimal dailyEarnings;
+    @NotNull
+    @Column
+    private boolean active;
 
     @OneToMany(mappedBy = "driver", fetch = FetchType.EAGER)
     private List<SaleTransactionEntity> saleTransaction;
@@ -85,7 +88,7 @@ public class DriverEntity implements Serializable {
         this.username = username;
         this.password = password;
         this.profilePicture = profilePicture;
-
+        this.active = true;
         setPassword(password);
     }
 
@@ -205,5 +208,20 @@ public class DriverEntity implements Serializable {
     public String toString() {
         return "entity.DriverEntity[ id=" + driverId + " ]";
     }
+
+    /**
+     * @return the active
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * @param active the active to set
+     */
+    public void setActive(boolean active) {
+        this.setActive(active);
+    }
+
 
 }

@@ -1,4 +1,55 @@
 <?xml version='1.0' encoding='UTF-8' ?>
+<<<<<<< HEAD
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./Template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">\
+    
+    
+    <ui:define name="content">
+        <div id="mainIntroduction">
+            <h:outputText class="slogan" value="No more Overtime Blues"/>
+            <h:outputText class="appname" value="OOTD Food"/>
+            <p:commandButton class="orderbutton" value="Order Now"></p:commandButton>
+        </div>
+        <p:separator />
+        <div id ="benefits">
+        </div>
+        <p:separator/>
+        <h:form id="contentFlow">
+            <p:contentFlow var="meal" value="#{indexManagedBean.top5Meals}">
+                <p:graphicImage url="resources/images/mealImages/${meal.name}.jpg" styleClass="content"/>
+                <div class="caption">#{meal.name}</div>
+            </p:contentFlow>
+        </h:form>
+        <p:separator/>
+        <h:outputText value="#{indexManagedBean.top2ReviewsForTop5Meals.size()}"/>
+        <div id="reviews">
+            <p:carousel value="#{indexManagedBean.top2ReviewsForTop5Meals}" var="product" responsive="true">
+                
+                <div class="product">
+                    <div class="product-grid-item p-p-5">
+                        <div class="product-grid-item-top">
+                            <div>
+                                <h:outputText value="#{product.meal.name}" style="font-size: 30px"/>
+                            </div>
+                        </div>
+                        <div class="product-grid-item-content">
+                            <p:graphicImage url="resources/images/mealImages/#{product.meal.name}.jpg" style="width: 100%; height: 50%"/>
+                            <div class="product-name" style="font-size: 60px">#{product.user.firstname}</div>
+                            <div class="product-description" style="font-size: 30px">#{product.description}</div> 
+                            <p:rating readonly="true" value="${product.rating}" style="font-size: 14rem"/>
+                        
+                            
+                        </div>
+                    </div>
+                </div>
+            </p:carousel>
+        </div>
+    </ui:define>
+=======
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -21,4 +72,6 @@
 
 
 </ui:composition>
+>>>>>>> fcfcd91726383da2216dd2686262c542594b30c6
 
+</ui:composition>
