@@ -58,6 +58,7 @@ public class MealEntity implements Serializable {
     @NotNull
     private String name;
 
+
     @ManyToMany
     private List<OTUserEntity> users;
     @ManyToMany

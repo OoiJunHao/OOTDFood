@@ -54,6 +54,21 @@ public class OTUserEntitySessionBean implements OTUserEntitySessionBeanLocal {
     }
 
     @Override
+    public OTUserEntity login(String email, String password) throws InvalidLoginCredentialException, UserNotFoundException {
+        try {
+            OTUserEntity user = retrieveUserByEmail(email);
+            String passHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + user.getSalt()));
+            if (user.getPassword().equals(passHash)) {
+                return user;
+            } else {
+                throw new InvalidLoginCredentialException("User with such email does not exist or invalid password input!");
+            }
+        } catch (UserNotFoundException ex) {
+            throw new UserNotFoundException(ex.getMessage());
+        }
+    }
+
+    @Override
     public Long createNewUser(OTUserEntity user) throws UserExistException, UnknownPersistenceException, InputDataValidationException {
         Set<ConstraintViolation<OTUserEntity>> constraintViolations = validator.validate(user);
         if (constraintViolations.isEmpty()) {

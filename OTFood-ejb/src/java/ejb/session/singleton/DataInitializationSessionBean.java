@@ -48,16 +48,10 @@ public class DataInitializationSessionBean {
 
     @EJB(name = "MealEntitySessionBeanLocal")
     private MealEntitySessionBeanLocal mealEntitySessionBeanLocal;
-    
-    
-    
-    
 
     @PersistenceContext(unitName = "OTFood-ejbPU")
     private EntityManager em;
-    
-    
-    
+
     @PostConstruct
     public void postConstruct() {
         if (em.find(MealEntity.class, 1l) == null) {
@@ -68,7 +62,7 @@ public class DataInitializationSessionBean {
     public void persist(Object object) {
         em.persist(object);
     }
-    
+
     private void dataInitialise() {
         try {
             OTUserEntity user = new OTUserEntity("bennyphoe1998@gmail.com", "test", 90909090l, "test", "test", new Date(), "test");
@@ -84,7 +78,7 @@ public class DataInitializationSessionBean {
             bentoSets.add(bento3);
             bentoSets.add(bento4);
             bentoSets.add(bento5);
-            for (MealEntity mealEntity: bentoSets) {
+            for (MealEntity mealEntity : bentoSets) {
                 mealEntitySessionBeanLocal.createNewMeal(mealEntity);
             }
             ReviewEntity review1 = new ReviewEntity(5, "This is amazing!", new Date());
@@ -119,5 +113,5 @@ public class DataInitializationSessionBean {
             Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }

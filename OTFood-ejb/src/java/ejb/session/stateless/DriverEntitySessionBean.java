@@ -89,6 +89,18 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
         return query.getResultList();
     }
     
+    @Override
+    public boolean setDriverActiveToFalse(Long driverId) throws DriverNotFoundException {
+        DriverEntity driverToFire = em.find(DriverEntity.class, driverId);
+        if (driverToFire != null) {
+            driverToFire.setActive(false);
+            em.flush();
+            return driverToFire.isActive();
+        }
+        throw new DriverNotFoundException("Driver ID: " + driverId + " does not exist!");
+    
+    }
+    
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<DriverEntity>> constraintViolations) {
         String msg = "Input data validation error!:";
