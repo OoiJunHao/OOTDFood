@@ -30,7 +30,7 @@ public class SecurityFilter implements Filter {
 
     FilterConfig filterConfig;
 
-    private static final String CONTEXT_ROOT = "/OOTDFood";
+    private static final String CONTEXT_ROOT = "/OTFood-war";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -69,7 +69,7 @@ public class SecurityFilter implements Filter {
     }
 
     private boolean excludeLoginCheck(String requestServletPath) {
-        if (requestServletPath.equals("/index.xhtml") || requestServletPath.equals("/userPages/about.xhtml") || requestServletPath.equals("/userPages/bento.xhtml") || requestServletPath.equals("/userPages/cyob.xhtml") || requestServletPath.equals("/userPages/faq.xhtml") || requestServletPath.equals("/accessRightError.xhtml") || requestServletPath.startsWith("/javax.faces.resource")) {
+        if (requestServletPath.equals("/index.xhtml") || requestServletPath.equals("/userPages/about.xhtml") || requestServletPath.equals("/userPages/bento.xhtml") || requestServletPath.equals("/userPages/cyob.xhtml") || requestServletPath.equals("/userPages/faq.xhtml") || requestServletPath.equals("/accessRightError.xhtml") || requestServletPath.startsWith("/resource")) {
             return true;
         } else {
             return false;

@@ -32,9 +32,10 @@ a:link:hover, a:visited:hover  {
     color: pink;
     display: inline-block;
     background-color: red;
-    height: 100%;
+    height: 35%;
     width: 100%;
-    margin: 0 0 0 0;
+    margin:0%;
+    /*    overflow: visible !important;*/
 }
 
 #content {
