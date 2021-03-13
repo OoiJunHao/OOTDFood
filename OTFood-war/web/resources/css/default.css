@@ -3,7 +3,7 @@ body {
     font-size: 12px;
     font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
     color: #000000;
-    margin: 10px;
+    margin: 0px;
 }
 
 h1 {
@@ -29,9 +29,8 @@ a:link:hover, a:visited:hover  {
 }
 
 #menubar {
-    color: pink;
     display: inline-block;
-    background-color: red;
+    /*    background-color: red;*/
     height: 35%;
     width: 100%;
     margin:0%;
@@ -40,6 +39,8 @@ a:link:hover, a:visited:hover  {
 
 #content {
     height: 100%;
+    width: 100%;
+    margin: 0%;
 }
 
 #page {

@@ -5,21 +5,21 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
-    
+
     <ui:define name="css">
-      <h:outputStylesheet name="indexCss.css" library="css"/>
-      <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
-   </ui:define>
-    
+        <h:outputStylesheet name="indexCss.css" library="css"/>
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+    </ui:define>
+
     <ui:define name="content">
-        <h:panelGroup rendered="#{sessionScope.isLogin == false}">
-            <div id="mainIntroduction">
+        <h:panelGroup>
+            <div id="mainIntroduction" class="ui-g-12">
                 <h:outputText class="slogan" value="No more Overtime Blues"/>
                 <h:outputText class="appname" value="OOTD Food"/>
                 <p:commandButton class="orderbutton" value="Order Now"></p:commandButton>
             </div>
             <p:separator />
-            <div id ="benefits">
+            <div id ="benefits" class="ui-g-12">
             </div>
             <p:separator/>
             <h:form id="contentFlow">
@@ -29,7 +29,7 @@
                 </p:contentFlow>
             </h:form>
             <p:separator/>
-            <div id="reviews">
+            <div id="reviews" class="ui-g-12">
                 <p:carousel value="#{indexManagedBean.top2ReviewsForTop5Meals}" var="product" responsive="true">
                     <div class="product">
                         <div class="product-grid-item p-p-5">
@@ -49,6 +49,12 @@
                 </p:carousel>
             </div>
         </h:panelGroup>
+
+        <div id ="footer" class="ui-g-12">
+            <ui:insert name="footer">
+                <ui:include src="/footer.xhtml"/>
+            </ui:insert>
+        </div>
     </ui:define>
 </ui:composition>
 
