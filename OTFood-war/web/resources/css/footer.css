@@ -9,6 +9,8 @@ and open the template in the editor.
 */
 
 .footer {
-    background-color: black;
+    /*    background-color: black;*/
     height: 30%;
+    font-family: Camphor,Open Sans,Segoe UI,sans-serif;
+    font-weight: 500;
 }

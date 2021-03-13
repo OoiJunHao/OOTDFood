@@ -8,9 +8,39 @@
                 xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
 
 
+    <ui:define name="css">
+        <h:outputStylesheet library="css" name="about.css"/>
+    </ui:define>
+
+
     <ui:define name="content">
-        hi
-        about22222
+        <h:panelGroup>
+            <div id="Intro" class="ui-g-12">
+                <div id='intro-content'>
+                    <h1 class="intro-header">
+                        Our mission is to provide
+                    </h1>
+                    <span>&nbsp;</span>
+                    <h1 class="intro-header">
+                        affordable and healthy food.
+                    </h1>
+
+                    <p class="intro-text">
+                        OOTDFood offers a
+                        timely and nutritious solution that caters to our hard workers dwelling in tasks over time. We provide a wide range of choices ranging to western to asian
+                        style food and the choice of carbohydrates, protein, fibre are all up to each customer. All of
+                        these will be delivered to your office, up till and past midnight.
+
+                    </p>
+                </div>
+            </div>
+        </h:panelGroup>
+
+        <div id ="footer" class="ui-g-12">
+            <ui:insert name="footer">
+                <ui:include src="/footer.xhtml"/>
+            </ui:insert>
+        </div>
     </ui:define>
 
 </ui:composition>

@@ -1,0 +1,56 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/*
+    Created on : 13 Mar, 2021, 6:13:33 PM
+    Author     : Mitsuki
+*/
+
+div {
+    display: block;
+}
+
+#Intro {
+    background-image: url(../resources/images/background/blueFood.jpg);
+    height: 100vh; width:100%;
+    background-size: 100% 100%;
+    background-repeat:  no-repeat;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+}
+
+#intro-content {
+    padding: 30px;
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto;
+
+}
+
+.intro-header {
+    font-family: Camphor,Open Sans,Segoe UI,sans-serif;
+    font-weight: 400;
+    font-size: 53px;
+    line-height: 68px;
+    letter-spacing: -.01em;
+    color: white;
+}
+
+.intro-header br {
+    display: none;
+}
+
+.intro-header span {
+    display: inline-block;
+}
+
+.intro-text {
+    font-family: Camphor,Open Sans,Segoe UI,sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 36px;
+    color: #ffcc00;
+}

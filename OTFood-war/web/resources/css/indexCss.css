@@ -17,12 +17,17 @@
 
 .slogan {
     text-align: center;
-    color: white;
+    color: #ffcc00;
     position: absolute;
     top: 520px;
     left: 530px;
     font-size: 40px;
-    font-family: Trebuchet MS, sans-serif
+    font-family: Camphor,Open Sans,Segoe UI,sans-serif;
+}
+
+.appname {
+    font-family: Camphor,Open Sans,Segoe UI,sans-serif;
+    color:  #ff9900;
 }
 
 .orderbutton {
