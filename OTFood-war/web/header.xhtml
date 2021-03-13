@@ -5,12 +5,18 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
+    <!--<<<<<<< HEAD
+        <h:head>
+            <h:outputStylesheet library="css" name="header.css"/>
+            <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
 
-    <h:head>
-        <h:outputStylesheet library="css" name="header.css"/>
+        </h:head>-->
+
+    <ui:define name="css">
+        <h:outputStylesheet library="css" name="/header.css"/>
         <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+    </ui:define>
 
-    </h:head>
 
     <h:body>
         <h:panelGroup rendered="#{sessionScope.isLogin == false}">
@@ -72,7 +78,7 @@
                             <p:outputLabel for="firstName" value="First Name: " style="font-weight: bold;" />
                         </p:column>
                         <p:column>
-                            <p:inputText id="firstName" value="#{userManagementManagedBean.newUser.firstname}" required="true" requiredMessage="First Name is required" />
+                            <p:inputText id="firstName" value="#{loginManagedBean.userManagementManagedBean.newUser.firstname}" required="true" requiredMessage="First Name is required" />
                         </p:column>
                         <p:column>
                             <p:message for="firstName" />
@@ -84,7 +90,7 @@
                             <p:outputLabel for="lastName" value="Last Name: " style="font-weight: bold;" />
                         </p:column>
                         <p:column>
-                            <p:inputText id="lastName" value="#{userManagementManagedBean.newUser.lastName}" required="true" requiredMessage="Last Name is required" />
+                            <p:inputText id="lastName" value="#{loginManagedBean.userManagementManagedBean.newUser.lastName}" required="true" requiredMessage="Last Name is required" />
                         </p:column>
                         <p:column>
                             <p:message for="lastName" />
@@ -96,7 +102,7 @@
                             <p:outputLabel for="email" value="Email: " style="font-weight: bold;" />
                         </p:column>
                         <p:column>
-                            <p:inputText id="email" value="#{userManagementManagedBean.newUser.email}" required="true" requiredMessage="Email is required" />
+                            <p:inputText id="email" value="#{loginManagedBean.userManagementManagedBean.newUser.email}" required="true" requiredMessage="Email is required" />
                         </p:column>
                         <p:column>
                             <p:message for="email" />
@@ -108,7 +114,7 @@
                             <p:outputLabel for="contactNum" value="Contact Number: " style="font-weight: bold;" />
                         </p:column>
                         <p:column>
-                            <p:inputText id="contactNum" value="#{userManagementManagedBean.newUser.contactNum}" required="true" requiredMessage="Unit Price is required" />
+                            <p:inputText id="contactNum" value="#{loginManagedBean.userManagementManagedBean.newUser.contactNum}" required="true" requiredMessage="Unit Price is required" />
                         </p:column>
                         <p:column>
                             <p:message for="contactNum" />
@@ -120,7 +126,7 @@
                             <p:outputLabel for="dob" value="Date of Birth: " style="font-weight: bold;" />
                         </p:column>
                         <p:column>
-                            <p:datePicker id="dob" value="#{userManagementManagedBean.newUser.dob}" monthNavigator="true" yearNavigator="true" required="true" requiredMessage="Date of Birth is required" />
+                            <p:datePicker id="dob" value="#{loginManagedBean.userManagementManagedBean.newUser.dob}" monthNavigator="true" yearNavigator="true" required="true" requiredMessage="Date of Birth is required" />
                         </p:column>
                         <p:column>
                             <p:message for="dob" />
@@ -132,7 +138,11 @@
                             <p:outputLabel for="password" value="Password: " style="font-weight: bold;" />
                         </p:column>
                         <p:column>
+                            <<<<<<< HEAD
                             <p:password id="password" value="#{userManagementManagedBean.newUser.password}" required="true" requiredMessage="Password is required" />
+                            =======
+                            <p:inputText id="password" value="#{loginManagedBean.userManagementManagedBean.newUser.password}" required="true" requiredMessage="Password is required" />
+                            >>>>>>> 36cdbf3bd369181700c7661829a50ba5c17f0f10
                         </p:column>
                         <p:column>
                             <p:message for="password" />
@@ -144,7 +154,7 @@
                             <p:outputLabel for="password2" value="Retype Password: "/>
                         </p:column>
                         <p:column>
-                            <p:password id="password2" value="#{userManagementManagedBean.checkingPassword}" required="true" requiredMessage="Password is required"/>
+                            <p:password id="password2" value="#{loginManagedBean.userManagementManagedBean.checkingPassword}" required="true" requiredMessage="Password is required"/>
                         </p:column>
                         <p:column>
                             <p:message for="password2"/>
@@ -154,7 +164,7 @@
                     <p:row>
                         <p:column colspan="3">
                             <p:commandButton type="reset" value="Clear" icon="fa fa-undo"/>&nbsp;
-                            <p:commandButton  value="Create New Account" actionListener="#{userManagementManagedBean.createNewUser}"  icon="fa fa-sign-in"/>
+                            <p:commandButton  value="Create New Account" actionListener="#{loginManagedBean.userManagementManagedBean.createNewUser}"  icon="fa fa-sign-in"/>
                         </p:column>
                     </p:row>
 

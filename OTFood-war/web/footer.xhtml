@@ -3,27 +3,26 @@
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                template="/template/defaultTemplate.xhtml"
                 xmlns:p="http://primefaces.org/ui">
 
+    <ui:define name="css">
+        <!-- add in style sheet here -->
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+    </ui:define>
+
     <h:body>
-        footer
-        <!--        <footer class="footer">
-                    footer
-                    <div>
-
-                        <p:panelGrid columns="4" layout="grid" styleClass="showcase-text-align-center">
-                            <h5 style="font-weight: bold">Contact Us</h5>
-                            <h:outputText value="Email : OOTDFood@gmail.com"/>
-                            <h:outputText value="Contact Number : +65 9123 8765"/>
-                            <p:commandLink value="FAQ" actionListener="#{footerManagedBean.redirectToFAQ}"/>
-
-                            <h5 style="font-weight: bold">Payment</h5>
-                            <p:graphicImage library="images" name="payment.png" alt="payment"/>
-                        </p:panelGrid>
-                    </div>
-
-                </footer>-->
+        <footer class="footer">
+            <div>
+                <p:panelGrid columns="4" layout="grid" styleClass="showcase-text-align-center">
+                    <h5 style="font-weight: bold">Contact Us</h5>
+                    <h:outputText value="Email : OOTDFood@gmail.com"/>
+                    <h:outputText value="Contact Number : +65 9123 8765"/>
+                    <p:commandLink value="FAQ" actionListener="#{footerManagedBean.redirectToFAQ}"/>
+                    <h5 style="font-weight: bold">Payment</h5>
+                    <p:graphicImage library="images" name="payment.png" alt="payment"/>
+                </p:panelGrid>
+            </div>
+        </footer>
     </h:body>
 
 
