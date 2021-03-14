@@ -5,10 +5,12 @@
  */
 package ejb.session.singleton;
 
+import ejb.session.stateless.FaqSessionBeanLocal;
 import ejb.session.stateless.MealEntitySessionBeanLocal;
 import ejb.session.stateless.OTUserEntitySessionBeanLocal;
 import ejb.session.stateless.ReviewEntitySessionBeanLocal;
 import entity.BentoEntity;
+import entity.FaqEntity;
 import entity.MealEntity;
 import entity.OTUserEntity;
 import entity.ReviewEntity;
@@ -25,6 +27,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import util.exception.FaqExistException;
 import util.exception.InputDataValidationException;
 import util.exception.ReviewExistException;
 import util.exception.UnknownPersistenceException;
@@ -39,6 +42,9 @@ import util.exception.UserNotFoundException;
 @Singleton
 @LocalBean
 public class DataInitializationSessionBean {
+
+    @EJB
+    private FaqSessionBeanLocal faqSessionBean;
 
     @EJB(name = "ReviewEntitySessionBeanLocal")
     private ReviewEntitySessionBeanLocal reviewEntitySessionBeanLocal;
@@ -101,15 +107,34 @@ public class DataInitializationSessionBean {
             reviewEntitySessionBeanLocal.addReview(review8, customerId, 4l);
             reviewEntitySessionBeanLocal.addReview(review9, customerId, 5l);
             reviewEntitySessionBeanLocal.addReview(review10, customerId, 5l);
-        } catch (UserExistException ex) {
-            Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnknownPersistenceException ex) {
-            Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InputDataValidationException ex) {
-            Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ReviewExistException ex) {
-            Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UserNotFoundException ex) {
+
+            //Legit Faq DataInit
+            FaqEntity faq1 = new FaqEntity("How can I track my order?", "You can track your order by viewing your sales transaction status. When being delivered a status marked 'DELIVERING' will appear.", "Orders");
+            FaqEntity faq4 = new FaqEntity("I made a mistake. Can I change my order?", "We strive to process orders as quickly as possible. But we will try to accommodate any order change. The quickest way to get a hold of us is by emailing us at ootdFood@gmail.com.", "Orders");
+            FaqEntity faq5 = new FaqEntity("Can i make custom orders", "Yes, of course! You can do so under our CYOB page under meals.", "Orders");
+            FaqEntity faq6 = new FaqEntity("What payment methods do you accept?", "We accept Visa and Mastercard for online orders.", "Orders");
+
+            FaqEntity faq2 = new FaqEntity("How long would it take to receieve my order?", "We have fixed delivery timings, lunch : 12-2pm, dinner: 6-8pm, supper : 12am-2am", "Delivery");
+            FaqEntity faq3 = new FaqEntity("How much is delivery fee?", "We have a flat rate of $2 for regions within 5km from us and $5 for the rest", "Delivery");
+            FaqEntity faq7 = new FaqEntity("How do i know my order is on the way?", "If the 'Ordered' status changes to 'Delivering', you can look forward to having your scrumptious bentos within 30mins.", "Delivery");
+
+            FaqEntity faq11 = new FaqEntity("Where do we get our ingredients from?", "We source them from trustable suppliers providing only the best of the crops.", "Product");
+            FaqEntity faq8 = new FaqEntity("Will my Bento look exactly like the photo?", "Our chefs guarantees individual attention to detail and quality assurance in every bowl of bento to leave the kitchen.", "Product");
+            FaqEntity faq9 = new FaqEntity("Are there different sizes to the bento?", "Sorry but at the moment, we only offer a fixed protion size.", "Product");
+            FaqEntity faq10 = new FaqEntity("Can I visit your shop?", "Currently we are a home grown business, hence we do not have an outlet store. We do appreciate your continuous support to allow us to achieve the dream of opening our own store", "Product");
+            faqSessionBean.createNewFaq(faq1);
+            faqSessionBean.createNewFaq(faq2);
+            faqSessionBean.createNewFaq(faq3);
+            faqSessionBean.createNewFaq(faq4);
+            faqSessionBean.createNewFaq(faq5);
+            faqSessionBean.createNewFaq(faq6);
+            faqSessionBean.createNewFaq(faq7);
+            faqSessionBean.createNewFaq(faq8);
+            faqSessionBean.createNewFaq(faq9);
+            faqSessionBean.createNewFaq(faq10);
+            faqSessionBean.createNewFaq(faq11);
+
+        } catch (UserExistException | UnknownPersistenceException | InputDataValidationException | ReviewExistException | UserNotFoundException | FaqExistException ex) {
             Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
