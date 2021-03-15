@@ -3,24 +3,39 @@
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                template="/template/defaultTemplate.xhtml"
                 xmlns:p="http://primefaces.org/ui">
 
+    <ui:define name="css">
+        <h:outputStylesheet library="css" name="footer.css"/>
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+    </ui:define>
+
+
     <h:body>
-        <footer class="footer">
-            <div>
+        <footer>
+            <div class="footer">
+                <p:panelGrid class="footer" columns="4" layout="grid" styleClass="showcase-text-align-center" columnClasses="ui-g-12 ui-md-6 ui-lg-3, ui-g-12 ui-md-6 ui-lg-3, ui-g-12 ui-md-6 ui-lg-3, ui-g-12 ui-md-6 ui-lg-3">
+                    <h:outputText style="font-weight: bolder;" value="Contact Us"/>
+                    <h:outputText style="font-weight: bolder;" value="Payment"/>
+                    <h:outputText style="font-weight: bolder;" value="Follow Us"/>
+                    <h:outputText style="font-weight: bolder;" value="Join Us"/>
 
-                <p:panelGrid columns="4" layout="grid" styleClass="showcase-text-align-center">
-                    <h5 style="font-weight: bold">Contact Us</h5>
-                    <h:outputText value="Email : OOTDFood@gmail.com"/>
-                    <h:outputText value="Contact Number : +65 9123 8765"/>
-                    <p:commandLink value="FAQ" actionListener="#{footerManagedBean.redirectToFAQ}"/>
+                    <h:outputText value="Email : ootdFood@gmail.com"/>
+                    <h:outputText value=""/>
+                    <h:outputText value=""/>
+                    <h:outputText value="Careers"/>
 
-                    <h5 style="font-weight: bold">Payment</h5>
-                    <p:graphicImage library="images" name="payment.png" alt="payment"/>
+                    <h:outputText value="Contact Number: +65 9123 8765"/>
+                    <h:outputText value=""/>
+                    <h:outputText value=""/>
+                    <h:outputText value=""/>
+
+                    <p:commandLink style="color: white; font-weight: lighter" actionListener="#{footerManagedBean.redirectToFAQ}" value="FAQ"/>
+                    <p:graphicImage style="width: 50%; height: 10%;" library="images" name="payment2.png" alt="payment"/>
+                    <p:graphicImage style="width: 50%; height: 30%;" library="images" name="socialMedia.png" alt="media"/>
+                    <h:outputText value=""/>
                 </p:panelGrid>
             </div>
-
         </footer>
     </h:body>
 

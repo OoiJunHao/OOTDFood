@@ -1,42 +1,54 @@
 body {
-    background-color: #ffffff;
+    background-color: #242f4b;
     font-size: 12px;
-    font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+    font-family: Andale Mono, monospace, Camphor,Open Sans,Segoe UI,sans-serif;
     color: #000000;
-    margin: 10px;
+    margin: 0px;
 }
 
 h1 {
     font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
-    border-bottom: 1px solid #AFAFAF;
+    /*    border-bottom: 1px solid #AFAFAF;*/
     font-size:  16px;
     font-weight: bold;
     margin: 0px;
     padding: 0px;
-    color: #D20005;
+    color: black;
 }
 
 a:link, a:visited {
-    color: #045491;
+    color: #ff9900;
     font-weight : bold;
     text-decoration: none;
 }
 
 a:link:hover, a:visited:hover  {
-    color: #045491;
+    color: white;
     font-weight : bold;
     text-decoration : underline;
 }
 
 #menubar {
-    height: 100%;
+    display: inline-block;
+    /*    background-color: red;*/
+    height: 35%;
+    width: 100%;
+    margin:0%;
+    /*    overflow: visible !important;*/
+    font-family: Andale Mono, monospace;
+    font-weight: 500;
 }
 
 #content {
     height: 100%;
+    width: 100%;
+    margin: 0%;
 }
 
 #page {
     height: 100%;
 }
 
+.headerValue {
+    font-family: Andale Mono, monospace;
+}

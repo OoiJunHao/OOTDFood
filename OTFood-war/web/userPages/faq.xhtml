@@ -5,12 +5,59 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="./../template/defaultTemplate.xhtml"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
+    <ui:define name="css">
+        <h:outputStylesheet library="css" name="faq.css"/>
+    </ui:define>
 
     <ui:define name="content">
-        <!--        <ez:menubar/>-->
-        faq
+        <h3>Frequently Asked Questions</h3>
+        <p:tabView>
+            <p:tab title="Orders">
+                <div class="qna">
+                    <p:accordionPanel value="#{faqManagedBean.faqOrder}" var="faq">
+                        <p:tab title="#{faq.question}">
+                            <div class="answer">
+                                <h:outputText value="#{faq.answer}"/>
+                            </div>
+                        </p:tab>
+                    </p:accordionPanel>
+                </div>
+            </p:tab>
+            <p:tab title="Delivery">
+                <div class="qna">
+                    <p:accordionPanel value="#{faqManagedBean.faqDelivery}" var="faq">
+                        <p:tab title="#{faq.question}">
+                            <div class="answer">
+                                <h:outputText value="#{faq.answer}"/>
+                            </div>
+                        </p:tab>
+                    </p:accordionPanel>
+                </div>
+            </p:tab>
+            <p:tab title="Product">
+                <div class="qna">
+                    <p:accordionPanel value="#{faqManagedBean.faqProduct}" var="faq">
+                        <p:tab title="#{faq.question}">
+                            <div class="answer">
+                                <h:outputText value="#{faq.answer}"/>
+                            </div>
+                        </p:tab>
+                    </p:accordionPanel>
+                </div>
+            </p:tab>
+
+
+        </p:tabView>
+
+        <div id ="footer" class="ui-g-12">
+            <ui:insert name="footer">
+                <ui:include src="/footer.xhtml"/>
+            </ui:insert>
+        </div>
+
     </ui:define>
 
 </ui:composition>

@@ -8,10 +8,8 @@ and open the template in the editor.
     Author     : Mitsuki
 */
 
-#center {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-
+#dialogLogin {
+    overflow: visible !important;
+    color: red;
 }
 
