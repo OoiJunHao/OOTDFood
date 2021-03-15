@@ -17,19 +17,19 @@
 
 }
 
-
+@media only screen and (min-width: 1200px)
 .nav-wrap .container {
     padding-left: 30px;
     padding-right: 30px;
 }
 
-
+@media only screen and (min-width: 961px)
 .nav-wrap .container {
     padding-left: 25px;
     padding-right: 25px;
 }
 
-
+@media only screen and (min-width: 1200px)
 .container {
     width: 1156px;
 }
