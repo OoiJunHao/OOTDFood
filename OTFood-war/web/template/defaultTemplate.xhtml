@@ -9,20 +9,22 @@
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet library="css" name="default.css"/>
+        <h:outputStylesheet library="css" name="cssLayout.css"/>
         <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
-        <title>OOTD Food</title>
+        <ui:insert name="css"/>
     </h:head>
 
     <h:body>
         <div id="page" class="ui-g">
-            <h1 style="color: black; text-align: center; font-weight: bold">OOTD Food</h1>
             <div id ="menubar" class="ui-g-12" style="width: 100%;" >
                 <ui:insert name="header">
                     <ui:include src="/header.xhtml"/>
                 </ui:insert>
             </div>
 
-            <div id="content" class="ui-g-9">
+            <p:separator/>
+
+            <div id="content" class="ui-g-12">
                 <ui:insert name="content">Content</ui:insert>
             </div>
 
@@ -30,7 +32,7 @@
                             <ui:insert name="footer">
                                 <ui:include src="/footer.xhtml"/>
                             </ui:insert>
-                        </div>-->
+                        </div> -->
         </div>
     </h:body>
 </html>

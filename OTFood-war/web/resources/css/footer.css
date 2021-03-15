@@ -1,0 +1,26 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/*
+    Created on : 13 Mar, 2021, 2:33:53 PM
+    Author     : Mitsuki
+*/
+
+.footer {
+    /*    background-color: black;*/
+    height: 30%;
+    font-family: Camphor,Open Sans,Segoe UI,sans-serif;
+    font-weight: 500;
+    max-height: 10px;
+}
+
+#copyright {
+    font-family: Camphor,Open Sans,Segoe UI,sans-serif;
+    color: white;
+    position: relative;
+    top: 110px;
+    font-size: 20px;
+
+}

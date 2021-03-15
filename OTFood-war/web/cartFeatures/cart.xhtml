@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:body>
+
+        <p:commandButton id="cart" type="button" icon="fa fa-shopping-cart" style="float: right;" />
+        <p:overlayPanel for="cart" showEvent="mouseover" hideEvent="click">
+            <div class="entireCart">
+                <h:form>
+
+                    <p:dataScroller value="" var="" chunkSize="10" mode="inline"
+                                    scrollHeight="500">
+
+                    </p:dataScroller>
+
+                    <div class="lineItems">
+
+                    </div>
+                </h:form>
+
+            </div>
+        </p:overlayPanel>
+
+    </h:body>
+
+</ui:composition>
+

@@ -16,6 +16,7 @@ import javax.inject.Named;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.UserNotFoundException;
@@ -30,7 +31,10 @@ public class LoginManagedBean {
 
     @EJB
     private OTUserEntitySessionBeanLocal oTUserEntitySessionBean;
-
+    
+    @Inject
+    private userManagementManagedBean userManagementManagedBean;
+    
     private String email;
     private String password;
 
@@ -73,5 +77,15 @@ public class LoginManagedBean {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public userManagementManagedBean getUserManagementManagedBean() {
+        return userManagementManagedBean;
+    }
+
+    public void setUserManagementManagedBean(userManagementManagedBean userManagementManagedBean) {
+        this.userManagementManagedBean = userManagementManagedBean;
+    }
+    
+    
 
 }
