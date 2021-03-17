@@ -53,6 +53,7 @@ public class SaleTransactionLineEntity implements Serializable {
     public SaleTransactionLineEntity() {
     }
 
+
     public SaleTransactionLineEntity(MealEntity meal, Integer quantity) {
         this.quantity = quantity;
 //        this.unitPrice = unitPrice;
@@ -82,14 +83,6 @@ public class SaleTransactionLineEntity implements Serializable {
 
     public void setMeal(MealEntity meal) {
         this.meal = meal;
-    }
-
-    public Long getId() {
-        return saleTransactionLineItemId;
-    }
-
-    public void setId(Long id) {
-        this.saleTransactionLineItemId = id;
     }
 
     @Override

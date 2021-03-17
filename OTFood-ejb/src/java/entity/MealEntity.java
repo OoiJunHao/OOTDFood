@@ -44,8 +44,6 @@ public class MealEntity implements Serializable {
     @Column(length = 128)
     @Size(max = 128)
     private String description;
-    @Column(nullable = false)
-    private boolean isStarred;
     @NotNull
     @Min(0)
     private Integer calorie;
@@ -78,11 +76,11 @@ public class MealEntity implements Serializable {
         ingredients = new ArrayList<>();
     }
 
-    public MealEntity(String name, BigDecimal price, String description, boolean isStarred, Integer calorie, String image) {
+
+    public MealEntity(String name, BigDecimal price, String description, Integer calorie) {
         this();
         this.price = price;
         this.description = description;
-        this.isStarred = isStarred;
         this.calorie = calorie;
         this.averageRating = 5;
         this.name = name;
@@ -121,13 +119,6 @@ public class MealEntity implements Serializable {
         this.description = description;
     }
 
-    public boolean isIsStarred() {
-        return isStarred;
-    }
-
-    public void setIsStarred(boolean isStarred) {
-        this.isStarred = isStarred;
-    }
 
     public Integer getCalorie() {
         return calorie;
