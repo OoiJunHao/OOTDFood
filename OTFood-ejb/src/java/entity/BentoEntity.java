@@ -24,15 +24,13 @@ public class BentoEntity extends MealEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    
     public BentoEntity() {
         super();
     }
 
-    public BentoEntity(String name, BigDecimal price, String description, boolean isStarred, Integer calorie) {
-        super(name, price, description, isStarred, calorie);
+    public BentoEntity(String name, BigDecimal price, String description, boolean isStarred, Integer calorie, String image) {
+        super(name, price, description, isStarred, calorie, image);
     }
-
 
     @Override
     public int hashCode() {
