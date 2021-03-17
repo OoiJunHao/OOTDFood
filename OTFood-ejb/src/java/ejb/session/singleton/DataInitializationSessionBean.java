@@ -71,19 +71,19 @@ public class DataInitializationSessionBean {
 
     private void dataInitialise() {
         try {
-            
+
             // Create Users
             OTUserEntity user = new OTUserEntity("bennyphoe1998@gmail.com", "password", 90909090l, "Benny", "Phoe", new Date(), "");
             Long customerId = oTUserEntitySessionBeanLocal.createNewUser(user);
-            
+
             // Create Meals
             List<MealEntity> bentoSets = new ArrayList<>();
 
-            MealEntity bento1 = new BentoEntity("bento1", BigDecimal.valueOf(8.00), "this is test bento 1", 450);
-            MealEntity bento2 = new BentoEntity("bento2", BigDecimal.valueOf(8.50), "this is test bento 2", 500);
-            MealEntity bento3 = new BentoEntity("bento3", BigDecimal.valueOf(9.00), "this is test bento 3", 550);
-            MealEntity bento4 = new BentoEntity("bento4", BigDecimal.valueOf(9.50), "this is test bento 4", 600);
-            MealEntity bento5 = new BentoEntity("bento5", BigDecimal.valueOf(10.00), "this is test bento 5", 650);
+            MealEntity bento1 = new BentoEntity("bento1", BigDecimal.valueOf(8.00), "this is test bento 1", 450, "bento5.jpg");
+            MealEntity bento2 = new BentoEntity("bento2", BigDecimal.valueOf(8.50), "this is test bento 2", 500, "bento5.jpg");
+            MealEntity bento3 = new BentoEntity("bento3", BigDecimal.valueOf(9.00), "this is test bento 3", 550, "bento5.jpg");
+            MealEntity bento4 = new BentoEntity("bento4", BigDecimal.valueOf(9.50), "this is test bento 4", 600, "bento5.jpg");
+            MealEntity bento5 = new BentoEntity("bento5", BigDecimal.valueOf(10.00), "this is test bento 5", 650, "bento5.jpg");
 
             bentoSets.add(bento1);
             bentoSets.add(bento2);
@@ -113,8 +113,6 @@ public class DataInitializationSessionBean {
             reviewEntitySessionBeanLocal.addReview(review8, customerId, 4l);
             reviewEntitySessionBeanLocal.addReview(review9, customerId, 5l);
             reviewEntitySessionBeanLocal.addReview(review10, customerId, 5l);
-            
-           
 
             //Legit Faq DataInit
             FaqEntity faq1 = new FaqEntity("How can I track my order?", "You can track your order by viewing your sales transaction status. When being delivered a status marked 'DELIVERING' will appear.", "Orders");

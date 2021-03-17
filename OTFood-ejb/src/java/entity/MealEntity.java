@@ -76,8 +76,7 @@ public class MealEntity implements Serializable {
         ingredients = new ArrayList<>();
     }
 
-
-    public MealEntity(String name, BigDecimal price, String description, Integer calorie) {
+    public MealEntity(String name, BigDecimal price, String description, Integer calorie, String image) {
         this();
         this.price = price;
         this.description = description;
@@ -118,7 +117,6 @@ public class MealEntity implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-
 
     public Integer getCalorie() {
         return calorie;

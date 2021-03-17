@@ -11,8 +11,11 @@
 
     <h:body>
 
-        <p:commandButton id="cart" type="button" icon="fa fa-shopping-cart" style="float: right;" />
+        <p:commandButton id="cart" type="button" icon="fa fa-shopping-cart" />
         <p:overlayPanel for="cart" showEvent="mouseover" hideEvent="click">
+
+
+
             <div class="entireCart">
                 <h:form id="cartForm">
                     <p:dataScroller value="#{cartManagedBean.lineItems}" var="orders" mode="inline"
@@ -49,17 +52,9 @@
                             <p:commandButton value="Checkout" icon="fa fa-money" actionListener="#{cartManagedBean.directToCheckout}" style="font-size: 15px"/>
                         </div>
                     </div>
-
                 </h:form>
-
-
-
-
-
             </div>
         </p:overlayPanel>
-
     </h:body>
-
 </ui:composition>
 

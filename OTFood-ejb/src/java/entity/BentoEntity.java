@@ -22,9 +22,8 @@ public class BentoEntity extends MealEntity implements Serializable {
         super();
     }
 
-
-    public BentoEntity(String name, BigDecimal price, String description, Integer calorie) {
-        super(name, price, description, calorie);
+    public BentoEntity(String name, BigDecimal price, String description, Integer calorie, String image) {
+        super(name, price, description, calorie, image);
 
     }
 
