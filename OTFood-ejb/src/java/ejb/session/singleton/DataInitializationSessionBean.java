@@ -78,11 +78,13 @@ public class DataInitializationSessionBean {
             
             // Create Meals
             List<MealEntity> bentoSets = new ArrayList<>();
+
             MealEntity bento1 = new BentoEntity("bento1", BigDecimal.valueOf(8.00), "this is test bento 1", 450);
             MealEntity bento2 = new BentoEntity("bento2", BigDecimal.valueOf(8.50), "this is test bento 2", 500);
             MealEntity bento3 = new BentoEntity("bento3", BigDecimal.valueOf(9.00), "this is test bento 3", 550);
             MealEntity bento4 = new BentoEntity("bento4", BigDecimal.valueOf(9.50), "this is test bento 4", 600);
             MealEntity bento5 = new BentoEntity("bento5", BigDecimal.valueOf(10.00), "this is test bento 5", 650);
+
             bentoSets.add(bento1);
             bentoSets.add(bento2);
             bentoSets.add(bento3);
