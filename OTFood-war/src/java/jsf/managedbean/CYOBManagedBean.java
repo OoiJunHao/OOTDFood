@@ -232,8 +232,8 @@ public class CYOBManagedBean implements Serializable {
                 ingredients.add(droppedIngredientsForAddons.get(i).getIngredient());
             }
         }
-        MealEntity newMeal = new CYOBEntity("CYOB", totalPrice, "New CYOB", false, totalCalorie);
-        newMeal.setIngredients(ingredients);
+        //MealEntity newMeal = new CYOBEntity("CYOB", totalPrice, "New CYOB", false, totalCalorie);
+        //newMeal.setIngredients(ingredients);
         //push to cart
     }
 

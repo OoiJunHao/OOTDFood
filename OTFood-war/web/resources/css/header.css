@@ -51,3 +51,19 @@
     text-align: center;
 }
 
+.nav-buttons {
+    position: relative;
+}
+
+.nav-buttons > * {
+    position: absolute;
+    bottom: -15px;
+    right: 10px;
+    float: right;
+}
+
+.nav-buttons #cart {
+    right: 16.7vw;
+    bottom: 0vh;
+}
+

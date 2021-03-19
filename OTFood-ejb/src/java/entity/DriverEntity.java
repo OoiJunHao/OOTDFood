@@ -46,7 +46,7 @@ public class DriverEntity implements Serializable {
     @NotNull
     @Min(21)
     private Integer age;
-    @Column(nullable = false, length = 24)
+    @Column(nullable = false, length = 24, unique = true)
     @NotNull
     @Size(max = 24)
     private String username;
@@ -77,7 +77,10 @@ public class DriverEntity implements Serializable {
     public DriverEntity() {
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
         saleTransaction = new ArrayList<>();
+        this.active = true;
         this.profilePicture = "";
+        this.monthlyEarnings = new BigDecimal(0.0);
+        this.dailyEarnings = new BigDecimal(0.0);
     }
 
     public DriverEntity(String firstname, String lastName, Integer age, String username, String password, String profilePicture) {
@@ -88,7 +91,6 @@ public class DriverEntity implements Serializable {
         this.username = username;
         this.password = password;
         this.profilePicture = profilePicture;
-        this.active = true;
         setPassword(password);
     }
 

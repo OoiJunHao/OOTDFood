@@ -23,6 +23,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -54,6 +55,11 @@ public class SaleTransactionEntity implements Serializable {
     @Column(nullable = false)
     @NotNull
     private Date transactionDateTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    @NotNull
+    @Future
+    private Date deliveryDateTime;
     @Column(nullable = false)
     @NotNull
     private Boolean voidRefund;
@@ -63,8 +69,8 @@ public class SaleTransactionEntity implements Serializable {
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(nullable = true)
     private PromoCodeEntity promoCode;
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false)
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = true)
     private DriverEntity driver;
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
@@ -74,13 +80,14 @@ public class SaleTransactionEntity implements Serializable {
         saleTransactionLineItemEntities = new ArrayList<>();
     }
 
-    public SaleTransactionEntity(Integer totalLineItem, Integer totalQuantity, BigDecimal totalAmount, Date transactionDateTime, Boolean voidRefund) {
+    public SaleTransactionEntity(Integer totalLineItem, Integer totalQuantity, BigDecimal totalAmount, Date transactionDateTime, Boolean voidRefund, Date deliveryDateTime) {
         this();
         this.totalLineItem = totalLineItem;
         this.totalQuantity = totalQuantity;
         this.totalAmount = totalAmount;
         this.transactionDateTime = transactionDateTime;
         this.voidRefund = voidRefund;
+        this.deliveryDateTime = deliveryDateTime;
     }
 
     public Integer getTotalLineItem() {
@@ -186,6 +193,20 @@ public class SaleTransactionEntity implements Serializable {
     @Override
     public String toString() {
         return "entity.SaleTransactionEntity[ id=" + saleTransactionId + " ]";
+    }
+
+    /**
+     * @return the deliveryDateTime
+     */
+    public Date getDeliveryDateTime() {
+        return deliveryDateTime;
+    }
+
+    /**
+     * @param deliveryDateTime the deliveryDateTime to set
+     */
+    public void setDeliveryDateTime(Date deliveryDateTime) {
+        this.deliveryDateTime = deliveryDateTime;
     }
 
 }

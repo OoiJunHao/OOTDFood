@@ -7,8 +7,25 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
 
+     <ui:define name="css">
+        <h:outputStylesheet library="css" name="about.css"/>
+    </ui:define>
+
+    
     <ui:define name="content">
-        content
+        <h:form id="pastTransactionForm">
+            <p:dataView id="pastTransaction" var="transaction" value="#{userManagementManagedBean.pastTransactions}" rows="9" layout="grid" gridIcon="pi pi-th-large" >
+                <p:dataViewGridItem>
+                    <p:panel id="pnl" header="ID Number: #{transaction.saleTransactionId}" style="text-align:center">
+                        <h:panelGrid columns="1" style="width:100%">
+                            <!--<p:graphicImage name="/demo/images/product/#{product.image}"/>-->
+                        </h:panelGrid>
+                    </p:panel>
+
+                    <p:draggable for="pnl" revert="true" handle=".ui-panel-titlebar" stack=".ui-panel"/>
+                </p:dataViewGridItem>
+            </p:dataView>
+        </h:form>
     </ui:define>
 
 </ui:composition>
