@@ -17,6 +17,7 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.primefaces.event.TabChangeEvent;
+import util.enumeration.CategoryEnum;
 
 /**
  *
@@ -30,34 +31,34 @@ public class ViewBentoManagedBean implements Serializable {
     private MealEntitySessionBeanLocal mealEntitySessionBeanLocal;
 
     private List<BentoEntity> listOfBentos;
-    private List<String> listOfCategories;
+    private List<CategoryEnum> listOfCategories;
     private String selectedCategory;
 
     @PostConstruct
     public void postConstruct() {
         this.listOfCategories = new ArrayList<>();
-        this.listOfCategories.add("Chicken");
-        this.listOfCategories.add("Fish");
-        this.listOfCategories.add("Beef");
-        this.listOfCategories.add("Pork");
-        this.listOfCategories.add("Vegetarian");
-        this.listOfCategories.add("Impossible");
+        this.listOfCategories.add(CategoryEnum.CHICKEN);
+        this.listOfCategories.add(CategoryEnum.FISH);
+        this.listOfCategories.add(CategoryEnum.BEEF);
+        this.listOfCategories.add(CategoryEnum.PORK);
+        this.listOfCategories.add(CategoryEnum.VEGETARIAN);
+        this.listOfCategories.add(CategoryEnum.VEGAN);
+        this.listOfCategories.add(CategoryEnum.BALANCED);
         System.out.println(this.listOfCategories);
         this.setListOfBentos(mealEntitySessionBeanLocal.retriveAllBentos());
     }
 
     public ViewBentoManagedBean() {
         this.listOfBentos = new ArrayList<>();
-        
         this.selectedCategory = "";
     }
     
     public void refreshListByTabSelected(TabChangeEvent event) {
-        System.out.println("List Refreshsed");
-        String currentTabId = event.getTab().getTitle(); //By right tab Id should be the category
+        System.out.println("List Refreshed");
+        String currentTabId = event.getTab().getTitle(); //This will be the CategoryEnum
         System.out.println("tab Title: " + currentTabId);
         this.listOfBentos = mealEntitySessionBeanLocal.retrieveBentosByCategory(currentTabId);
-
+        System.out.println("No of Bentos: " + this.listOfBentos.size());
     }
 
     public void getListOfBentosByCategory(AjaxBehaviorEvent event) {
@@ -81,14 +82,14 @@ public class ViewBentoManagedBean implements Serializable {
     /**
      * @return the listOfCategories
      */
-    public List<String> getListOfCategories() {
+    public List<CategoryEnum> getListOfCategories() {
         return listOfCategories;
     }
 
     /**
      * @param listOfCategories the listOfCategories to set
      */
-    public void setListOfCategories(List<String> listOfCategories) {
+    public void setListOfCategories(List<CategoryEnum> listOfCategories) {
         this.listOfCategories = listOfCategories;
     }
 

@@ -24,6 +24,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import util.enumeration.CategoryEnum;
 
 /**
  *
@@ -60,8 +61,9 @@ public class MealEntity implements Serializable {
     @NotNull
     private String image;
     
-    @Column
-    List<String> categories;
+    @Column(nullable = false)
+    @NotNull
+    List<CategoryEnum> categories;
     
     @ManyToMany
     private List<OTUserEntity> users;
@@ -78,7 +80,7 @@ public class MealEntity implements Serializable {
         ingredients = new ArrayList<>();
     }
 
-    public MealEntity(String name, BigDecimal price, String description, Integer calorie, String image, List<String> inputCategories) {
+    public MealEntity(String name, BigDecimal price, String description, Integer calorie, String image, List<CategoryEnum> inputCategories) {
         this();
         this.price = price;
         this.description = description;
@@ -137,11 +139,11 @@ public class MealEntity implements Serializable {
         this.users = users;
     }
 
-    public List<String> getCategories() {
+    public List<CategoryEnum> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<String> categories) {
+    public void setCategories(List<CategoryEnum> categories) {
         this.categories = categories;
     }
 

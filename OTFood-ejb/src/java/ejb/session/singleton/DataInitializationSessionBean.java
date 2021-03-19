@@ -33,6 +33,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import util.enumeration.CategoryEnum;
 import util.exception.CreateNewSaleTransactionException;
 import util.exception.DriverExistsException;
 import util.exception.FaqExistException;
@@ -85,18 +86,7 @@ public class DataInitializationSessionBean {
 
     private void dataInitialise() {
         try {
-            List<String> chickenList = new ArrayList<>();
-            List<String> fishList = new ArrayList<>();
-            List<String> pigList = new ArrayList<>();
-            List<String> cowList = new ArrayList<>();
-            List<String> sadList = new ArrayList<>();
-            List<String> coolList = new ArrayList<>();
-            chickenList.add("Chicken");
-            fishList.add("Fish");
-            pigList.add("Pork");
-            cowList.add("Beef");
-            sadList.add("Vegetarian");
-            coolList.add("Impossible");
+            
             // Create Users
             OTUserEntity user = new OTUserEntity("bennyphoe1998@gmail.com", "password", 90909090l, "Benny", "Phoe", new Date(), "");
             Long customerId = oTUserEntitySessionBeanLocal.createNewUser(user);
@@ -105,7 +95,21 @@ public class DataInitializationSessionBean {
             DriverEntity driver = new DriverEntity("Benny", "Phoe", 24, "bennyphoe1998", "password", "");
             driverEntitySessionBeanLocal.createNewDriver(driver);
 
-             // Create Meals
+            // Create temporary list of categories
+            List<CategoryEnum> chickenList = new ArrayList<>();
+            List<CategoryEnum> fishList = new ArrayList<>();
+            List<CategoryEnum> pigList = new ArrayList<>();
+            List<CategoryEnum> cowList = new ArrayList<>();
+            List<CategoryEnum> sadList = new ArrayList<>();
+            List<CategoryEnum> coolList = new ArrayList<>();
+            chickenList.add(CategoryEnum.CHICKEN);
+            fishList.add(CategoryEnum.FISH);
+            pigList.add(CategoryEnum.PORK);
+            cowList.add(CategoryEnum.BEEF);
+            sadList.add(CategoryEnum.VEGETARIAN);
+            coolList.add(CategoryEnum.IMPOSSIBLE);
+
+            // Create Meals
             List<MealEntity> bentoSets = new ArrayList<>();
             bentoSets.add(new BentoEntity("bento1", BigDecimal.valueOf(8.00), "this is chicken bento 1", 450, "bento5.jpg", chickenList));
             bentoSets.add(new BentoEntity("bento2", BigDecimal.valueOf(8.50), "this is fish bento 2", 500, "bento5.jpg", fishList));
@@ -122,7 +126,7 @@ public class DataInitializationSessionBean {
             saleTransactionLines.add(new SaleTransactionLineEntity(bentoSets.get(1), 2));
             SaleTransactionEntity saleTransaction = new SaleTransactionEntity(2, 6, BigDecimal.valueOf(8.00 * 2 + 8.50 * 4), new Date(), false, new Date(500, 10, 10));
             saleTransaction.setSaleTransactionLineItemEntities(saleTransactionLines);
-            saleTransactionEntitySessionBeanLocal.createNewSaleTransaction(customerId, saleTransaction); // will give error because nullable=false for driver
+            saleTransactionEntitySessionBeanLocal.createNewSaleTransaction(customerId, saleTransaction); 
             
             // Create user reviews
             reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "This is amazing!", new Date()), customerId, 1l);

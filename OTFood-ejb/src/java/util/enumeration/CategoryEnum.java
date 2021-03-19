@@ -14,6 +14,11 @@ public enum CategoryEnum {
     VEGAN,
     PROTEIN,
     CARBS,
-    BALANCED;
+    BALANCED,
+    CHICKEN,
+    FISH,
+    PORK,
+    BEEF,
+    IMPOSSIBLE;
 
 }

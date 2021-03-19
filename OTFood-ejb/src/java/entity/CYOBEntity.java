@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Entity;
+import util.enumeration.CategoryEnum;
 
 /**
  *
@@ -23,7 +24,7 @@ public class CYOBEntity extends MealEntity implements Serializable {
         super();
     }
 
-    public CYOBEntity(String name, BigDecimal price, String description, Integer calorie, String image, List<String> categoryList) {
+    public CYOBEntity(String name, BigDecimal price, String description, Integer calorie, String image, List<CategoryEnum> categoryList) {
         super(name, price, description, calorie, image, categoryList);
 
     }

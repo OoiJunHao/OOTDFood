@@ -21,6 +21,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import util.enumeration.CategoryEnum;
 import util.exception.InputDataValidationException;
 import util.exception.MealExistsException;
 import util.exception.MealNotFoundException;
@@ -121,10 +122,21 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
     @Override
     public List<BentoEntity> retrieveBentosByCategory(String category) {
         
-        Query query = em.createQuery("SELECT b FROM BentoEntity b WHERE :inCategory MEMBER OF (b.categories)");
-        query.setParameter("inCategory", category);
-        System.out.println(query.getResultList());
-        return query.getResultList();
+        //Query query = em.createQuery("SELECT b FROM BentoEntity b WHERE :inCategory MEMBER OF (b.categories)"); //This is not possible because categories is not an entity
+        Query query = em.createQuery("SELECT b FROM BentoEntity b");
+        
+        List<BentoEntity> bentos = query.getResultList();
+        List<BentoEntity> res = new ArrayList<>();
+        for (BentoEntity b: bentos) {
+            for (CategoryEnum c: b.getCategories()) {
+                if (c.toString() == null ? category == null : c.toString().equals(category)) {
+                    res.add(b);
+                    break;
+                }
+            }
+        }
+        
+        return res;
     }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<MealEntity>> constraintViolations) {

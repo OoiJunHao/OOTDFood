@@ -27,6 +27,11 @@
                     </div> 
                 </div><-->
 
+                
+                <!-- @yuntian this part here is displaying the bentos incorrectly
+                     I tested the viewBentoManagedBean already and the view model is working as intended
+                     - Jun Hao
+                -->
                 <p:dataView id="dataViewOfBentos" var="bentoEntity" value="#{viewBentoManagedBean.listOfBentos}" paginator="true"
                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                             gridIcon="pi pi-th-large" listIcon="pi pi-bars"
