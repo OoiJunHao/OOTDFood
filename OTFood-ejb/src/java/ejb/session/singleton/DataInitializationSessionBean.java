@@ -7,6 +7,7 @@ package ejb.session.singleton;
 
 import ejb.session.stateless.DriverEntitySessionBeanLocal;
 import ejb.session.stateless.FaqSessionBeanLocal;
+import ejb.session.stateless.IngredientEntitySessionBeanLocal;
 import ejb.session.stateless.MealEntitySessionBeanLocal;
 import ejb.session.stateless.OTUserEntitySessionBeanLocal;
 import ejb.session.stateless.ReviewEntitySessionBeanLocal;
@@ -14,6 +15,7 @@ import ejb.session.stateless.SaleTransactionEntitySessionBeanLocal;
 import entity.BentoEntity;
 import entity.DriverEntity;
 import entity.FaqEntity;
+import entity.IngredientEntity;
 import entity.MealEntity;
 import entity.OTUserEntity;
 import entity.ReviewEntity;
@@ -34,9 +36,11 @@ import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.enumeration.CategoryEnum;
+import util.enumeration.IngredientTypeEnum;
 import util.exception.CreateNewSaleTransactionException;
 import util.exception.DriverExistsException;
 import util.exception.FaqExistException;
+import util.exception.IngredientEntityExistsException;
 import util.exception.InputDataValidationException;
 import util.exception.ReviewExistException;
 import util.exception.UnknownPersistenceException;
@@ -51,6 +55,9 @@ import util.exception.UserNotFoundException;
 @Singleton
 @LocalBean
 public class DataInitializationSessionBean {
+
+    @EJB(name = "IngredientEntitySessionBeanLocal")
+    private IngredientEntitySessionBeanLocal ingredientEntitySessionBeanLocal;
 
     @EJB
     private DriverEntitySessionBeanLocal driverEntitySessionBeanLocal;
@@ -70,6 +77,8 @@ public class DataInitializationSessionBean {
     @EJB(name = "MealEntitySessionBeanLocal")
     private MealEntitySessionBeanLocal mealEntitySessionBeanLocal;
 
+    
+    
     @PersistenceContext(unitName = "OTFood-ejbPU")
     private EntityManager em;
 
@@ -119,7 +128,41 @@ public class DataInitializationSessionBean {
             for (MealEntity mealEntity : bentoSets) {
                 mealEntitySessionBeanLocal.createNewMeal(mealEntity);
             }
+ 
             
+            List<IngredientEntity> allIngredients = new ArrayList<>();
+            allIngredients.add(new IngredientEntity("Japanese Rice", BigDecimal.valueOf(1.50), 150, IngredientTypeEnum.BASE));
+            allIngredients.add(new IngredientEntity("Stir Fry Noodle", BigDecimal.valueOf(1.00), 160, IngredientTypeEnum.BASE));
+            allIngredients.add(new IngredientEntity("Jasmine Rice", BigDecimal.valueOf(1.00), 135, IngredientTypeEnum.BASE));
+            allIngredients.add(new IngredientEntity("Brown Rice", BigDecimal.valueOf(0.80), 100, IngredientTypeEnum.BASE));
+            allIngredients.add(new IngredientEntity("Soba Noodles", BigDecimal.valueOf(2.00), 160, IngredientTypeEnum.BASE));
+            
+            allIngredients.add(new IngredientEntity("Beef", BigDecimal.valueOf(4.00), 250, IngredientTypeEnum.MEAT));
+            allIngredients.add(new IngredientEntity("Pork", BigDecimal.valueOf(3.00), 220, IngredientTypeEnum.MEAT));
+            allIngredients.add(new IngredientEntity("Chicken", BigDecimal.valueOf(3.00), 200, IngredientTypeEnum.MEAT));
+            allIngredients.add(new IngredientEntity("Fish", BigDecimal.valueOf(4.00), 270, IngredientTypeEnum.MEAT));
+            
+            allIngredients.add(new IngredientEntity("Brocolli", BigDecimal.valueOf(1.50), 60, IngredientTypeEnum.VEGE));
+            allIngredients.add(new IngredientEntity("Carrot", BigDecimal.valueOf(1.00), 80, IngredientTypeEnum.VEGE));
+            allIngredients.add(new IngredientEntity("Edamame", BigDecimal.valueOf(2.00), 90, IngredientTypeEnum.VEGE));
+            allIngredients.add(new IngredientEntity("Mini Tomatoes", BigDecimal.valueOf(1.50), 80, IngredientTypeEnum.VEGE));
+            allIngredients.add(new IngredientEntity("Salad", BigDecimal.valueOf(1.2), 75 , IngredientTypeEnum.VEGE));
+            
+            allIngredients.add(new IngredientEntity("Teriyaki", BigDecimal.valueOf(0.20), 30, IngredientTypeEnum.SAUCE));
+            allIngredients.add(new IngredientEntity("Japanese Mayo", BigDecimal.valueOf(0.20), 30, IngredientTypeEnum.SAUCE));
+            allIngredients.add(new IngredientEntity("Spicy Japanese Mayo", BigDecimal.valueOf(0.20), 30, IngredientTypeEnum.SAUCE));
+            allIngredients.add(new IngredientEntity("BBQ", BigDecimal.valueOf(0.20), 30, IngredientTypeEnum.SAUCE));
+            allIngredients.add(new IngredientEntity("ginger dressing", BigDecimal.valueOf(0.20), 30, IngredientTypeEnum.SAUCE));
+            
+            allIngredients.add(new IngredientEntity("Tamagoyaki", BigDecimal.valueOf(1.00), 45, IngredientTypeEnum.ADDON));
+            allIngredients.add(new IngredientEntity("Pickled Vegetable", BigDecimal.valueOf(0.50), 15, IngredientTypeEnum.ADDON));
+            allIngredients.add(new IngredientEntity("Soft Boiled Egg", BigDecimal.valueOf(0.80), 45, IngredientTypeEnum.ADDON));
+            allIngredients.add(new IngredientEntity("Sausage", BigDecimal.valueOf(1.00), 50, IngredientTypeEnum.ADDON));
+            
+            for (IngredientEntity ingredients : allIngredients) {
+                ingredientEntitySessionBeanLocal.createIngredientEntityForMeal(ingredients);
+            }
+
             // Create SaleTransactions
             List<SaleTransactionLineEntity> saleTransactionLines = new ArrayList<>();
             saleTransactionLines.add(new SaleTransactionLineEntity(bentoSets.get(0), 1));
@@ -157,7 +200,10 @@ public class DataInitializationSessionBean {
 
         } catch (UserExistException | UnknownPersistenceException | InputDataValidationException | ReviewExistException | UserNotFoundException | FaqExistException | CreateNewSaleTransactionException | DriverExistsException ex) {
             Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (IngredientEntityExistsException ex) {
+            Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+
     }
 
 }
