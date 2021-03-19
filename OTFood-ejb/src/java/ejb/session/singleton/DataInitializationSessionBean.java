@@ -5,6 +5,8 @@
  */
 package ejb.session.singleton;
 
+import ejb.session.stateless.AddressEntitySessionBeanLocal;
+import ejb.session.stateless.CreditCardEntitySessionBeanLocal;
 import ejb.session.stateless.DriverEntitySessionBeanLocal;
 import ejb.session.stateless.FaqSessionBeanLocal;
 import ejb.session.stateless.IngredientEntitySessionBeanLocal;
@@ -12,7 +14,9 @@ import ejb.session.stateless.MealEntitySessionBeanLocal;
 import ejb.session.stateless.OTUserEntitySessionBeanLocal;
 import ejb.session.stateless.ReviewEntitySessionBeanLocal;
 import ejb.session.stateless.SaleTransactionEntitySessionBeanLocal;
+import entity.AddressEntity;
 import entity.BentoEntity;
+import entity.CreditCardEntity;
 import entity.DriverEntity;
 import entity.FaqEntity;
 import entity.IngredientEntity;
@@ -23,7 +27,6 @@ import entity.SaleTransactionEntity;
 import entity.SaleTransactionLineEntity;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -37,7 +40,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.enumeration.CategoryEnum;
 import util.enumeration.IngredientTypeEnum;
+import util.enumeration.RegionEnum;
+import util.exception.AddressExistException;
+import util.exception.CardCreationException;
 import util.exception.CreateNewSaleTransactionException;
+import util.exception.CreditCardExistException;
 import util.exception.DriverExistsException;
 import util.exception.FaqExistException;
 import util.exception.IngredientEntityExistsException;
@@ -56,7 +63,13 @@ import util.exception.UserNotFoundException;
 @LocalBean
 public class DataInitializationSessionBean {
 
-    @EJB(name = "IngredientEntitySessionBeanLocal")
+    @EJB
+    private CreditCardEntitySessionBeanLocal creditCardEntitySessionBeanLocal;
+
+    @EJB
+    private AddressEntitySessionBeanLocal addressEntitySessionBeanLocal;
+
+    @EJB
     private IngredientEntitySessionBeanLocal ingredientEntitySessionBeanLocal;
 
     @EJB
@@ -68,13 +81,13 @@ public class DataInitializationSessionBean {
     @EJB
     private FaqSessionBeanLocal faqSessionBean;
 
-    @EJB(name = "ReviewEntitySessionBeanLocal")
+    @EJB
     private ReviewEntitySessionBeanLocal reviewEntitySessionBeanLocal;
 
-    @EJB(name = "OTUserEntitySessionBeanLocal")
+    @EJB
     private OTUserEntitySessionBeanLocal oTUserEntitySessionBeanLocal;
 
-    @EJB(name = "MealEntitySessionBeanLocal")
+    @EJB
     private MealEntitySessionBeanLocal mealEntitySessionBeanLocal;
 
     
@@ -99,6 +112,12 @@ public class DataInitializationSessionBean {
             // Create Users
             OTUserEntity user = new OTUserEntity("bennyphoe1998@gmail.com", "password", 90909090l, "Benny", "Phoe", new Date(), "");
             Long customerId = oTUserEntitySessionBeanLocal.createNewUser(user);
+            
+            // Create Address
+            Long addressId = addressEntitySessionBeanLocal.addAddressWithUserId(new AddressEntity(RegionEnum.CENTRAL, "Block 123A Bishan Street 12 #09-12", "321402"), customerId);
+            
+            // Create Credit Card    
+            CreditCardEntity cc = creditCardEntitySessionBeanLocal.createNewCreditCardForUser(new CreditCardEntity("VISA", "Benny Phoe", "1234123412341234", "23/02"), customerId);
 
             // Create Driver
             DriverEntity driver = new DriverEntity("Benny", "Phoe", 24, "bennyphoe1998", "password", "");
@@ -198,9 +217,7 @@ public class DataInitializationSessionBean {
             faqSessionBean.createNewFaq(new FaqEntity("Are there different sizes to the bento?", "Sorry but at the moment, we only offer a fixed protion size.", "Product"));
             faqSessionBean.createNewFaq(new FaqEntity("Can I visit your shop?", "Currently we are a home grown business, hence we do not have an outlet store. We do appreciate your continuous support to allow us to achieve the dream of opening our own store", "Product"));
 
-        } catch (UserExistException | UnknownPersistenceException | InputDataValidationException | ReviewExistException | UserNotFoundException | FaqExistException | CreateNewSaleTransactionException | DriverExistsException ex) {
-            Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IngredientEntityExistsException ex) {
+        } catch (UserExistException | UnknownPersistenceException | InputDataValidationException | ReviewExistException | UserNotFoundException | FaqExistException | CreateNewSaleTransactionException | DriverExistsException | IngredientEntityExistsException | AddressExistException | CreditCardExistException | CardCreationException ex) {
             Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         } 
 
