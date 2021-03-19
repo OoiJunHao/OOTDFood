@@ -79,6 +79,8 @@ public class DriverEntity implements Serializable {
         saleTransaction = new ArrayList<>();
         this.active = true;
         this.profilePicture = "";
+        this.monthlyEarnings = new BigDecimal(0.0);
+        this.dailyEarnings = new BigDecimal(0.0);
     }
 
     public DriverEntity(String firstname, String lastName, Integer age, String username, String password, String profilePicture) {
