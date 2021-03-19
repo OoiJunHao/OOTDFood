@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.persistence.Entity;
 
 /**
@@ -22,8 +23,8 @@ public class BentoEntity extends MealEntity implements Serializable {
         super();
     }
 
-    public BentoEntity(String name, BigDecimal price, String description, Integer calorie, String image) {
-        super(name, price, description, calorie, image);
+    public BentoEntity(String name, BigDecimal price, String description, Integer calorie, String image, List<String> categoryList) {
+        super(name, price, description, calorie, image, categoryList);
 
     }
 

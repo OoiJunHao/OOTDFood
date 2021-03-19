@@ -16,6 +16,7 @@ import entity.OTUserEntity;
 import entity.ReviewEntity;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -71,7 +72,18 @@ public class DataInitializationSessionBean {
 
     private void dataInitialise() {
         try {
-
+            List<String> chickenList = new ArrayList<>();
+            List<String> fishList = new ArrayList<>();
+            List<String> pigList = new ArrayList<>();
+            List<String> cowList = new ArrayList<>();
+            List<String> sadList = new ArrayList<>();
+            List<String> coolList = new ArrayList<>();
+            chickenList.add("Chicken");
+            fishList.add("Fish");
+            pigList.add("Pork");
+            cowList.add("Beef");
+            sadList.add("Vegetarian");
+            coolList.add("Impossible");
             // Create Users
             OTUserEntity user = new OTUserEntity("bennyphoe1998@gmail.com", "password", 90909090l, "Benny", "Phoe", new Date(), "");
             Long customerId = oTUserEntitySessionBeanLocal.createNewUser(user);
@@ -79,17 +91,19 @@ public class DataInitializationSessionBean {
             // Create Meals
             List<MealEntity> bentoSets = new ArrayList<>();
 
-            MealEntity bento1 = new BentoEntity("bento1", BigDecimal.valueOf(8.00), "this is test bento 1", 450, "bento5.jpg");
-            MealEntity bento2 = new BentoEntity("bento2", BigDecimal.valueOf(8.50), "this is test bento 2", 500, "bento5.jpg");
-            MealEntity bento3 = new BentoEntity("bento3", BigDecimal.valueOf(9.00), "this is test bento 3", 550, "bento5.jpg");
-            MealEntity bento4 = new BentoEntity("bento4", BigDecimal.valueOf(9.50), "this is test bento 4", 600, "bento5.jpg");
-            MealEntity bento5 = new BentoEntity("bento5", BigDecimal.valueOf(10.00), "this is test bento 5", 650, "bento5.jpg");
-
+            MealEntity bento1 = new BentoEntity("bento1", BigDecimal.valueOf(8.00), "this is chicken bento 1", 450, "bento5.jpg", chickenList);
+            MealEntity bento2 = new BentoEntity("bento2", BigDecimal.valueOf(8.50), "this is fish bento 2", 500, "bento5.jpg", fishList);
+            MealEntity bento3 = new BentoEntity("bento3", BigDecimal.valueOf(9.00), "this is pig bento 3", 550, "bento5.jpg", cowList);
+            MealEntity bento4 = new BentoEntity("bento4", BigDecimal.valueOf(9.50), "this is cow bento 4", 600, "bento5.jpg", sadList);
+            MealEntity bento5 = new BentoEntity("bento5", BigDecimal.valueOf(10.00), "this is vegetarian bento 5", 650, "bento5.jpg", sadList);
+            MealEntity bento6 = new BentoEntity("bento6", BigDecimal.valueOf(99.00), "this is impossible meat bento ", 650, "bento5.jpg", coolList);
+            
             bentoSets.add(bento1);
             bentoSets.add(bento2);
             bentoSets.add(bento3);
             bentoSets.add(bento4);
             bentoSets.add(bento5);
+            bentoSets.add(bento6);
             for (MealEntity mealEntity : bentoSets) {
                 mealEntitySessionBeanLocal.createNewMeal(mealEntity);
             }

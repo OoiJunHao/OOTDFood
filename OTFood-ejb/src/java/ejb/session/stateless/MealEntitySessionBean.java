@@ -111,11 +111,19 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
         return query.getResultList();
     }
 
+    
     @Override
-    public List<MealEntity> retrieveMealsByCategory(String catName) {
-        Query query = em.createQuery("SELECT m FROM MealEntity m, IN (m.categories) c WHERE :inCatName = c");
-        query.setParameter("inCatName", catName);
-
+    public List<BentoEntity> retriveAllBentos() { 
+        Query query = em.createQuery("SELECT b FROM BentoEntity b");
+        return query.getResultList();
+    }
+    
+    @Override
+    public List<BentoEntity> retrieveBentosByCategory(String category) {
+        
+        Query query = em.createQuery("SELECT b FROM BentoEntity b WHERE :inCategory MEMBER OF (b.categories)");
+        query.setParameter("inCategory", category);
+        System.out.println(query.getResultList());
         return query.getResultList();
     }
 

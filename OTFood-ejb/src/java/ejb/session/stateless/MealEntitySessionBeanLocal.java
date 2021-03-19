@@ -5,6 +5,7 @@
  */
 package ejb.session.stateless;
 
+import entity.BentoEntity;
 import entity.MealEntity;
 import java.util.List;
 import javax.ejb.Local;
@@ -29,10 +30,12 @@ public interface MealEntitySessionBeanLocal {
 
     public Long createNewMealForUser(Long userId, MealEntity meal) throws UnknownPersistenceException, InputDataValidationException, UserNotFoundException, MealExistsException;
 
-    public List<MealEntity> retrieveMealsByCategory(String catName);
-
     public Long createNewMeal(MealEntity meal);
 
     public List<MealEntity> retrieveTop5MealEntityByRating();
-    
+
+    public List<BentoEntity> retriveAllBentos();
+
+    public List<BentoEntity> retrieveBentosByCategory(String category);
+
 }
