@@ -101,6 +101,28 @@ public class IngredientEntitySessionBean implements IngredientEntitySessionBeanL
 
         return msg;
     }
+    
+    public List<IngredientEntity> retrieveListOfBases() {
+        Query query = em.createQuery("SELECT ingredients FROM IngredientEntity ingredients WHERE ingredients.type = util.enumeration.IngredientTypeEnum.BASE");
+        return query.getResultList();
+    }
+    
+    public List<IngredientEntity> retrieveListOfMeats() {
+        Query query = em.createQuery("SELECT ingredients FROM IngredientEntity ingredients WHERE ingredients.type = util.enumeration.IngredientTypeEnum.MEAT");
+        return query.getResultList();
+    }
+    public List<IngredientEntity> retrieveListOfVegetables() {
+        Query query = em.createQuery("SELECT ingredients FROM IngredientEntity ingredients WHERE ingredients.type = util.enumeration.IngredientTypeEnum.VEGE");
+        return query.getResultList();
+    }
+    public List<IngredientEntity> retrieveListOfAddons() {
+        Query query = em.createQuery("SELECT ingredients FROM IngredientEntity ingredients WHERE ingredients.type = util.enumeration.IngredientTypeEnum.ADDON");
+        return query.getResultList();
+    }
+    public List<IngredientEntity> retrieveListOfSauces() {
+        Query query = em.createQuery("SELECT ingredients FROM IngredientEntity ingredients WHERE ingredients.type = util.enumeration.IngredientTypeEnum.SAUCE");
+        return query.getResultList();
+    }
 
 }
 

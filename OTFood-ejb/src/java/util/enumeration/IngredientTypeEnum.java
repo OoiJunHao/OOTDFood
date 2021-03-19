@@ -13,6 +13,7 @@ public enum IngredientTypeEnum {
     MEAT,
     VEGE,
     BASE,
+    ADDON,
     SAUCE;
 
 }
