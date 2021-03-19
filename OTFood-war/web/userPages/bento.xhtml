@@ -4,12 +4,50 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="./../template/defaultTemplate.xhtml"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="css">
+        <h:outputStylesheet name="css/viewBentos.css"/>
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+    </ui:define>
 
     <ui:define name="content">
-        <ez:menubar/>
-        bento
+
+        <h:form>
+            <p:tabView value="#{viewBentoManagedBean.listOfCategories}" var="bentoCategory">
+                <p:ajax event="tabChange" listener="#{viewBentoManagedBean.refreshListByTabSelected}" update="dataViewOfBentos"/>
+                <p:tab title="#{bentoCategory.toString()}">
+
+                <!--<div class="viewBentos">
+                    <div>
+                        <p:graphicImage class="viewBentoSingleImage" styleClass="viewBentoSingleImage" url="./../resources/images/mealImages/bento5.jpg"/>
+                        <div class="bentoListDetail">
+                            <div class="bentoName">Test Bento</div>
+                        </div>
+                    </div> 
+                </div><-->
+
+                <p:dataView id="dataViewOfBentos" var="bentoEntity" value="#{viewBentoManagedBean.listOfBentos}" paginator="true"
+                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                            gridIcon="pi pi-th-large" listIcon="pi pi-bars"
+                            layout="grid" >
+                    <p:dataViewGridItem>
+                        <p:graphicImage url="./../resources/images/mealImages/bento5.jpg" styleClass="viewBentoSingleImage"/>
+                        <div><span>#{bentoEntity.name}</span></div>
+                    </p:dataViewGridItem>
+
+                    <p:dataViewListItem>
+                        <p:graphicImage url="./../resources/images/mealImages/bento5.jpg" styleClass="viewBentoSingleImage"/>
+                        <div><span>#{bentoEntity.name}</span></div>
+                    </p:dataViewListItem>
+
+                </p:dataView>
+
+                </p:tab>
+            </p:tabView>
+
+        </h:form>
+
     </ui:define>
 
 </ui:composition>
