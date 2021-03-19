@@ -108,7 +108,7 @@ public class DataInitializationSessionBean {
             List<SaleTransactionLineEntity> saleTransactionLines = new ArrayList<>();
             saleTransactionLines.add(new SaleTransactionLineEntity(1, 2, BigDecimal.valueOf(8.00), BigDecimal.valueOf(8.00 * 2), bentoSets.get(0)));
             saleTransactionLines.add(new SaleTransactionLineEntity(2, 4, BigDecimal.valueOf(8.50), BigDecimal.valueOf(8.50 * 4), bentoSets.get(1)));
-            SaleTransactionEntity saleTransaction = new SaleTransactionEntity(2, 6, BigDecimal.valueOf(8.00 * 2 + 8.50 * 4), new Date(),false);
+            SaleTransactionEntity saleTransaction = new SaleTransactionEntity(2, 6, BigDecimal.valueOf(8.00 * 2 + 8.50 * 4), new Date(), false, new Date(500, 10, 10));
             saleTransaction.setSaleTransactionLineItemEntities(saleTransactionLines);
             saleTransactionEntitySessionBeanLocal.createNewSaleTransaction(customerId, saleTransaction); // will give error because nullable=false for driver
                     
