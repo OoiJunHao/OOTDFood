@@ -14,44 +14,39 @@
     <ui:define name="content">
 
         <h:form>
-            <p:tabView value="#{viewBentoManagedBean.listOfCategories}" var="bentoCategory">
-                <p:ajax event="tabChange" listener="#{viewBentoManagedBean.refreshListByTabSelected}" update="dataViewOfBentos"/>
-                <p:tab title="#{bentoCategory.toString()}">
+            <p:tabView value="#{viewBentoManagedBean.listOfCategories}" var="bentoCategory" >
 
-                <!--<div class="viewBentos">
-                    <div>
-                        <p:graphicImage class="viewBentoSingleImage" styleClass="viewBentoSingleImage" url="./../resources/images/mealImages/bento5.jpg"/>
-                        <div class="bentoListDetail">
-                            <div class="bentoName">Test Bento</div>
-                        </div>
-                    </div> 
-                </div><-->
-
+                <p:ajax event="tabChange" listener="#{viewBentoManagedBean.refreshListByTabSelected}" update="dataViewOfBentos"/> 
                 
-                <!-- @yuntian this part here is displaying the bentos incorrectly
-                     I tested the viewBentoManagedBean already and the view model is working as intended
-                     - Jun Hao
-                -->
-                <p:dataView id="dataViewOfBentos" var="bentoEntity" value="#{viewBentoManagedBean.listOfBentos}" paginator="true"
-                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-                            gridIcon="pi pi-th-large" listIcon="pi pi-bars"
-                            layout="grid" >
-                    <p:dataViewGridItem>
-                        <p:graphicImage url="./../resources/images/mealImages/bento5.jpg" styleClass="viewBentoSingleImage"/>
-                        <div><span>#{bentoEntity.name}</span></div>
-                    </p:dataViewGridItem>
+                <p:tab transient="true" title="#{bentoCategory}">
 
-                    <p:dataViewListItem>
-                        <p:graphicImage url="./../resources/images/mealImages/bento5.jpg" styleClass="viewBentoSingleImage"/>
-                        <div><span>#{bentoEntity.name}</span></div>
-                    </p:dataViewListItem>
 
-                </p:dataView>
+                    <p:dataView id="dataViewOfBentos" var="bentoEntity" value="#{viewBentoManagedBean.listOfBentos}" paginator="true"
+                                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                                gridIcon="pi pi-th-large" listIcon="pi pi-bars"
+                                layout="grid" >
+
+                        <p:dataViewGridItem>
+                            <p:graphicImage url="./../resources/images/mealImages/bento5.jpg" styleClass="viewBentoSingleImage"/>
+                            <div><span>#{bentoEntity.name}</span></div>
+                        </p:dataViewGridItem>
+
+                        <p:dataViewListItem>
+                            <p:graphicImage url="./../resources/images/mealImages/bento5.jpg" styleClass="viewBentoSingleImage"/>
+                            <div><span>#{bentoEntity.name}</span></div>
+                        </p:dataViewListItem>
+
+                    </p:dataView>
+
+
 
                 </p:tab>
+
             </p:tabView>
 
+
         </h:form>
+
 
     </ui:define>
 
