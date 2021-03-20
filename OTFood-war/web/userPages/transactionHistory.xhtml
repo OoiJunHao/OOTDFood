@@ -7,8 +7,178 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
 
+    <ui:define name="css">
+        <h:outputStylesheet library="css" name="about.css"/>
+    </ui:define>
+
+
     <ui:define name="content">
-        content
+
+        <h:form id="form">
+            <div class="card crud-demo">
+                <p:growl id="messages" showDetail="true"/>
+
+
+                <p:dataTable id="dt-products" widgetVar="dtProducts" var="transactions" value="#{userManagementManagedBean.pastTransactions}"
+                             reflow="true" styleClass="products-table"
+                             rowKey="#{transactions.saleTransactionId}" paginator="true"
+                             rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                    <f:facet name="header">
+                        <div class="products-table-header">
+                            <span style="font-weight: bold">ALL TRANSACTIONS</span>
+                        </div>
+                    </f:facet>                    
+
+                    <p:column headerText="Transaction ID" sortBy="#{transactions.saleTransactionId}" >
+                        <h:outputText value="#{transactions.saleTransactionId}"/>
+                    </p:column>
+                    <p:column headerText="Delivery Date and Time" sortBy="#{transactions.deliveryDateTime}" >
+                        <h:outputText value="#{transactions.deliveryDateTime}"/>
+                    </p:column>
+                    <p:column headerText="Total Cost" sortBy="#{transactions.totalAmount}">
+                        <h:outputText value="#{transactions.totalAmount}" style="font-weight: 700">
+                            <f:convertNumber currencySymbol="$" type="currency"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Transaction Date and Time" sortBy="#{transactions.transactionDateTime}">
+                        <h:outputText value="#{transactions.transactionDateTime}"/>
+                    </p:column>
+                    <!-- @jh for putting delivery status
+                    <p:column headerText="Status" sortBy="#{product.inventoryStatus}"
+                              filterBy="#{product.inventoryStatus}">
+                        <h:outputText styleClass="product-badge status-#{product.inventoryStatus.name().toLowerCase()}"
+                                      value="#{product.inventoryStatus.text}"/>
+                    </p:column> -->
+                    <p:column exportable="false" style="width: 10%">
+                        <p:commandButton icon="pi pi-info-circle"     
+                                         update = "@form"
+                                         value="View more details"
+                                         oncomplete="PF('viewTransactionDetails').show()"
+                                         styleClass="edit-button rounded-button ui-button-success" process="@this">
+                            <f:setPropertyActionListener value="#{transactions}" target="#{viewTransactionDetailManagedBean.selectedSaleTransaction}" />             
+                        </p:commandButton>
+
+                    </p:column>
+
+                </p:dataTable>
+
+                <p:dialog header="Transaction Details" showEffect="fade" modal="true" draggable="false"
+                          widgetVar="viewTransactionDetails" responsive="true" resizable="false">
+
+
+                    <h:form>
+                        <p:dataScroller value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.saleTransactionLineItemEntities}" var="lineItem" >
+                            <f:facet name="header">
+                                Order Details
+                            </f:facet>
+
+                            <f:facet name="loader">
+                                <b>Total Cost: </b> 
+                                <h:outputText value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.totalAmount}" styleClass="product-price" style="font-weight: bold">
+                                    <f:convertNumber currencySymbol="$" type="currency"/>
+                                </h:outputText> 
+
+                            </f:facet>
+
+                            <div class="product">
+                                <div class="product-list-item p-p-5">
+                                    <p:graphicImage url="/resources/images/mealImages/bento5.jpg" style="width: 70px; height: 70px; float:left; margin-right: 10px"/>
+                                    <div class="product-list-detail" >
+                                        <div class="product-name"><b>#{lineItem.meal.name}</b></div>
+                                        <div class="product-description">Quantity: #{lineItem.quantity}</div>   
+                                        Unit Cost: <h:outputText value="#{lineItem.meal.price}" styleClass="product-price">
+                                            <f:convertNumber currencySymbol="$" type="currency"/>
+                                        </h:outputText> 
+                                        <br></br>
+                                        Total Cost: <h:outputText value="#{lineItem.meal.price*lineItem.quantity}" styleClass="product-price">
+                                            <f:convertNumber currencySymbol="$" type="currency"/>
+                                        </h:outputText>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+                        </p:dataScroller>
+                    </h:form>
+
+
+
+                    <p:panelGrid style="margin-top: 10px">
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value ="Transaction ID" />
+                            </p:column>
+                            <p:column>
+                                <h:outputText id="transactionID" value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.saleTransactionId}" />
+                            </p:column>                 
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="Transaction Date and Time" />
+                            </p:column>
+                            <p:column>
+                                <h:outputText id="transactionDateAndTime" value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.transactionDateTime}" />
+                            </p:column>                 
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="Delivery Date and Time" />
+                            </p:column>
+                            <p:column>
+                                <h:outputText id="deliveryDateAndTime" value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.deliveryDateTime}" />
+                            </p:column>                 
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="Promo Code (If applicable)" />
+                            </p:column>
+                            <p:column>
+                                <h:outputText id="promoCode" value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.promoCode}"/>
+                            </p:column>                 
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="Driver Assigned" />
+                            </p:column>
+                            <p:column>
+                                <h:outputText id="driverAssigned" value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.driver.firstname} #{viewTransactionDetailManagedBean.selectedSaleTransaction.driver.lastname}"/>
+                            </p:column>                 
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="Delivery Status" />
+                            </p:column>
+                            <p:column>
+                                <h:outputText id="deliveryStatus" value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.promoCode}"/> <!-- to be edited -->
+                            </p:column>                 
+                        </p:row>
+
+                     
+
+                    </p:panelGrid>
+
+                    <p:commandButton value="Generate Receipt" style="margin-top: 10px; width: 40%; margin-left: 30%; margin-right: 30%"></p:commandButton>
+
+                </p:dialog>
+
+
+
+
+            </div>
+        </h:form>
+
+        <div id ="footer" class="ui-g-12">
+            <ui:insert name="footer">
+                <ui:include src="/footer.xhtml"/>
+            </ui:insert>
+        </div>
     </ui:define>
 
 </ui:composition>

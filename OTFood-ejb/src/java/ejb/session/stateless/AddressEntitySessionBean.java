@@ -145,5 +145,15 @@ public class AddressEntitySessionBean implements AddressEntitySessionBeanLocal {
             throw new UpdateAddressException("The address or user entered is null!");
         }
     }
+    
+    @Override
+    public AddressEntity retrieveAddressById(Long addressId) throws NoAddressFoundException {
+        AddressEntity address = em.find(AddressEntity.class, addressId);
+        if (address != null) {
+            return address;
+        } else {
+            throw new NoAddressFoundException("No address found!");
+        }
+    }
 
 }

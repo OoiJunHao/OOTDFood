@@ -24,6 +24,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import util.enumeration.CategoryEnum;
 
 /**
  *
@@ -44,8 +45,6 @@ public class MealEntity implements Serializable {
     @Column(length = 128)
     @Size(max = 128)
     private String description;
-    @Column(nullable = false)
-    private boolean isStarred;
     @NotNull
     @Min(0)
     private Integer calorie;
@@ -57,12 +56,18 @@ public class MealEntity implements Serializable {
     @Size(min = 0)
     @NotNull
     private String name;
-
-
+    @Column(nullable = false, length = 24)
+    @Size(min = 0)
+    @NotNull
+    private String image;
+    
+    @Column(nullable = false)
+    @NotNull
+    List<CategoryEnum> categories;
+    
     @ManyToMany
     private List<OTUserEntity> users;
-    @ManyToMany
-    private List<CategoryEntity> categories;
+    
     @OneToMany(mappedBy = "meal")
     private List<ReviewEntity> reviews;
     @ManyToMany
@@ -75,14 +80,23 @@ public class MealEntity implements Serializable {
         ingredients = new ArrayList<>();
     }
 
-    public MealEntity(String name, BigDecimal price, String description, boolean isStarred, Integer calorie) {
+    public MealEntity(String name, BigDecimal price, String description, Integer calorie, String image, List<CategoryEnum> inputCategories) {
         this();
         this.price = price;
         this.description = description;
-        this.isStarred = isStarred;
         this.calorie = calorie;
         this.averageRating = 5;
         this.name = name;
+        this.image = image;
+        this.categories = inputCategories;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public List<IngredientEntity> getIngredients() {
@@ -109,14 +123,6 @@ public class MealEntity implements Serializable {
         this.description = description;
     }
 
-    public boolean isIsStarred() {
-        return isStarred;
-    }
-
-    public void setIsStarred(boolean isStarred) {
-        this.isStarred = isStarred;
-    }
-
     public Integer getCalorie() {
         return calorie;
     }
@@ -133,11 +139,11 @@ public class MealEntity implements Serializable {
         this.users = users;
     }
 
-    public List<CategoryEntity> getCategories() {
+    public List<CategoryEnum> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<CategoryEntity> categories) {
+    public void setCategories(List<CategoryEnum> categories) {
         this.categories = categories;
     }
 
@@ -172,8 +178,6 @@ public class MealEntity implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    
-    
 
     @Override
     public int hashCode() {
@@ -199,13 +203,13 @@ public class MealEntity implements Serializable {
     public String toString() {
         return "entity.MealEntity[ id=" + mealId + " ]";
     }
-    
+
     public Integer calculateAverageRating() {
         Integer totalRatings = 0;
         for (int i = 0; i < this.reviews.size(); i++) {
             totalRatings += this.reviews.get(i).getRating();
         }
-        return (int)(totalRatings/this.reviews.size());
+        return (int) (totalRatings / this.reviews.size());
     }
 
 }

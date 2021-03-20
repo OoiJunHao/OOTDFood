@@ -24,4 +24,14 @@ public interface IngredientEntitySessionBeanLocal {
 
     public Long createIngredientEntityForMeal(IngredientEntity ingre) throws IngredientEntityExistsException, UnknownPersistenceException, InputDataValidationException;
 
+    public List<IngredientEntity> retrieveListOfBases();
+
+    public List<IngredientEntity> retrieveListOfMeats();
+
+    public List<IngredientEntity> retrieveListOfVegetables();
+
+    public List<IngredientEntity> retrieveListOfAddons();
+
+    public List<IngredientEntity> retrieveListOfSauces();
+
 }
