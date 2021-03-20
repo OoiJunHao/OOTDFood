@@ -186,7 +186,7 @@ public class DataInitializationSessionBean {
             List<SaleTransactionLineEntity> saleTransactionLines = new ArrayList<>();
             saleTransactionLines.add(new SaleTransactionLineEntity(bentoSets.get(0), 1));
             saleTransactionLines.add(new SaleTransactionLineEntity(bentoSets.get(1), 2));
-            SaleTransactionEntity saleTransaction = new SaleTransactionEntity(2, 6, BigDecimal.valueOf(8.00 * 2 + 8.50 * 4), new Date(), false, new Date(500, 10, 10));
+            SaleTransactionEntity saleTransaction = new SaleTransactionEntity(2, 6, BigDecimal.valueOf(8.00 * 2 + 8.50 * 4), new Date(), new Date(500, 10, 10));
             saleTransaction.setSaleTransactionLineItemEntities(saleTransactionLines);
             saleTransactionEntitySessionBeanLocal.createNewSaleTransaction(customerId, cc.getCreditCardId(), addressId, saleTransaction); 
             
