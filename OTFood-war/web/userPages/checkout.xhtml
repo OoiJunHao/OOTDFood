@@ -29,8 +29,14 @@
                     </p:column>
 
                     <p:column headerText="Bento" class="item-details">
-                        <h:outputText value="#{items.meal.name}"/>
-                        <h:outputText value="#{items.meal.description}"/>
+                        <div id="bento-name">
+                            <h:outputText value="#{items.meal.name}"/>
+                        </div>
+                        <div>
+                            <h:outputText value="#{items.meal.description}"/>
+                        </div>
+                        <div>Calorie: #{items.meal.calorie}</div>
+                        <div>Average Rating: #{items.meal.calculateAverageRating()}</div>
                     </p:column>
 
                     <p:column headerText="Qty" class="item-qty">
@@ -43,12 +49,15 @@
                         </h:outputText>
                     </p:column>
 
+                    <!--  junhao
+                          sos
+                          here -->
                     <div class="items-action-button">
                         <p:column exportable="false">
-                            <p:commandButton icon="fa fa-pencil" process="@this" oncomplete="PF('editItemsDialog').show()" styleClass="edit-button rounded-button ui-button-success">
-                                <f:setPropertyActionListener value="#{items}" target="#{cartManagedBean.selectedItem}"/>
+                            <p:commandButton value="Edit Qty" icon="fa fa-pencil" update="checkoutForm mealDetails" actionListener="#{cartManagedBean.getMealOrderDetails}" oncomplete="PF('editItemsDialog').show()" styleClass="edit-button rounded-button ui-button-success">
+                                <f:attribute name="meal" value="#{items}"/>
                             </p:commandButton>
-                            <p:commandButton class="ui-button-warning rounded-button" icon="fa fa-remove" actionListener="#{cartManagedBean.removeFromCart}" process="@this" update="@form" style="font-size: 15px">
+                            <p:commandButton class="ui-button-warning rounded-button" value="Remove From Cart" icon="fa fa-remove" actionListener="#{cartManagedBean.removeFromCart}" process="@this" update="@form" style="font-size: 15px">
                                 <f:attribute name="bento" value="#{items.meal}"/>
                             </p:commandButton>
                         </p:column>
@@ -56,45 +65,23 @@
                 </p:dataTable>
             </div>
 
-            <p:dialog header="Edit Purchase Details" showEffect="fade" modal="true" widgetVar="editItemsDialog">
-                <p:outputPanel class="ui-fluid">
-                    <p:outputPanel rendered="#{not empty cartManagedBean.selectedItem}">
-                        <div class='p-field'>
-                            <p:outputLabel for="name">Name</p:outputLabel>
-                            <h:outputText id='name' value='#{cartManagedBean.selectedItem.meal.name}'/>
-                        </div>
-                        <div class='p-field'>
-                            <p:outputLabel for="description">Description</p:outputLabel>
-                            <h:outputText id='description' value='#{cartManagedBean.selectedItem.meal.description}'/>
-                        </div>
-                        <div class='p-field p-col'>
-                            <p:outputLabel for='qty'>Quantity</p:outputLabel>
-                            <p:spinner id="qty" min="0" value="#{cartManagedBean.selectedItem.quantity}"/>
-                        </div>
 
-                        <f:facet name="footer">
-                            <p:commandButton value="Update" icon="fa fa-check-circle-o" actionListener="#{cartManagedBean.updateOrderList}" update="@this" process="@this"/>
-                            <p:commandButton value="Cancel" icon="fa fa-close" onclick="PF('editItemsDialog').hide()"
-                                             class="ui-button-secondary"/>
-                        </f:facet>
-
-                    </p:outputPanel>
-                </p:outputPanel>
-            </p:dialog>
 
             <br/>
 
-            <div class='cart-footer'>
+            <div class="cart-footer-price">
+
                 <h2> Total Amount </h2>
                 <h3>
                     <h:outputText value="#{cartManagedBean.totalAmount}" styleClass="product-price">
                         <f:convertNumber currencySymbol="$" type="currency"/>
                     </h:outputText>
                 </h3>
+            </div>
 
-                <br/>
 
-                <h:panelGroup>
+            <div class='cart-footer'>
+                <h:panelGroup rendered="#{cartManagedBean.isEmpty == false}">
                     <p:outputLabel for="creditCard" value="Select Credit Card: "/>
                     <p:selectOneMenu id="creditCard" value="#{cartManagedBean.selectedCard}">
                         <f:selectItem itemLabel="Credit Card" noSelectionOption="false" />
@@ -105,29 +92,82 @@
                     <br/>
 
                     <p:outputLabel for="address" value="Enter Delivery Address: " />
-                    <p:inputText id ="address" value ="#{cartManagedBean.order.address}" required="true" requiredMessage="Address is required" />
+                    <p:selectOneMenu id="address" value="#{cartManagedBean.selectedAddress}">
+                        <f:selectItem itemLabel="Address" noSelectionOption="false" />
+                        <f:selectItems value="#{cartManagedBean.address}" />
+                    </p:selectOneMenu>
 
                     <br/>
                     <br/>
+
+
 
                     <p:outputLabel value="Enter Promo code: " />
                     <p:inputText id ="promoCode" value ="#{cartManagedBean.promoCode}" required="false" />&nbsp;
                     <p:commandButton value="Enter" actionListener="#{cartManagedBean.checkPromoCode}" process="@form" update="@form" />
 
-                    <p:commandButton style="align-self: center" value = "Pay" action="#{cartManagedBean.createNewOrder()}" oncomplete="PF('dialogPay').show()" update="@form" icon="fa fa-dollar"/>
+                    <div class="pay-button">
+                        <p:commandButton style="align-self: center" value = "Pay" action="#{cartManagedBean.createNewOrder()}" oncomplete="PF('dialogPay').show()" update="@form" icon="fa fa-dollar"/>
+                    </div>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{cartManagedBean.isEmpty == true}">
+                    <h4 id="warning">Please enter link a credit card or an address to your account in the profile section to continue with payment.</h4>
                 </h:panelGroup>
             </div>
+        </h:form>
 
-            <p:dialog id="dialogPay" widgetVar="dialogPay" fitViewport="true" header="Order Confirmation" width="800px" closable="true" closeOnEscape="true">
-                <p:panel style="text-align: center" rendered="#{cartManagedBean.checkoutComplete == true}">
-                    <h2> Your order has been confirmed! </h2>
-                    <p> $#{cartManagedBean.totalAmount} has been charged to your account.</p>
-                    <p:commandButton value="Close" process="@this" actionListener="#{cartManagedBean.removeEverything}" />&nbsp;
-                </p:panel>
-                <p:panel style="text-align: center" rendered="#{cartManagedBean.checkoutComplete == false}">
-                    <h2> ERROR </h2>
-                    <p:commandButton value="Close" oncomplete="PF('dialogPay'.hide()" />&nbsp;
-                </p:panel>
+        <p:dialog id="dialogPay" widgetVar="dialogPay" fitViewport="true" header="Order Confirmation" width="800px" closable="true" closeOnEscape="true">
+            <p:panel style="text-align: center" rendered="#{cartManagedBean.checkoutComplete == true}">
+                <h2> Your order has been confirmed! </h2>
+                <p> $#{cartManagedBean.totalAmount} has been charged to your account.</p>
+                <p:commandButton value="Close" process="@this" actionListener="#{cartManagedBean.removeEverything}" />&nbsp;
+            </p:panel>
+            <p:panel style="text-align: center" rendered="#{cartManagedBean.checkoutComplete == false}">
+                <h2> ERROR </h2>
+                <p:commandButton value="Close" oncomplete="PF('dialogPay').hide()" />&nbsp;
+            </p:panel>
+        </p:dialog>
+
+        <h:form id="mealDetails">
+            <p:dialog  header="Edit Purchase Details" showEffect="fade" closable="true" resizable="false" widgetVar="editItemsDialog">
+                <p:outputPanel class="ui-fluid">
+                    <p:outputPanel rendered="#{not empty cartManagedBean.selectedItem}">
+                        <div class='p-field'>
+                            <p:outputLabel for="name">Name: </p:outputLabel>
+                            <h:outputText id='name' value='#{cartManagedBean.selectedItem.meal.name}'/>
+                        </div>
+                        <div class='p-field'>
+                            <p:outputLabel for="description">Description: </p:outputLabel>
+                            <h:outputText id='description' value='#{cartManagedBean.selectedItem.meal.description}'/>
+                        </div>
+                        <div class='p-field'>
+                            <p:outputLabel for="Calorie">Calorie: </p:outputLabel>
+                            <h:outputText id='Calorie' value='#{cartManagedBean.selectedItem.meal.calorie}'/>
+                        </div>
+                        <div class='p-field'>
+                            <p:outputLabel for="Categories">Categories: </p:outputLabel>
+                            <h:outputText id='Categories' value='#{cartManagedBean.selectedItem.meal.categories}'/>
+                        </div>
+                        <div class='p-field'>
+                            <p:outputLabel for="Rating">Rating: </p:outputLabel>
+                            <h:outputText id='Rating' value='#{cartManagedBean.selectedItem.meal.averageRating}'/>
+                        </div>
+                        <div class='p-field'>
+                            <p:outputLabel for='qty'>Quantity: </p:outputLabel>
+                            <p:spinner id="qty" min="0" value="#{cartManagedBean.selectedItem.quantity}" style="width: 50%"/>
+                        </div>
+                        <br/>
+                        <!--                        <f:facet name="footer">-->
+                        <p:commandButton value="Update" icon="fa fa-check-circle-o" actionListener="#{cartManagedBean.updateOrderList}" update="@form" process="@this,qty" style="width: 50%; flex-direction: row;">
+                            <!--                            <f:attribute name="qty" value=""-->
+                        </p:commandButton>
+                        <p:commandButton value="Cancel" icon="fa fa-close" onclick="PF('editItemsDialog').hide()"
+                                         style="width: 50%; flex-direction: row;"/>
+                        <!--                        </f:facet>-->
+
+                    </p:outputPanel>
+                </p:outputPanel>
             </p:dialog>
 
         </h:form>
