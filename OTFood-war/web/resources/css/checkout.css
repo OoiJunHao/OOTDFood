@@ -9,14 +9,16 @@ and open the template in the editor.
 */
 
 .cart-items-list {
-    float: left;
-    width: 70%;
+    /*    float: left;*/
+    width: 100%;
 }
 
 .item-image {
     width: 150px;
     box-shadow: 0 3px 6px rgb(0 0 0 / 16%), 0 3px 6px rgb(0 0 0 / 23%);
     margin-right: 2rem;
+    text-align: center;
+
 }
 
 .item-details {
