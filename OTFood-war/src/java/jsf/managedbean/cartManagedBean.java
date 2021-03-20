@@ -5,10 +5,15 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.CreditCardEntitySessionBeanLocal;
 import ejb.session.stateless.MealEntitySessionBeanLocal;
+import ejb.session.stateless.PromoSessionBeanLocal;
 import ejb.session.stateless.SaleTransactionEntitySessionBeanLocal;
+import entity.CreditCardEntity;
 import entity.MealEntity;
 import entity.OTUserEntity;
+import entity.PromoCodeEntity;
+import entity.SaleTransactionEntity;
 //import entity.Order;
 import entity.SaleTransactionLineEntity;
 import java.io.IOException;
@@ -17,6 +22,7 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +31,11 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import org.primefaces.PrimeFaces;
+import util.exception.CreateNewSaleTransactionException;
+import util.exception.InputDataValidationException;
 import util.exception.MealNotFoundException;
+import util.exception.PromotionNotFoundException;
 
 /**
  *
@@ -36,17 +46,32 @@ import util.exception.MealNotFoundException;
 public class cartManagedBean implements Serializable {
 
     @EJB
+    private PromoSessionBeanLocal promoSessionBean;
+
+    @EJB
+    private CreditCardEntitySessionBeanLocal creditCardEntitySessionBean;
+
+    @EJB
     private MealEntitySessionBeanLocal mealEntitySessionBean;
 
     @EJB
     private SaleTransactionEntitySessionBeanLocal saleTransactionEntitySessionBean;
 
     private OTUserEntity currentUser;
+    private SaleTransactionLineEntity selectedItem;
 //    private List<Order> orders;
     private List<SaleTransactionLineEntity> lineItems;
+    private SaleTransactionEntity order;
 
     private BigDecimal totalAmount;
     private int amtToCart;
+
+    private List<CreditCardEntity> creditCards;
+    private CreditCardEntity selectedCard;
+
+    private String promoCode;
+
+    boolean checkoutComplete;
 
     /**
      * Creates a new instance of cartManagedBean
@@ -139,6 +164,94 @@ public class cartManagedBean implements Serializable {
         }
     }
 
+    public void updateOrderList(ActionEvent event) {
+        int index = existInCart(selectedItem.getMeal());
+        if (index != -1) {
+            lineItems.set(index, selectedItem);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Item quantity updated!", null));
+
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Item not found", null));
+        }
+
+        PrimeFaces.current().executeScript("PF(editItemsDialog).hide()");
+        PrimeFaces.current().ajax().update("form:dt-lineItems");
+
+    }
+
+    public void checkPromoCode(ActionEvent event) {
+        Boolean valid = false;
+        try {
+            PromoCodeEntity promo = promoSessionBean.retrieveCodeByDiscountCode(promoCode);
+
+            valid = true;
+        } catch (PromotionNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Promo Code!", null));
+        } finally {
+            if (valid) {
+                try {
+                    PromoCodeEntity promo = promoSessionBean.retrieveCodeByDiscountCode(promoCode);
+
+                    Boolean reallyValid = promoSessionBean.checkPromoCode(promoCode);
+
+                    if (reallyValid) {
+                        switch (promo.getDiscountCodeTypeEnum()) {
+                            case FLAT:
+                                totalAmount = totalAmount.subtract(promo.getDiscountRate());
+                                break;
+
+                            case PERCENTAGE:
+                                totalAmount = totalAmount.multiply(new BigDecimal("1.00").subtract(promo.getDiscountRate()));
+                                break;
+                        }
+
+                    } else {
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Invalid Promo Code!", null));
+                    }
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Promo Code Applied!", null));
+
+                } catch (PromotionNotFoundException ex) {
+                    Logger.getLogger(cartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
+    }
+
+    public void createNewOrder() {
+        if (lineItems.isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Please add items to cart!", null));
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("cartEmpty", true);
+        } else {
+            SaleTransactionEntity txn = new SaleTransactionEntity(totalAmount, new Date(), order.getAddress());
+            txn.setUser(currentUser);
+            txn.setSaleTransactionLineItemEntities(lineItems);
+
+            Boolean success = false;
+            try {
+                PromoCodeEntity promo = promoSessionBean.retrieveCodeByDiscountCode(promoCode);
+                Boolean reallyValid = promoSessionBean.checkPromoCode(promoCode);
+                success = true;
+
+                if (promo != null && success && reallyValid) {
+                    txn.setPromoCode(promoSessionBean.retrieveCodeByDiscountCode(promoCode));
+                }
+            } catch (PromotionNotFoundException ex) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, ex.getMessage(), null));
+            }
+
+            txn.setTotalAmount(totalAmount);
+            txn.setTotalLineItem(lineItems.size());
+
+            try {
+                saleTransactionEntitySessionBean.createNewSaleTransaction(currentUser.getUserId(), txn);
+            } catch (CreateNewSaleTransactionException | InputDataValidationException ex) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, ex.getMessage(), null));
+            }
+            setCheckoutComplete(true);
+        }
+    }
+
     private void getFakeData() throws MealNotFoundException {
         System.out.println(">>>>>> fake data <<<<<<<<");
         SaleTransactionLineEntity order1 = new SaleTransactionLineEntity(mealEntitySessionBean.retrieveMealById(1l), 2);
@@ -163,16 +276,28 @@ public class cartManagedBean implements Serializable {
         totalAmount();
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("cartEmpty", false);
     }
-//    //after checkout complete
-//    public void removeEverything() {
-//
-//    }
-//
-//
+
+    //after checkout complete
+    public void removeEverything() {
+        lineItems.clear();
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
+        } catch (IOException ex) {
+            Logger.getLogger(cartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("cartEmpty", true);
+    }
 
     public void directToCheckout(ActionEvent event) throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/userPages/checkout.xhtml");
         setCurrentUser((OTUserEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentUser"));
+
+        if (getCurrentUser() != null) {
+            setCreditCards(getCurrentUser().getCreditCard());
+        }
+
+        setCheckoutComplete(false);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select payment method", null));
     }
 
     public OTUserEntity getCurrentUser() {
@@ -212,6 +337,54 @@ public class cartManagedBean implements Serializable {
 
     public void setLineItems(List<SaleTransactionLineEntity> lineItems) {
         this.lineItems = lineItems;
+    }
+
+    public SaleTransactionLineEntity getSelectedItem() {
+        return selectedItem;
+    }
+
+    public void setSelectedItem(SaleTransactionLineEntity selectedItem) {
+        this.selectedItem = selectedItem;
+    }
+
+    public List<CreditCardEntity> getCreditCards() {
+        return creditCards;
+    }
+
+    public void setCreditCards(List<CreditCardEntity> creditCards) {
+        this.creditCards = creditCards;
+    }
+
+    public CreditCardEntity getSelectedCard() {
+        return selectedCard;
+    }
+
+    public void setSelectedCard(CreditCardEntity card) {
+        this.selectedCard = card;
+    }
+
+    public boolean isCheckoutComplete() {
+        return checkoutComplete;
+    }
+
+    public void setCheckoutComplete(boolean checkoutComplete) {
+        this.checkoutComplete = checkoutComplete;
+    }
+
+    public SaleTransactionEntity getOrder() {
+        return order;
+    }
+
+    public void setOrder(SaleTransactionEntity order) {
+        this.order = order;
+    }
+
+    public String getPromoCode() {
+        return promoCode;
+    }
+
+    public void setPromoCode(String promoCode) {
+        this.promoCode = promoCode;
     }
 
 }

@@ -1,0 +1,38 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/*
+    Created on : 18 Mar, 2021, 6:06:01 PM
+    Author     : Mitsuki
+*/
+
+.cart-items-list {
+    float: left;
+    width: 70%;
+}
+
+.item-image {
+    width: 150px;
+    box-shadow: 0 3px 6px rgb(0 0 0 / 16%), 0 3px 6px rgb(0 0 0 / 23%);
+    margin-right: 2rem;
+}
+
+.item-details {
+    width: 40%;
+}
+
+.item-qty {
+    width: 10%;
+    text-align: center;
+}
+
+.product-price {
+    font-size: 1.0rem;
+    font-weight: 600;
+    margin-bottom: .5rem;
+    align-self: flex-end;
+    text-align: center;
+    width: 20%;
+}

@@ -26,6 +26,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -42,10 +43,10 @@ public class SaleTransactionEntity implements Serializable {
     @NotNull
     @Min(1)
     private Integer totalLineItem;
-    @Column(nullable = false)
-    @NotNull
-    @Min(1)
-    private Integer totalQuantity;
+//    @Column(nullable = false)
+//    @NotNull
+//    @Min(1)
+//    private Integer totalQuantity;
     @Column(nullable = false, precision = 11, scale = 2)
     @NotNull
     @DecimalMin("0.00")
@@ -63,6 +64,10 @@ public class SaleTransactionEntity implements Serializable {
     @Column(nullable = false)
     @NotNull
     private Boolean voidRefund;
+    @Column(nullable = false, length = 32)
+    @NotNull
+    @Size(max = 32)
+    private String address;
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<SaleTransactionLineEntity> saleTransactionLineItemEntities;
@@ -80,16 +85,21 @@ public class SaleTransactionEntity implements Serializable {
         saleTransactionLineItemEntities = new ArrayList<>();
     }
 
-    public SaleTransactionEntity(Integer totalLineItem, Integer totalQuantity, BigDecimal totalAmount, Date transactionDateTime, Boolean voidRefund, Date deliveryDateTime) {
-        this();
-        this.totalLineItem = totalLineItem;
-        this.totalQuantity = totalQuantity;
+    public SaleTransactionEntity(BigDecimal totalAmount, Date transactionDateTime, String address) {
         this.totalAmount = totalAmount;
         this.transactionDateTime = transactionDateTime;
-        this.voidRefund = voidRefund;
-        this.deliveryDateTime = deliveryDateTime;
+        this.address = address;
     }
 
+//    public SaleTransactionEntity(Integer totalLineItem, Integer totalQuantity, BigDecimal totalAmount, Date transactionDateTime, Boolean voidRefund, Date deliveryDateTime) {
+//        this();
+//        this.totalLineItem = totalLineItem;
+//        this.totalQuantity = totalQuantity;
+//        this.totalAmount = totalAmount;
+//        this.transactionDateTime = transactionDateTime;
+//        this.voidRefund = voidRefund;
+//        this.deliveryDateTime = deliveryDateTime;
+//    }
     public Integer getTotalLineItem() {
         return totalLineItem;
     }
@@ -97,14 +107,14 @@ public class SaleTransactionEntity implements Serializable {
     public void setTotalLineItem(Integer totalLineItem) {
         this.totalLineItem = totalLineItem;
     }
-
-    public Integer getTotalQuantity() {
-        return totalQuantity;
-    }
-
-    public void setTotalQuantity(Integer totalQuantity) {
-        this.totalQuantity = totalQuantity;
-    }
+//
+//    public Integer getTotalQuantity() {
+//        return totalQuantity;
+//    }
+//
+//    public void setTotalQuantity(Integer totalQuantity) {
+//        this.totalQuantity = totalQuantity;
+//    }
 
     public BigDecimal getTotalAmount() {
         return totalAmount;
@@ -168,6 +178,14 @@ public class SaleTransactionEntity implements Serializable {
 
     public void setSaleTransactionId(Long saleTransactionId) {
         this.saleTransactionId = saleTransactionId;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     @Override
