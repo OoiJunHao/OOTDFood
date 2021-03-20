@@ -1,0 +1,54 @@
+
+
+.ui-widget-header {
+    background: transparent
+}
+
+.ui-panelGrid {
+    border: transparent
+}
+
+.ui-panelgrid {
+    border: none !important
+}
+
+td {
+    display: table-cell;
+    vertical-align: inherit;
+    font-size: 30px
+}
+
+.column1 {
+    width: 10%;
+    background: black
+}
+
+.column2 {
+    width: 90%;
+    background: black
+}
+
+.ui-widget-content {
+    border: transparent
+}
+
+.address-list-item {
+    display: flex;
+    flex-direction: row;
+}
+
+.address-list-detail {
+    flex: 1 1;
+}
+
+.address-list-action {
+     display: flex;
+    flex-direction: column;
+}
+
+.address {
+    font-size: 20px;
+    font: bolder
+}
+
+
