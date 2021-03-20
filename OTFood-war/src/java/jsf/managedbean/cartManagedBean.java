@@ -77,6 +77,8 @@ public class cartManagedBean implements Serializable {
 
     boolean checkoutComplete;
 
+    boolean isEmpty;
+
     /**
      * Creates a new instance of cartManagedBean
      */
@@ -169,6 +171,9 @@ public class cartManagedBean implements Serializable {
     }
 
     public void updateOrderList(ActionEvent event) {
+        System.out.println(">>>>>>> Updating!!!! <<<<<<<<");
+        System.out.println("Selected item details:");
+        System.out.println(selectedItem.getQuantity());
         int index = existInCart(selectedItem.getMeal());
         if (index != -1) {
             lineItems.set(index, selectedItem);
@@ -177,9 +182,12 @@ public class cartManagedBean implements Serializable {
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Item not found", null));
         }
+        for (int i = 0; i < lineItems.size(); i++) {
+            System.out.println(lineItems.get(i).getMeal().getName() + " " + lineItems.get(i).getQuantity());
 
-        PrimeFaces.current().executeScript("PF(editItemsDialog).hide()");
-        PrimeFaces.current().ajax().update("form:dt-lineItems");
+        }
+        PrimeFaces.current().executeScript("PF('editItemsDialog').hide()");
+        PrimeFaces.current().ajax().update("form:checkoutForm");
 
     }
 
@@ -302,12 +310,26 @@ public class cartManagedBean implements Serializable {
 
         if (getCurrentUser() != null) {
             setCreditCards(getCurrentUser().getCreditCard());
+            setAddress(getCurrentUser().getAddress());
         }
 
         setCheckoutComplete(false);
+        setIsEmpty(creditCards.isEmpty() && address.isEmpty());
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select payment method", null));
     }
 
+    public void getMealOrderDetails(ActionEvent event) {
+        System.out.println(">>>>> INDIVIDUAL MEAL ORDER DETAILS <<<<<<");
+        selectedItem = (SaleTransactionLineEntity) event.getComponent().getAttributes().get("meal");
+        System.out.println("Meal Item = " + selectedItem.getMeal().getName());
+    }
+
+//    public void checkIfEmpty() {
+//        System.out.println(">>>> checking <<<<<<<");
+//        System.out.println(creditCards.isEmpty());
+//        System.out.println(creditCards.get(0));
+//        setIsEmpty(creditCards.isEmpty() && address.isEmpty());
+//    }
     public OTUserEntity getCurrentUser() {
         return currentUser;
     }
@@ -393,6 +415,30 @@ public class cartManagedBean implements Serializable {
 
     public void setPromoCode(String promoCode) {
         this.promoCode = promoCode;
+    }
+
+    public List<AddressEntity> getAddress() {
+        return address;
+    }
+
+    public void setAddress(List<AddressEntity> address) {
+        this.address = address;
+    }
+
+    public AddressEntity getSelectedAddress() {
+        return selectedAddress;
+    }
+
+    public void setSelectedAddress(AddressEntity selectedAddress) {
+        this.selectedAddress = selectedAddress;
+    }
+
+    public boolean isIsEmpty() {
+        return isEmpty;
+    }
+
+    public void setIsEmpty(boolean isEmpty) {
+        this.isEmpty = isEmpty;
     }
 
 }
