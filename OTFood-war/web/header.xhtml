@@ -68,7 +68,7 @@
 
         <h:form id ="formCreateNewCustomer">
 
-            <p:dialog id="dialogRegister" widgetVar="dialogRegister" header="Register As New User" closable ="true">
+            <p:dialog id="dialogRegister" widgetVar="dialogRegister" header="Register As New User" closable ="true" modal="true" resizable="false" draggable="false">
                 <p:messages id="messagesCreateNewCustomer" redisplay="false" />
 
                 <p:panelGrid>
@@ -126,7 +126,7 @@
                             <p:outputLabel for="dob" value="Date of Birth: " style="font-weight: bold;" />
                         </p:column>
                         <p:column>
-                            <p:datePicker id="dob" value="#{loginManagedBean.userManagementManagedBean.newUser.dob}" monthNavigator="true" yearNavigator="true" required="true" requiredMessage="Date of Birth is required" />
+                            <p:datePicker id="dob" value="#{loginManagedBean.userManagementManagedBean.newUser.dob}" monthNavigator="true" yearNavigator="true" required="true" requiredMessage="Date of Birth is required" yearRange="1900:2030"/>
                         </p:column>
                         <p:column>
                             <p:message for="dob" />

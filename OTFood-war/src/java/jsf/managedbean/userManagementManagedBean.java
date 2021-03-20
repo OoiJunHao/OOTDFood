@@ -11,10 +11,10 @@ import entity.CreditCardEntity;
 import entity.MealEntity;
 import entity.OTUserEntity;
 import entity.ReviewEntity;
+import entity.SaleTransactionEntity;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -26,6 +26,7 @@ import javax.faces.view.ViewScoped;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UserExistException;
+import util.exception.UserNotFoundException;
 import util.security.CryptographicHelper;
 
 /**
@@ -55,6 +56,9 @@ public class userManagementManagedBean implements Serializable {
     //favourited meals
     private List<MealEntity> favouriteMeals;
 
+    //transactions
+    private List<SaleTransactionEntity> pastTransactions;
+
     /**
      * Creates a new instance of userManagementManagedBean
      */
@@ -71,6 +75,7 @@ public class userManagementManagedBean implements Serializable {
             address = currentUser.getAddress();
             reviews = currentUser.getReviews();
             favouriteMeals = currentUser.getMeals();
+            setPastTransactions(currentUser.getSaleTransaction());
         }
     }
 
@@ -80,9 +85,12 @@ public class userManagementManagedBean implements Serializable {
             if (isSame) {
                 Long id = oTUserEntitySessionBean.createNewUser(getNewUser());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Account Created", null));
+                FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentUser", oTUserEntitySessionBean.retrieveUserById(id));
                 FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
             }
-        } catch (UserExistException | UnknownPersistenceException | InputDataValidationException ex) {
+        } catch (UserExistException | UnknownPersistenceException | InputDataValidationException | UserNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while creating new account: " + ex.getMessage(), null));
         }
     }
@@ -156,6 +164,20 @@ public class userManagementManagedBean implements Serializable {
 
     public void setCheckingPassword(String checkingPassword) {
         this.checkingPassword = checkingPassword;
+    }
+
+    /**
+     * @return the pastTransactions
+     */
+    public List<SaleTransactionEntity> getPastTransactions() {
+        return pastTransactions;
+    }
+
+    /**
+     * @param pastTransactions the pastTransactions to set
+     */
+    public void setPastTransactions(List<SaleTransactionEntity> pastTransactions) {
+        this.pastTransactions = pastTransactions;
     }
 
 }

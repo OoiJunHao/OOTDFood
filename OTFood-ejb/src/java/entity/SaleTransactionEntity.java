@@ -43,10 +43,10 @@ public class SaleTransactionEntity implements Serializable {
     @NotNull
     @Min(1)
     private Integer totalLineItem;
-//    @Column(nullable = false)
-//    @NotNull
-//    @Min(1)
-//    private Integer totalQuantity;
+    @Column(nullable = false)
+    @NotNull
+    @Min(1)
+    private Integer totalQuantity;
     @Column(nullable = false, precision = 11, scale = 2)
     @NotNull
     @DecimalMin("0.00")
@@ -91,15 +91,16 @@ public class SaleTransactionEntity implements Serializable {
         this.address = address;
     }
 
-//    public SaleTransactionEntity(Integer totalLineItem, Integer totalQuantity, BigDecimal totalAmount, Date transactionDateTime, Boolean voidRefund, Date deliveryDateTime) {
-//        this();
-//        this.totalLineItem = totalLineItem;
-//        this.totalQuantity = totalQuantity;
-//        this.totalAmount = totalAmount;
-//        this.transactionDateTime = transactionDateTime;
-//        this.voidRefund = voidRefund;
-//        this.deliveryDateTime = deliveryDateTime;
-//    }
+    public SaleTransactionEntity(Integer totalLineItem, Integer totalQuantity, BigDecimal totalAmount, Date transactionDateTime, Boolean voidRefund, Date deliveryDateTime) {
+        this();
+        this.totalLineItem = totalLineItem;
+        this.totalQuantity = totalQuantity;
+        this.totalAmount = totalAmount;
+        this.transactionDateTime = transactionDateTime;
+        this.voidRefund = voidRefund;
+        this.deliveryDateTime = deliveryDateTime;
+    }
+
     public Integer getTotalLineItem() {
         return totalLineItem;
     }
@@ -107,14 +108,14 @@ public class SaleTransactionEntity implements Serializable {
     public void setTotalLineItem(Integer totalLineItem) {
         this.totalLineItem = totalLineItem;
     }
-//
-//    public Integer getTotalQuantity() {
-//        return totalQuantity;
-//    }
-//
-//    public void setTotalQuantity(Integer totalQuantity) {
-//        this.totalQuantity = totalQuantity;
-//    }
+
+    public Integer getTotalQuantity() {
+        return totalQuantity;
+    }
+
+    public void setTotalQuantity(Integer totalQuantity) {
+        this.totalQuantity = totalQuantity;
+    }
 
     public BigDecimal getTotalAmount() {
         return totalAmount;
