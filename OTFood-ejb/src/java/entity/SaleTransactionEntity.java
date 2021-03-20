@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,6 +28,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import util.enumeration.DeliveryStatusEnum;
 
 /**
  *
@@ -63,6 +66,11 @@ public class SaleTransactionEntity implements Serializable {
     @Column(nullable = false)
     @NotNull
     private Boolean voidRefund;
+    
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private DeliveryStatusEnum deliveryStatus;
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<SaleTransactionLineEntity> saleTransactionLineItemEntities;
@@ -75,18 +83,27 @@ public class SaleTransactionEntity implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     private OTUserEntity user;
+    
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    private AddressEntity address;
+    
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    private CreditCardEntity creditCardEntity;
 
     public SaleTransactionEntity() {
         saleTransactionLineItemEntities = new ArrayList<>();
+        this.deliveryStatus = DeliveryStatusEnum.ORDER_RECIEVED;
+        this.voidRefund = false;
     }
 
-    public SaleTransactionEntity(Integer totalLineItem, Integer totalQuantity, BigDecimal totalAmount, Date transactionDateTime, Boolean voidRefund, Date deliveryDateTime) {
+    public SaleTransactionEntity(Integer totalLineItem, Integer totalQuantity, BigDecimal totalAmount, Date transactionDateTime, Date deliveryDateTime) {
         this();
         this.totalLineItem = totalLineItem;
         this.totalQuantity = totalQuantity;
         this.totalAmount = totalAmount;
         this.transactionDateTime = transactionDateTime;
-        this.voidRefund = voidRefund;
         this.deliveryDateTime = deliveryDateTime;
     }
 
@@ -207,6 +224,48 @@ public class SaleTransactionEntity implements Serializable {
      */
     public void setDeliveryDateTime(Date deliveryDateTime) {
         this.deliveryDateTime = deliveryDateTime;
+    }
+
+    /**
+     * @return the address
+     */
+    public AddressEntity getAddress() {
+        return address;
+    }
+
+    /**
+     * @param address the address to set
+     */
+    public void setAddress(AddressEntity address) {
+        this.address = address;
+    }
+
+    /**
+     * @return the creditCardEntity
+     */
+    public CreditCardEntity getCreditCardEntity() {
+        return creditCardEntity;
+    }
+
+    /**
+     * @param creditCardEntity the creditCardEntity to set
+     */
+    public void setCreditCardEntity(CreditCardEntity creditCardEntity) {
+        this.creditCardEntity = creditCardEntity;
+    }
+
+    /**
+     * @return the deliveryStatus
+     */
+    public DeliveryStatusEnum getDeliveryStatus() {
+        return deliveryStatus;
+    }
+
+    /**
+     * @param deliveryStatus the deliveryStatus to set
+     */
+    public void setDeliveryStatus(DeliveryStatusEnum deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
     }
 
 }

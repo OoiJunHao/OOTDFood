@@ -20,7 +20,7 @@ import util.exception.UpdateSaleTransactionException;
 @Local
 public interface SaleTransactionEntitySessionBeanLocal {
 
-    public Long createNewSaleTransaction(Long userId, SaleTransactionEntity saleTransaction) throws CreateNewSaleTransactionException, InputDataValidationException;
+    public Long createNewSaleTransaction(Long userId, Long ccId, Long adressId, SaleTransactionEntity saleTransaction) throws CreateNewSaleTransactionException, InputDataValidationException;
 
     public List<SaleTransactionEntity> retrieveAllSaleTransaction() throws NoSaleTransactionFoundException;
 
