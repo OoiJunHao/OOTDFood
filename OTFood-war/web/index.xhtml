@@ -19,14 +19,28 @@
                 <p:commandButton class="orderbutton" value="Order Now"></p:commandButton>
             </div>
             <p:separator />
+            <h1 style="text-align: center; font-size: 40px; color: white">BENEFITS</h1>
             <div id ="benefits" class="ui-g-12">
             </div>
             <p:separator/>
-            <h:form id="contentFlow">
-                <p:contentFlow var="meal" value="#{indexManagedBean.top5Meals}">
-                    <p:graphicImage url="/resources/images/mealImages/${meal.name}.jpg" styleClass="content"/>
-                    <div class="caption">#{meal.name}</div>
-                </p:contentFlow>
+            <h1 style="text-align: center; font-size: 40px; color: white">RANKINGS</h1>
+            <h:form id="rankings">
+                <p:dataView var="meal" value="#{indexManagedBean.mealsWithRank}" rows="0" layout="grid" >
+                    <p:dataViewGridItem columns="3" >
+                        <p:panel header="rank #{meal.rank}" style="text-align: center; font-size: 50px; width: 100%">
+                            <h:panelGrid columns="1">
+                                <f:facet name='header'>
+                                    <p:graphicImage url="/resources/images/mealImages/#{meal.meal.name}.jpg" style="text-align: center; height: auto; width:100%;"/>
+                                </f:facet>    
+                                <h:outputText value="#{meal.meal.name}" style="color: white; font-size: 25px"/>
+                                <h:outputText value="#{meal.meal.description}" style="color: white; font-size: 25px"/>
+                                <h:outputText value="#{meal.meal.price}" style="color: white; font-size: 25px">
+                                    <f:convertNumber currencySymbol="$" type="currency"/>
+                                </h:outputText>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:dataViewGridItem>
+                </p:dataView>
             </h:form>
             <p:separator/>
             <div id="reviews" class="ui-g-12">
