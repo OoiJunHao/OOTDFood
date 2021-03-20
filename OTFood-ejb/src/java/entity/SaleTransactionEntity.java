@@ -96,7 +96,6 @@ public class SaleTransactionEntity implements Serializable {
     }
 
     public SaleTransactionEntity(Integer totalLineItem, Integer totalQuantity, BigDecimal totalAmount, Date transactionDateTime, Date deliveryDateTime) {
-
         this();
         this.totalLineItem = totalLineItem;
         this.totalQuantity = totalQuantity;
