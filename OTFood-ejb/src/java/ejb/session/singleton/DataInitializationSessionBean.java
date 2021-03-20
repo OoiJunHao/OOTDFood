@@ -188,7 +188,7 @@ public class DataInitializationSessionBean {
             saleTransactionLines.add(new SaleTransactionLineEntity(bentoSets.get(1), 2));
             SaleTransactionEntity saleTransaction = new SaleTransactionEntity(2, 6, BigDecimal.valueOf(8.00 * 2 + 8.50 * 4), new Date(), false, new Date(500, 10, 10));
             saleTransaction.setSaleTransactionLineItemEntities(saleTransactionLines);
-            saleTransactionEntitySessionBeanLocal.createNewSaleTransaction(customerId, saleTransaction); 
+            saleTransactionEntitySessionBeanLocal.createNewSaleTransaction(customerId, cc.getCreditCardId(), addressId, saleTransaction); 
             
             // Create user reviews
             reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "This is amazing!", new Date()), customerId, 1l);

@@ -75,6 +75,14 @@ public class SaleTransactionEntity implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     private OTUserEntity user;
+    
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    private AddressEntity address;
+    
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    private CreditCardEntity creditCardEntity;
 
     public SaleTransactionEntity() {
         saleTransactionLineItemEntities = new ArrayList<>();
@@ -207,6 +215,34 @@ public class SaleTransactionEntity implements Serializable {
      */
     public void setDeliveryDateTime(Date deliveryDateTime) {
         this.deliveryDateTime = deliveryDateTime;
+    }
+
+    /**
+     * @return the address
+     */
+    public AddressEntity getAddress() {
+        return address;
+    }
+
+    /**
+     * @param address the address to set
+     */
+    public void setAddress(AddressEntity address) {
+        this.address = address;
+    }
+
+    /**
+     * @return the creditCardEntity
+     */
+    public CreditCardEntity getCreditCardEntity() {
+        return creditCardEntity;
+    }
+
+    /**
+     * @param creditCardEntity the creditCardEntity to set
+     */
+    public void setCreditCardEntity(CreditCardEntity creditCardEntity) {
+        this.creditCardEntity = creditCardEntity;
     }
 
 }
