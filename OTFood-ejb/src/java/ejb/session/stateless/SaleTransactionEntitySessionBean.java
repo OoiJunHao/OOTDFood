@@ -5,10 +5,11 @@
  */
 package ejb.session.stateless;
 
+import entity.AddressEntity;
+import entity.CreditCardEntity;
 import entity.IngredientEntity;
 import entity.MealEntity;
 import entity.OTUserEntity;
-import entity.ReviewEntity;
 import entity.SaleTransactionEntity;
 import entity.SaleTransactionLineEntity;
 import java.util.List;
@@ -27,8 +28,9 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.exception.CreateNewSaleTransactionException;
-import util.exception.IngredientDeductException;
+import util.exception.CreditCardNotFoundException;
 import util.exception.InputDataValidationException;
+import util.exception.NoAddressFoundException;
 import util.exception.NoSaleTransactionFoundException;
 import util.exception.UpdateSaleTransactionException;
 import util.exception.UserNotFoundException;
@@ -40,10 +42,16 @@ import util.exception.UserNotFoundException;
 @Stateless
 public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySessionBeanLocal {
 
-    @EJB(name = "OTUserEntitySessionBeanLocal")
+    @EJB
+    private AddressEntitySessionBeanLocal addressEntitySessionBeanLocal;
+
+    @EJB
+    private CreditCardEntitySessionBeanLocal creditCardEntitySessionBeanLocal;
+            
+    @EJB
     private OTUserEntitySessionBeanLocal oTUserEntitySessionBeanLocal;
 
-    @EJB(name = "IngredientEntitySessionBeanLocal")
+    @EJB
     private IngredientEntitySessionBeanLocal ingredientEntitySessionBeanLocal;
 
     private final ValidatorFactory validatorFactory;
@@ -58,13 +66,17 @@ public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySe
     }
     
     @Override
-    public Long createNewSaleTransaction(Long userId, SaleTransactionEntity saleTransaction) throws CreateNewSaleTransactionException, InputDataValidationException {
+    public Long createNewSaleTransaction(Long userId, Long ccId, Long adressId, SaleTransactionEntity saleTransaction) throws CreateNewSaleTransactionException, InputDataValidationException {
         Set<ConstraintViolation<SaleTransactionEntity>> constraintViolations = validator.validate(saleTransaction);
         if (constraintViolations.isEmpty()) {
             if (saleTransaction != null) {
                 try {
                     OTUserEntity user = oTUserEntitySessionBeanLocal.retrieveUserById(userId);
+                    CreditCardEntity cc = creditCardEntitySessionBeanLocal.retrieveCardById(ccId);
+                    AddressEntity addresss = addressEntitySessionBeanLocal.retrieveAddressById(adressId);
                     saleTransaction.setUser(user);
+                    saleTransaction.setCreditCardEntity(cc);
+                    saleTransaction.setAddress(addresss);
                     user.getSaleTransaction().add(saleTransaction);
                     em.persist(saleTransaction);
                     for (int i = 0; i < saleTransaction.getTotalLineItem(); i++) {
@@ -82,6 +94,8 @@ public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySe
                     return saleTransaction.getSaleTransactionId();
                 } catch (UserNotFoundException ex) {
                     throw new CreateNewSaleTransactionException("Error: User not found!");
+                } catch (CreditCardNotFoundException | NoAddressFoundException ex) {
+                    throw new CreateNewSaleTransactionException("Error: Address or Credit Card not found!"); //should never get this
                 }
             } else {
                 throw new CreateNewSaleTransactionException("Error: saleTransaction provided is null!");

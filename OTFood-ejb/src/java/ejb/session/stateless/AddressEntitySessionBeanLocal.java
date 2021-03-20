@@ -14,7 +14,6 @@ import util.exception.InputDataValidationException;
 import util.exception.NoAddressFoundException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateAddressException;
-import util.exception.UserExistException;
 import util.exception.UserNotFoundException;
 
 /**
@@ -33,5 +32,7 @@ public interface AddressEntitySessionBeanLocal {
     public List<AddressEntity> retrieveAddressesByUserId(Long userId) throws NoAddressFoundException, UserNotFoundException;
 
     public Long addAddressWithUserId(AddressEntity address, Long userId) throws UnknownPersistenceException, InputDataValidationException, UserNotFoundException, AddressExistException;
+
+    public AddressEntity retrieveAddressById(Long addressId) throws NoAddressFoundException;
     
 }

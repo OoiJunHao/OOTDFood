@@ -9,6 +9,7 @@ import ejb.session.stateless.CreditCardEntitySessionBeanLocal;
 import ejb.session.stateless.MealEntitySessionBeanLocal;
 import ejb.session.stateless.PromoSessionBeanLocal;
 import ejb.session.stateless.SaleTransactionEntitySessionBeanLocal;
+import entity.AddressEntity;
 import entity.CreditCardEntity;
 import entity.MealEntity;
 import entity.OTUserEntity;
@@ -68,6 +69,9 @@ public class cartManagedBean implements Serializable {
 
     private List<CreditCardEntity> creditCards;
     private CreditCardEntity selectedCard;
+
+    private List<AddressEntity> address;
+    private AddressEntity selectedAddress;
 
     private String promoCode;
 
@@ -223,7 +227,11 @@ public class cartManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Please add items to cart!", null));
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("cartEmpty", true);
         } else {
-            SaleTransactionEntity txn = new SaleTransactionEntity(totalAmount, new Date(), order.getAddress());
+            int totalQuantity = 0;
+            for (int i = 0; i < lineItems.size(); i++) {
+                totalQuantity += lineItems.get(i).getQuantity();
+            }
+            SaleTransactionEntity txn = new SaleTransactionEntity(lineItems.size(), totalQuantity, totalAmount, new Date(), new Date());
             txn.setUser(currentUser);
             txn.setSaleTransactionLineItemEntities(lineItems);
 
@@ -244,7 +252,7 @@ public class cartManagedBean implements Serializable {
             txn.setTotalLineItem(lineItems.size());
 
             try {
-                saleTransactionEntitySessionBean.createNewSaleTransaction(currentUser.getUserId(), txn);
+                saleTransactionEntitySessionBean.createNewSaleTransaction(currentUser.getUserId(), selectedCard.getCreditCardId(), selectedAddress.getAddressId(), txn);
             } catch (CreateNewSaleTransactionException | InputDataValidationException ex) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, ex.getMessage(), null));
             }
