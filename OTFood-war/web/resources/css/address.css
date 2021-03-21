@@ -127,6 +127,7 @@ and open the template in the editor.
 
         align-items: flex-start;*/
     padding-top: 30px;
+    padding-left: 5px;
 }
 .address-list-item {
     display: flex;
@@ -140,7 +141,7 @@ and open the template in the editor.
 .address-list-detail {
     flex-direction: column;
     width: 70%;
-    align-content: flex-start;
+    /*    align-content: flex-start;*/
 }
 
 .address-list-action {
@@ -186,6 +187,7 @@ and open the template in the editor.
 }
 
 .page-footer {
+    position: relative;
     margin-top: 20vw;
     min-width: 75rem;
     border-top: 4px solid #ee4d2d;

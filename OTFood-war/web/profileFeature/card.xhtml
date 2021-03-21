@@ -20,6 +20,7 @@
                 <div class="user-side-brief">
                     <div id="avatar-placeholder">
                         <p:graphicImage class="user-side-brief-avatar" url="/uploadedFiles/#{profileManagedBean.profile.profilePic}.jpg" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
+                        <p:graphicImage style="height: auto; width: 50;" library="images" name="userDefault.png" rendered="#{profileManagedBean.profile.profilePic.length() == 0}"/>
                     </div>
 
                     <div class="user-side-description">

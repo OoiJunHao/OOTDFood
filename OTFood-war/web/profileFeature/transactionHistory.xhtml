@@ -22,6 +22,7 @@
                 <div class="user-side-brief">
                     <div id="avatar-placeholder">
                         <p:graphicImage class="user-side-brief-avatar" url="/uploadedFiles/#{profileManagedBean.profile.profilePic}.jpg" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
+                        <p:graphicImage style="height: auto; width: 50;" library="images" name="userDefault.png" rendered="#{profileManagedBean.profile.profilePic.length() == 0}"/>
                     </div>
 
                     <div class="user-side-description">
@@ -199,8 +200,6 @@
                 <p:commandButton value="Generate Receipt" style="margin-top: 10px; width: 40%; margin-left: 30%; margin-right: 30%"></p:commandButton>
             </p:dialog>
         </h:form>
-
-
 
         <footer class="page-footer">
             <div id ="footer" class="ui-g-12">
