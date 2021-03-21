@@ -12,6 +12,7 @@ import ejb.session.stateless.FaqSessionBeanLocal;
 import ejb.session.stateless.IngredientEntitySessionBeanLocal;
 import ejb.session.stateless.MealEntitySessionBeanLocal;
 import ejb.session.stateless.OTUserEntitySessionBeanLocal;
+import ejb.session.stateless.PromoSessionBeanLocal;
 import ejb.session.stateless.ReviewEntitySessionBeanLocal;
 import ejb.session.stateless.SaleTransactionEntitySessionBeanLocal;
 import entity.AddressEntity;
@@ -22,6 +23,7 @@ import entity.FaqEntity;
 import entity.IngredientEntity;
 import entity.MealEntity;
 import entity.OTUserEntity;
+import entity.PromoCodeEntity;
 import entity.ReviewEntity;
 import entity.SaleTransactionEntity;
 import entity.SaleTransactionLineEntity;
@@ -40,6 +42,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.enumeration.CategoryEnum;
 import util.enumeration.IngredientTypeEnum;
+import util.enumeration.PromoCodeTypeEnum;
 import util.enumeration.RegionEnum;
 import util.exception.AddressExistException;
 import util.exception.CardCreationException;
@@ -49,6 +52,7 @@ import util.exception.DriverExistsException;
 import util.exception.FaqExistException;
 import util.exception.IngredientEntityExistsException;
 import util.exception.InputDataValidationException;
+import util.exception.PromoCodeExistException;
 import util.exception.ReviewExistException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UserExistException;
@@ -62,6 +66,9 @@ import util.exception.UserNotFoundException;
 @Singleton
 @LocalBean
 public class DataInitializationSessionBean {
+
+    @EJB
+    private PromoSessionBeanLocal promoSessionBeanLocal;
 
     @EJB
     private CreditCardEntitySessionBeanLocal creditCardEntitySessionBeanLocal;
@@ -181,6 +188,9 @@ public class DataInitializationSessionBean {
             for (IngredientEntity ingredients : allIngredients) {
                 ingredientEntitySessionBeanLocal.createIngredientEntityForMeal(ingredients);
             }
+            
+            // Create Promo Code
+            promoSessionBeanLocal.createNewPromoCode(new PromoCodeEntity(new Date(), new Date(500, 10, 10), 100,"AAAAAA" ,new BigDecimal(10.0), PromoCodeTypeEnum.PERCENTAGE));
 
             // Create SaleTransactions
             List<SaleTransactionLineEntity> saleTransactionLines = new ArrayList<>();
@@ -217,7 +227,7 @@ public class DataInitializationSessionBean {
             faqSessionBean.createNewFaq(new FaqEntity("Are there different sizes to the bento?", "Sorry but at the moment, we only offer a fixed protion size.", "Product"));
             faqSessionBean.createNewFaq(new FaqEntity("Can I visit your shop?", "Currently we are a home grown business, hence we do not have an outlet store. We do appreciate your continuous support to allow us to achieve the dream of opening our own store", "Product"));
 
-        } catch (UserExistException | UnknownPersistenceException | InputDataValidationException | ReviewExistException | UserNotFoundException | FaqExistException | CreateNewSaleTransactionException | DriverExistsException | IngredientEntityExistsException | AddressExistException | CreditCardExistException | CardCreationException ex) {
+        } catch (UserExistException | UnknownPersistenceException | InputDataValidationException | ReviewExistException | UserNotFoundException | FaqExistException | CreateNewSaleTransactionException | DriverExistsException | IngredientEntityExistsException | AddressExistException | CreditCardExistException | CardCreationException | PromoCodeExistException ex) {
             Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         } 
 

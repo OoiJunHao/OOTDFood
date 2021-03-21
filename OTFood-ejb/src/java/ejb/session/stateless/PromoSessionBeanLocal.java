@@ -28,4 +28,6 @@ public interface PromoSessionBeanLocal {
 
     public Boolean checkPromoCode(String code);
 
+    public PromoCodeEntity retrieveCodeById(Long promoCodeId) throws PromotionNotFoundException;
+
 }
