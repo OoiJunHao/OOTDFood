@@ -4,7 +4,7 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /*
-    Created on : 22 Mar, 2021, 2:11:32 AM
+    Created on : 22 Mar, 2021, 3:49:54 AM
     Author     : Mitsuki
 */
 
@@ -116,81 +116,15 @@ and open the template in the editor.
     margin-top: 3px;
 }
 
-.my-acct-section-header-button {
-    margin-right: 2vw;
-    justify-content: flex-end;
-}
-
-.my-acct-address {
-    /*    display: flex;
-        flex-direction: row;
-
-        align-items: flex-start;*/
+.card {
     padding-top: 30px;
-}
-.address-list-item {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 25px 0;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #efefef;
-}
-.address-list-detail {
-    flex-direction: column;
-    width: 70%;
-    align-content: flex-start;
-}
-
-.address-list-action {
-    display: flex;
-    width: 300px;
-    margin-right: 2vw;
-    justify-content: flex-end;
-}
-
-.input-with-label {
-    margin-bottom: 30px;
-}
-
-.input-with-label-wrapper {
-    display: flex;
-    -webkit-box-pack: end;
-    justify-content: flex-start;
-    -webkit-box-align: center;
-    align-items: center;
-    margin-left: 20px;
-}
-
-.address-label {
-    width: 20%;
-    text-align: left;
-    color: #87CEEB;
-    overflow: hidden;
-    font-size: 15;
-    font-weight: lighter;
-}
-
-.address-content {
-    width: 80%;
-    box-sizing: border-box;
-    padding-left: 1.25rem;
-    font-size: 15;
-}
-
-#dialogAddAddress .label-holder {
-    font-family: Roboto, "Helvetica Neue", Helvetica, sans-serif;
-    font-size: 130%;
-
 }
 
 .page-footer {
-    margin-top: 20vw;
+    margin-top: 45vw;
     min-width: 75rem;
     border-top: 4px solid #ee4d2d;
     border-top: 4px solid #ffaa0d;
     background-color: #fff;
     color: rgba(0,0,0,.54);
 }
-
