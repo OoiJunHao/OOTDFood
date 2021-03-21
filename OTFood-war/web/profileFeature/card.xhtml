@@ -1,10 +1,148 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../template/defaultTemplate.xhtml">
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="css">
+        <h:outputStylesheet name="card.css" library="css"/>
+    </ui:define>
 
     <ui:define name="content">
-        card
+        <h:form id="userCreditCards" class="container">
+            <p:messages  redisplay="false">
+                <p:autoUpdate />
+            </p:messages>
+
+            <div class="sidebar-menu">
+                <div class="user-side-brief">
+                    <div id="avatar-placeholder">
+                        <p:graphicImage class="user-side-brief-avatar" url="/uploadedFiles/#{profileManagedBean.profile.profilePic}.jpg" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
+                    </div>
+
+                    <div class="user-side-description">
+                        <h:outputText value="#{profileManagedBean.profile.firstname} #{profileManagedBean.profile.lastName}"/>
+                    </div>
+                </div>
+
+                <div class="user-side-menu">
+                    <p:menu toggleable="true">
+                        <p:submenu icon="fa fa-user" label="My Account">
+                            <p:menuitem value="Profile" outcome="/userPages/profile.xhtml"/>
+                            <p:menuitem value="Banks &#38; Cards" outcome="/profileFeature/card.xhtml"/>
+                            <p:menuitem value="Addresses" outcome="/profileFeature/address.xhtml"/>
+                            <p:menuitem value="Change Password" outcome="/profileFeature/changePassword.xhtml"/>
+                        </p:submenu>
+
+                        <p:submenu icon="fa fa-book" label="My Purchases">
+                            <p:menuitem value="Transaction History" outcome="/profileFeature/transactionHistory.xhtml"/>
+                        </p:submenu>
+                    </p:menu>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="content-smaller">
+                    <div class="my-acct-section">
+                        <div class="my-acct-section-header">
+                            <div class="my-acct-section-header-left">
+                                <div id="header">My Credit Card</div>
+                                <br/>
+                                <div id="subtitle">Manage your card information</div>
+                            </div>
+
+                            <div class="my-acct-section-header-button">
+                                <p:commandButton icon="ui-icon-plusthick" value="Add New Credit Card" oncomplete="PF('dialogAddCreditCard').show()"/>
+                            </div>
+                        </div>
+
+                        <div class="my-acct-card">
+                            <p:dataView var="credit" value="#{profileManagedBean.creditCards}" rows="5">
+                                <p:dataViewListItem>
+                                    <div class="card-list-item">
+                                        <div class="card-list-detail">
+
+                                            <div class="input-with-label">
+                                                <div class="input-with-label-wrapper">
+                                                    <p:outputLabel class="card-label" for="creditType" value="Card Type: "/>
+                                                    <h:outputText class="card-content" id="creditType" value="#{credit.type}"/>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="input-with-label">
+                                                <div class="input-with-label-wrapper">
+                                                    <p:outputLabel class="card-label" for="creditName" value="Card Name: "/>
+                                                    <h:outputText class="card-content" id="creditName" value="#{credit.cardName}"/>
+                                                </div>
+                                            </div>
+                                            <div class="input-with-label">
+                                                <div class="input-with-label-wrapper">
+                                                    <p:outputLabel class="card-label" for="creditNum" value="Card Number: "/>
+                                                    <h:outputText class="card-content" id="creditNum" value="#{credit.cardNumber}"/>
+                                                </div>
+                                            </div>
+                                            <div class="input-with-label">
+                                                <div class="input-with-label-wrapper">
+                                                    <p:outputLabel class="card-label" for="creditDate" value="Expiry Date: "/>
+                                                    <h:outputText class="card-content" id="creditDate" value="#{credit.expiryDate}"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-list-action">
+                                            <p:commandButton value="Remove" update="userCreditCards" actionListener="#{profileManagedBean.removeCreditCard}">
+                                                <f:attribute name="cardId" value="#{credit.creditCardId}"/>
+                                            </p:commandButton>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                </p:dataViewListItem>
+                            </p:dataView>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+        <h:form id="formAddCreditCard">
+
+            <p:dialog id="dialogAddCreditCard" widgetVar="dialogAddCreditCard" header="Add Credit Card" closable="true" resizable="false">
+
+                <h:outputText class="label-holder" value="Type: "/>
+                <p:inputText class="label-holder" value="#{profileManagedBean.newCreditCard.type}"/>
+                <br/>
+                <br/>
+                <h:outputText class="label-holder" value="Card Name: "/>
+                <p:inputText class="label-holder" value="#{profileManagedBean.newCreditCard.cardName}"/>
+                <br/>
+                <br/>
+                <h:outputText class="label-holder" value="Card Number: "/>
+                <p:inputText class="label-holder" value="#{profileManagedBean.newCreditCard.cardNumber}"/>
+                <br/>
+                <br/>
+                <h:outputText class="label-holder" value="Card Expiry Date: "/>
+                <p:inputText class="label-holder" value="#{profileManagedBean.newCreditCard.expiryDate}"/>
+                <br/>
+                <br/>
+
+                <p:column colspan="2">
+                    <p:commandButton value="Add Credit Card" update="userCreditCards formAddCreditCard" actionListener="#{profileManagedBean.addCreditCard}" style="color: orange"/>
+                </p:column>
+
+
+            </p:dialog>
+
+        </h:form>
+
+        <footer class="page-footer">
+            <div id ="footer" class="ui-g-12">
+                <ui:insert name="footer">
+                    <ui:include src="/footer.xhtml"/>
+                </ui:insert>
+            </div>
+        </footer>
     </ui:define>
 
 </ui:composition>

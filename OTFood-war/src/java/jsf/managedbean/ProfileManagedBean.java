@@ -196,7 +196,7 @@ public class ProfileManagedBean implements Serializable {
             region = null;
             newAddress = new AddressEntity();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Address Added successfully", ""));
-
+            PrimeFaces.current().executeScript("PF('dialogAddAddress').hide()");
         } catch (UpdateUserException | UserNotFoundException | InputDataValidationException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Add Address error: " + ex.getMessage(), ""));
         }
@@ -209,6 +209,7 @@ public class ProfileManagedBean implements Serializable {
             oTUserEntitySessionBeanLocal.updateUserDetails(profile);
             newCreditCard = new CreditCardEntity();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Credit Card Added successfully", ""));
+            PrimeFaces.current().executeScript("PF('dialogAddCreditCard').hide()");
 
         } catch (UpdateUserException | UserNotFoundException | InputDataValidationException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Add Card error: " + ex.getMessage(), ""));
