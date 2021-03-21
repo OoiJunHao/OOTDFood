@@ -66,3 +66,12 @@
 .datatable {
     width: 100%;
 }
+
+.page-footer {
+    margin-top: 20vw;
+    min-width: 75rem;
+    /*    border-top: 4px solid #ee4d2d;*/
+    border-top: 4px solid #ffaa0d;
+    background-color: #fff;
+    color: rgba(0,0,0,.54);
+}
