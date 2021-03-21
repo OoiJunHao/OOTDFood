@@ -165,7 +165,7 @@ public class OTUserEntitySessionBean implements OTUserEntitySessionBeanLocal {
     }
 
     @Override
-    public void updatePassword(OTUserEntity user, String oldPassword, String newPassword) throws InvalidLoginCredentialException, UserNotFoundException {
+    public void updatePassword(OTUserEntity user, String oldPassword, String newPassword) throws InvalidLoginCredentialException, UserNotFoundException, InputDataValidationException {
         if (user.getUserId() != null && user != null) {
             try {
                 OTUserEntity userToUpdate = retrieveUserById(user.getUserId());

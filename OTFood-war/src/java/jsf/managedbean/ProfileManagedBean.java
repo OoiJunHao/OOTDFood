@@ -37,8 +37,10 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
 import util.enumeration.RegionEnum;
 import util.exception.InputDataValidationException;
+import util.exception.InvalidLoginCredentialException;
 import util.exception.UpdateUserException;
 import util.exception.UserNotFoundException;
+import util.security.CryptographicHelper;
 
 /**
  *
@@ -62,6 +64,11 @@ public class ProfileManagedBean implements Serializable {
     private CreditCardEntity newCreditCard;
     private List<RegionEnum> regions;
     private RegionEnum region;
+
+    //to change password
+    private String oldPassword;
+    private String newPassword;
+    private String confirmPassword;
 
     public ProfileManagedBean() {
         addresses = new ArrayList<>();
@@ -216,6 +223,29 @@ public class ProfileManagedBean implements Serializable {
         }
     }
 
+    public void changePassword() {
+        try {
+            String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(oldPassword + profile.getSalt()));
+            if (passwordHash.equals(profile.getPassword())) {
+                if (newPassword.equals(confirmPassword)) {
+
+                    oTUserEntitySessionBeanLocal.updatePassword(profile, oldPassword, newPassword);
+
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Password changed successfully", null));
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "New password does not match", null));
+                }
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Old password is incorrect", null));
+            }
+
+        } catch (InvalidLoginCredentialException | UserNotFoundException | InputDataValidationException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating product: " + ex.getMessage(), null));
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
+        }
+    }
+
     public void setRegion(AjaxBehaviorEvent event) {
         System.out.print(region);
         newAddress.setRegion(region);
@@ -284,6 +314,30 @@ public class ProfileManagedBean implements Serializable {
 
     public void setRegion(RegionEnum region) {
         this.region = region;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
 }
