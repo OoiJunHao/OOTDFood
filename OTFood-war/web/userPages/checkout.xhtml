@@ -49,9 +49,6 @@
                         </h:outputText>
                     </p:column>
 
-                    <!--  junhao
-                          sos
-                          here -->
                     <div class="items-action-button">
                         <p:column exportable="false">
                             <p:commandButton value="Edit Qty" icon="fa fa-pencil" update="checkoutForm mealDetails  @all" process="@all" actionListener="#{cartManagedBean.getMealOrderDetails}" oncomplete="PF('editItemsDialog').show()" styleClass="edit-button rounded-button ui-button-success">
@@ -69,26 +66,26 @@
 
             <br/>
 
-       
-                <div class="cart-footer-price" >
 
-                    <h2> TOTAL AMOUNT
-                        <h:outputText rendered="#{cartManagedBean.appliedPromoCode != null}" style="color: #ff9900; font-style: italic" value="Promo Code applied: #{cartManagedBean.appliedPromoCode.discountCode}" />
-                    </h2>
-                    <h3>
-                        <h:outputText value="#{cartManagedBean.totalAmount}" styleClass="product-price">
-                            <f:convertNumber currencySymbol="$" type="currency"/>
-                        </h:outputText>
+            <div class="cart-footer-price" >
 
-                    </h3>
+                <h2> TOTAL AMOUNT
+                    <h:outputText rendered="#{cartManagedBean.appliedPromoCode != null}" style="color: #ff9900; font-style: italic" value="Promo Code applied: #{cartManagedBean.appliedPromoCode.discountCode}" />
+                </h2>
+                <h3>
+                    <h:outputText value="#{cartManagedBean.totalAmount}" styleClass="product-price">
+                        <f:convertNumber currencySymbol="$" type="currency"/>
+                    </h:outputText>
 
-                </div>
-      
+                </h3>
+
+            </div>
+
             <div class='cart-footer'>
                 <h:panelGroup rendered="#{cartManagedBean.lineItems.isEmpty() == false and cartManagedBean.missingDetails == false}">
 
                     <p:outputLabel for="creditCard" value="Select Credit Card: "/>
-                    <p:selectOneMenu id="creditCard" value="#{cartManagedBean.selectedCard}" placeholder="Select a Credit Card">               
+                    <p:selectOneMenu id="creditCard" value="#{cartManagedBean.selectedCard}" placeholder="Select a Credit Card">
                         <f:selectItems value="#{cartManagedBean.creditCardNumbers}" />
                     </p:selectOneMenu>
 
@@ -102,14 +99,14 @@
 
                     <br/>
                     <br/>
-                
+
                     <p:outputLabel for="promoCode" value="Enter Promo code: " />
-                   <p:inputText id ="promoCode" value ="#{cartManagedBean.promoCode}" required="false" rendered="#{cartManagedBean.appliedPromoCode == null}"/>&nbsp;
+                    <p:inputText id ="promoCode" value ="#{cartManagedBean.promoCode}" required="false" rendered="#{cartManagedBean.appliedPromoCode == null}"/>&nbsp;
                     <p:commandButton value="Enter" actionListener="#{cartManagedBean.checkPromoCode}" update="@form" rendered="#{cartManagedBean.appliedPromoCode == null}" />
                     <p:outputLabel style="color: greenyellow; margin-right: 30px" value="Promo Code entered successfully!" rendered="#{cartManagedBean.appliedPromoCode != null}" />
                     <p:commandButton value="Remove Promo Code" actionListener="#{cartManagedBean.removePromoCode}" update="@form" rendered="#{cartManagedBean.appliedPromoCode != null}" />
-           
-                  
+
+
 
                     <br/>
                     <br/>
@@ -121,7 +118,7 @@
                     <br/>
 
                     <div class="pay-button">
-                        <p:commandButton style="align-self: center" value = "Pay" actionListener="#{cartManagedBean.createNewOrder}" oncomplete="PF('dialogPay').show()" update="@form" icon="fa fa-dollar" />
+                        <p:commandButton style="align-self: center" value = "Pay" actionListener="#{cartManagedBean.createNewOrder}" update="@form dialogPaySuccess" icon="fa fa-dollar" />
                     </div>
                 </h:panelGroup>
 
@@ -134,13 +131,16 @@
             </div>
         </h:form>
 
-        <p:dialog id="dialogPay" widgetVar="dialogPay" fitViewport="true" header="Order Confirmation" width="800px" resizable="false" modal="true" closable="false">
-            <p:panel style="text-align: center" rendered="#{cartManagedBean.lineItems.isEmpty()}">
+        <p:dialog id="dialogPaySuccess" widgetVar="dialogPaySuccess" fitViewport="true" header="Order Confirmation" width="800px" resizable="false" closable="false">
+            <p:panel style="text-align: center">
                 <h2> Your order has been confirmed! </h2>
-                <p> $#{cartManagedBean.totalAmount} has been charged to your account.</p>
-                <p:commandButton value="Close" process="@this" action="#{cartManagedBean.directToHome()}" oncomplete="PF('dialogPay').hide()"/>&nbsp;
+                <p> $$#{cartManagedBean.totalAmount} has been charged to your account.</p>
+                <p:commandButton value="Close" process="@this" action="#{cartManagedBean.directToHome}" oncomplete="PF('dialogPay').hide()"/>&nbsp;
             </p:panel>
-            <p:panel style="text-align: center" rendered="#{cartManagedBean.lineItems.isEmpty() == false}">
+        </p:dialog>
+
+        <p:dialog id="dialogPayFail" widgetVar="dialogPayFail" fitViewport="true" header="Order Confirmation" width="800px" resizable="false" closable="false">
+            <p:panel style="text-align: center">
                 <h2> Uh oh! </h2>
                 <p> We cannot go back in time to deliver your food! <br/>
                     Please select a delivery date and time in the future!

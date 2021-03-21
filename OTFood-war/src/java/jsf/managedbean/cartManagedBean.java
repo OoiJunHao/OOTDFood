@@ -79,6 +79,7 @@ public class cartManagedBean implements Serializable {
     private PromoCodeEntity appliedPromoCode;
 
     private boolean missingDetails;
+    private boolean checkoutComplete;
 
     public cartManagedBean() {
         this.creditCards = new ArrayList<>();
@@ -89,6 +90,7 @@ public class cartManagedBean implements Serializable {
         this.amtToCart = 0;
         this.totalAmount = new BigDecimal("0.00");
         this.missingDetails = true;
+        this.checkoutComplete = false;
         this.promoCode = "";
 
         // Create placeholder for DeliveryDateAndTimePicker
@@ -138,22 +140,24 @@ public class cartManagedBean implements Serializable {
     }
 
     public BigDecimal totalAmount() {
+        System.out.println(">>>>>>> changing total amount <<<<<<<");
         BigDecimal total = new BigDecimal(0.0);
         for (SaleTransactionLineEntity ord : this.lineItems) {
             total = total.add(ord.getMeal().getPrice().multiply(BigDecimal.valueOf(ord.getQuantity())));
         }
         if (this.appliedPromoCode != null) {
             switch (this.appliedPromoCode.getDiscountCodeTypeEnum()) {
-                    case FLAT:
-                        total = total.subtract(this.appliedPromoCode.getDiscountRate());
-                        break;
+                case FLAT:
+                    total = total.subtract(this.appliedPromoCode.getDiscountRate());
+                    break;
 
-                    case PERCENTAGE:
-                        total = total.multiply(new BigDecimal(1.0).subtract(new BigDecimal("0.01").multiply(this.appliedPromoCode.getDiscountRate()))).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-                        break;
-                }
+                case PERCENTAGE:
+                    total = total.multiply(new BigDecimal(1.0).subtract(new BigDecimal("0.01").multiply(this.appliedPromoCode.getDiscountRate()))).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                    break;
+            }
         }
         this.totalAmount = total;
+        System.out.println(totalAmount);
         return this.totalAmount;
     }
 
@@ -166,7 +170,7 @@ public class cartManagedBean implements Serializable {
             System.out.println(lineItems.get(i).getMeal().getName());
         }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Meal removed!", null));
-        this.totalAmount();
+        totalAmount();
         PrimeFaces.current().ajax().update("cartForm");
         PrimeFaces.current().ajax().update("checkoutForm");
         if (lineItems.isEmpty()) {
@@ -189,7 +193,7 @@ public class cartManagedBean implements Serializable {
         for (int i = 0; i < lineItems.size(); i++) {
             System.out.println(lineItems.get(i).getMeal().getName() + " " + lineItems.get(i).getQuantity());
         }
-        this.totalAmount();
+        totalAmount();
         PrimeFaces.current().executeScript("PF('editItemsDialog').hide()");
         PrimeFaces.current().ajax().update("cartForm");
     }
@@ -198,7 +202,7 @@ public class cartManagedBean implements Serializable {
         this.promoCode = "";
         this.appliedPromoCode = null;
         this.totalAmount = totalAmount();
-        PrimeFaces.current().ajax().update("cartForm");     
+        PrimeFaces.current().ajax().update("cartForm");
     }
 
     public void checkPromoCode(ActionEvent event) {
@@ -233,6 +237,7 @@ public class cartManagedBean implements Serializable {
     public void createNewOrder(ActionEvent action) {
 
         System.out.println("check    " + this.selectedCard);
+        System.out.println(totalAmount);
         int totalQuantity = 0;
         for (int i = 0; i < lineItems.size(); i++) {
             totalQuantity += lineItems.get(i).getQuantity();
@@ -266,13 +271,21 @@ public class cartManagedBean implements Serializable {
             if (this.appliedPromoCode != null) {
                 long saleTransactionId = saleTransactionEntitySessionBean.createNewSaleTransactionWithPromo(currentUser.getUserId(), ccId, addressId, this.appliedPromoCode.getPromoCodeId(), txn);
                 System.out.println("Successfully checked out: Sale Transaction ID " + saleTransactionId);
+                System.out.println(totalAmount);
+                PrimeFaces.current().executeScript("PF('dialogPaySuccess').show()");
+//                removeEverything();
             } else {
                 long saleTransactionId = saleTransactionEntitySessionBean.createNewSaleTransaction(currentUser.getUserId(), ccId, addressId, txn);
                 System.out.println("Successfully checked out: Sale Transaction ID " + saleTransactionId);
+                System.out.println(totalAmount);
+                PrimeFaces.current().executeScript("PF('dialogPaySuccess').show()");
+//                removeEverything();
             }
         } catch (CreateNewSaleTransactionException | InputDataValidationException ex) {
-            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, ex.getMessage(), null)); // should never hit this
+            PrimeFaces.current().executeScript("PF('dialogPayFail').show()");
         }
+
+//        PrimeFaces.current().executeScript("PF('dialogPay').show()");
     }
 
     private void getFakeData() throws MealNotFoundException {
@@ -297,11 +310,15 @@ public class cartManagedBean implements Serializable {
 
     //after checkout complete
     public void removeEverything() {
+        System.out.println(">>>>>>> RESETTING DATA <<<<<<<<<");
         this.lineItems.clear();
+        System.out.println(lineItems.isEmpty());
         this.totalAmount = new BigDecimal(0.0);
         this.promoCode = "";
         this.appliedPromoCode = null;
+        this.checkoutComplete = true;
         PrimeFaces.current().ajax().update("cartForm");
+
     }
 
     public void directToHome() {
@@ -490,6 +507,14 @@ public class cartManagedBean implements Serializable {
      */
     public void setAppliedPromoCode(PromoCodeEntity appliedPromoCode) {
         this.appliedPromoCode = appliedPromoCode;
+    }
+
+    public boolean isCheckoutComplete() {
+        return checkoutComplete;
+    }
+
+    public void setCheckoutComplete(boolean checkoutComplete) {
+        this.checkoutComplete = checkoutComplete;
     }
 
 }

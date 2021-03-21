@@ -14,10 +14,12 @@ and open the template in the editor.
 }
 
 .item-image {
-    width: 150px;
-    box-shadow: 0 3px 6px rgb(0 0 0 / 16%), 0 3px 6px rgb(0 0 0 / 23%);
+    width: 70%;
+    height: auto;
+    /*    box-shadow: 0 3px 6px rgb(0 0 0 / 16%), 0 3px 6px rgb(0 0 0 / 23%);*/
     margin-right: 2rem;
     text-align: center;
+
 
 }
 
@@ -25,11 +27,13 @@ and open the template in the editor.
     display: flex;
     flex-direction: column;
     border: hidden;
+
     /*    width: 40%;*/
 }
 
 .item-details #bento-name {
     font-weight: 700;
+    padding-bottom: 20;
 }
 
 .item-qty {
