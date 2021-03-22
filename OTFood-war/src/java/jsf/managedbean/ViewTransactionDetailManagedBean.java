@@ -40,6 +40,9 @@ public class ViewTransactionDetailManagedBean implements Serializable {
     public void postConstruct() {
         OTUserEntity user = (OTUserEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentUser");
         this.allSaleTransactions = saleTransactionEntitySessionBeanLocal.retrieveSaleTransactionsByUserId(user.getUserId());      
+        System.out.println("Calling vtmb");
+        System.out.println(this.allSaleTransactions.get(2).getDeliveryStatus().toString());
+        this.selectedSaleTransaction =this.allSaleTransactions.get(2);
     }
 
     /**

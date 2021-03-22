@@ -33,7 +33,7 @@ and open the template in the editor.
 
 .item-details #bento-name {
     font-weight: 700;
-    padding-bottom: 20;
+   
 }
 
 .item-qty {
@@ -68,6 +68,7 @@ and open the template in the editor.
     color: blanchedalmond;
     font-size: 1.0rem;
     padding-bottom: 20;
+    margin-left: 10px;
 }
 
 .cart-footer {
@@ -75,6 +76,7 @@ and open the template in the editor.
     color: blanchedalmond;
     font-size: 0.9rem;
     padding-bottom: 20;
+    margin-left: 10px;
 }
 
 .page-footer {

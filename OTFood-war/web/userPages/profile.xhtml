@@ -102,7 +102,7 @@
                                     </div>
                                 </div>
                                 <div class="my-acct-profile-left-edit">
-                                    <p:commandButton value="edit" oncomplete="PF('dialogUpdateDetails').show()" update="@form"/>
+                                    <p:commandButton value="Edit" oncomplete="PF('dialogUpdateDetails').show()" update="@form"/>
                                 </div>
 
                             </div>
@@ -139,7 +139,7 @@
         </h:form>
 
         <h:form id="formUpdateDetails">
-            <p:dialog id="dialogUpdateDetails" widgetVar="dialogUpdateDetails" header="Current Details" closable="true" resizable="false">
+            <p:dialog id="dialogUpdateDetails" widgetVar="dialogUpdateDetails" header="Current Details" closable="true" resizable="false" modal="true" draggable="false" closeOnEscape="true">
 
                 <p:panelGrid>
                     <p:row>

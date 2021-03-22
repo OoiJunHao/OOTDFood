@@ -102,12 +102,7 @@ public class cartManagedBean implements Serializable {
 
     @PostConstruct
     public void postConstruct() {  // To be empty eventually
-        try {
-            getFakeData();
-            System.out.println(">>>>> FINISH <<<<<<");
-        } catch (MealNotFoundException ex) {
-            Logger.getLogger(cartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       
     }
 
     public void addToCart(MealEntity meal) {
@@ -126,6 +121,15 @@ public class cartManagedBean implements Serializable {
             }
             amtToCart = 0;
         }
+        totalAmount();
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("cartEmpty", false);
+    }
+    
+    
+    // only used by CYOBManagedBean
+    public void addCYOBToCart(MealEntity meal) {
+        lineItems.add(new SaleTransactionLineEntity(meal, 1));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Added to cart!", null));
         totalAmount();
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("cartEmpty", false);
     }
