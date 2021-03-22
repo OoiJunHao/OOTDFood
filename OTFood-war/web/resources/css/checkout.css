@@ -77,4 +77,13 @@ and open the template in the editor.
     padding-bottom: 20;
 }
 
+.page-footer {
+
+    min-width: 75rem;
+    /*    border-top: 4px solid #ee4d2d;*/
+    border-top: 4px solid #ffaa0d;
+    background-color: #fff;
+    color: rgba(0,0,0,.54);
+}
+
 

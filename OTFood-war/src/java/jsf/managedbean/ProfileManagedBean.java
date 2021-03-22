@@ -33,11 +33,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
 import util.enumeration.RegionEnum;
 import util.exception.InputDataValidationException;
+import util.exception.InvalidLoginCredentialException;
 import util.exception.UpdateUserException;
 import util.exception.UserNotFoundException;
+import util.security.CryptographicHelper;
 
 /**
  *
@@ -50,7 +53,6 @@ public class ProfileManagedBean implements Serializable {
     @EJB(name = "OTUserEntitySessionBeanLocal")
     private OTUserEntitySessionBeanLocal oTUserEntitySessionBeanLocal;
 
-    
     /**
      * Creates a new instance of ProfileManagedBean
      */
@@ -62,8 +64,12 @@ public class ProfileManagedBean implements Serializable {
     private CreditCardEntity newCreditCard;
     private List<RegionEnum> regions;
     private RegionEnum region;
-    
-    
+
+    //to change password
+    private String oldPassword;
+    private String newPassword;
+    private String confirmPassword;
+
     public ProfileManagedBean() {
         addresses = new ArrayList<>();
         creditCards = new ArrayList<>();
@@ -71,10 +77,10 @@ public class ProfileManagedBean implements Serializable {
         newAddress = new AddressEntity();
         newCreditCard = new CreditCardEntity();
     }
-    
+
     @PostConstruct
     public void postConstruct() {
-        profile = (OTUserEntity)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentUser");
+        profile = (OTUserEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentUser");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String dateInString = formatter.format(profile.getDob());
         profileDate = dateInString;
@@ -87,15 +93,12 @@ public class ProfileManagedBean implements Serializable {
         addresses = profile.getAddress();
         creditCards = profile.getCreditCard();
         regions = Arrays.asList(RegionEnum.values());
-        
+
     }
-    
-    
-    public void handleFileUpload(FileUploadEvent event) throws InputDataValidationException, UpdateUserException, UserNotFoundException
-    {
-        
-        try
-        {
+
+    public void handleFileUpload(FileUploadEvent event) throws InputDataValidationException, UpdateUserException, UserNotFoundException {
+
+        try {
             String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") + event.getFile().getFileName();
 
             System.err.println("********** Demo03ManagedBean.handleFileUpload(): File name: " + event.getFile().getFileName());
@@ -110,12 +113,10 @@ public class ProfileManagedBean implements Serializable {
 
             InputStream inputStream = event.getFile().getInputStream();
 
-            while (true)
-            {
+            while (true) {
                 a = inputStream.read(buffer);
 
-                if (a < 0)
-                {
+                if (a < 0) {
                     break;
                 }
 
@@ -126,34 +127,35 @@ public class ProfileManagedBean implements Serializable {
             fileOutputStream.close();
             inputStream.close();
             String newFile = event.getFile().getFileName();
-            profile.setProfilePic(event.getFile().getFileName().substring(0, newFile.length()-4));
+            profile.setProfilePic(event.getFile().getFileName().substring(0, newFile.length() - 4));
             oTUserEntitySessionBeanLocal.updateUserDetails(profile);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,  "File uploaded successfully", ""));
-        }
-        catch(IOException ex)
-        {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,  "File upload error: " + ex.getMessage(), ""));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "File uploaded successfully", ""));
+        } catch (IOException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "File upload error: " + ex.getMessage(), ""));
         }
     }
-    
+
     public void updateDetails(ActionEvent event) {
-            try {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                Date updateDate = formatter.parse(profileDate);
-                profile.setDob(updateDate);
-                oTUserEntitySessionBeanLocal.updateUserDetails(profile);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,  "Profile updated successfully", ""));
-            } catch (UpdateUserException | UserNotFoundException | InputDataValidationException ex) {
-               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,  "Profile Update error: " + ex.getMessage(), ""));
-            } catch (ParseException ex) {
+        System.out.println(">>>>>>>>Update details <<<<<");
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date updateDate = formatter.parse(profileDate);
+            profile.setDob(updateDate);
+            oTUserEntitySessionBeanLocal.updateUserDetails(profile);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Profile updated successfully", ""));
+
+            PrimeFaces.current().executeScript("PF('dialogUpdateDetails').hide()");
+        } catch (UpdateUserException | UserNotFoundException | InputDataValidationException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Update error: " + ex.getMessage(), ""));
+        } catch (ParseException ex) {
             Logger.getLogger(ProfileManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
+
     public void removeAddress(ActionEvent event) {
         try {
-            Long addressId = (Long)event.getComponent().getAttributes().get("addressId");
+            Long addressId = (Long) event.getComponent().getAttributes().get("addressId");
             for (int i = 0; i < addresses.size(); i++) {
                 if (addresses.get(i).getAddressId() == addressId) {
                     addresses.remove(i);
@@ -169,12 +171,12 @@ public class ProfileManagedBean implements Serializable {
         } catch (InputDataValidationException ex) {
             Logger.getLogger(ProfileManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
+
     public void removeCreditCard(ActionEvent event) {
         try {
-            Long creditCardId = (Long)event.getComponent().getAttributes().get("cardId");
+            Long creditCardId = (Long) event.getComponent().getAttributes().get("cardId");
             for (int i = 0; i < creditCards.size(); i++) {
                 if (creditCards.get(i).getCreditCardId() == creditCardId) {
                     creditCards.remove(i);
@@ -190,9 +192,9 @@ public class ProfileManagedBean implements Serializable {
         } catch (InputDataValidationException ex) {
             Logger.getLogger(ProfileManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
+
     public void addAddress(ActionEvent event) {
         try {
             addresses.add(newAddress);
@@ -200,23 +202,47 @@ public class ProfileManagedBean implements Serializable {
             oTUserEntitySessionBeanLocal.updateUserDetails(profile);
             region = null;
             newAddress = new AddressEntity();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,  "Address Added successfully", ""));
-            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Address Added successfully", ""));
+            PrimeFaces.current().executeScript("PF('dialogAddAddress').hide()");
         } catch (UpdateUserException | UserNotFoundException | InputDataValidationException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,  "Add Address error: " + ex.getMessage(), ""));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Add Address error: " + ex.getMessage(), ""));
         }
     }
-    
+
     public void addCreditCard(ActionEvent event) {
         try {
             creditCards.add(newCreditCard);
             profile.setCreditCard(creditCards);
             oTUserEntitySessionBeanLocal.updateUserDetails(profile);
             newCreditCard = new CreditCardEntity();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,  "Credit Card Added successfully", ""));
-            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Credit Card Added successfully", ""));
+            PrimeFaces.current().executeScript("PF('dialogAddCreditCard').hide()");
+
         } catch (UpdateUserException | UserNotFoundException | InputDataValidationException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,  "Add Card error: " + ex.getMessage(), ""));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Add Card error: " + ex.getMessage(), ""));
+        }
+    }
+
+    public void changePassword() {
+        try {
+            String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(oldPassword + profile.getSalt()));
+            if (passwordHash.equals(profile.getPassword())) {
+                if (newPassword.equals(confirmPassword)) {
+
+                    oTUserEntitySessionBeanLocal.updatePassword(profile, oldPassword, newPassword);
+
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Password changed successfully", null));
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "New password does not match", null));
+                }
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Old password is incorrect", null));
+            }
+
+        } catch (InvalidLoginCredentialException | UserNotFoundException | InputDataValidationException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating product: " + ex.getMessage(), null));
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }
 
@@ -225,7 +251,7 @@ public class ProfileManagedBean implements Serializable {
         newAddress.setRegion(region);
         System.out.print(newAddress.getRegion());
     }
-    
+
     public OTUserEntity getProfile() {
         return profile;
     }
@@ -289,10 +315,29 @@ public class ProfileManagedBean implements Serializable {
     public void setRegion(RegionEnum region) {
         this.region = region;
     }
-    
-    
-    
-    
-    
-    
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
 }

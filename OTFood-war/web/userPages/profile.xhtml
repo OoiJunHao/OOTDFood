@@ -6,54 +6,148 @@
                 template="./../template/defaultTemplate.xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
-    
-   
+
+
     <ui:define name="css">
         <h:outputStylesheet name="profile.css" library="css"/>
-        
+
     </ui:define>
 
     <ui:define name="content">
-        <h:form id="formFileUpload" enctype="multipart/form-data">
+        <h:form class="container" id="formFileUpload" enctype="multipart/form-data">
             <p:messages  redisplay="false">
-                    <p:autoUpdate />
+                <p:autoUpdate />
             </p:messages>
-                
-            <p:panel header="Your Profile" style="text-align: center; font-size: 45px;">
-                <h5 style="text-align: center">Profile Picture:</h5><br/>
-                <p:graphicImage url="/uploadedFiles/#{profileManagedBean.profile.profilePic}.jpg" style="text-align: center; border-radius: 50%; height: 50%; position: relative; top: -5vh" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
-                <p:fileUpload listener="#{profileManagedBean.handleFileUpload}" multiple="true" style="width: 30%; font-size: 20px; position: relative; left: 33vw;" update="formFileUpload" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/><br/>
-                <h:outputText value="Name: "/>
-                <h:outputText value="#{profileManagedBean.profile.firstname} #{profileManagedBean.profile.lastName}"/>
-                <br/>
-                <br/>
-                <h:outputText value="Email: "/>
-                <h:outputText value="#{profileManagedBean.profile.email}"/>
-                <br/>
-                <br/>
-                <h:outputText value="Contact Number: "/>
-                <h:outputText value="#{profileManagedBean.profile.contactNum}"/>
-                <br/>
-                <br/>
-                <h:outputText value="Date Of Birth: "/>
-                <h:outputText value="#{profileManagedBean.profileDate}"/>
-                <br/>
-                <br/>
-                <p:commandButton value="edit" oncomplete="PF('dialogUpdateDetails').show()" update="formFileUpload" style="text-align: center; color: greenyellow; font-family: cursive"/>
 
-            </p:panel>
-        </h:form>    
+            <div class="sidebar-menu">
+                <div class="user-side-brief">
+                    <div id="avatar-placeholder">
+                        <p:graphicImage class="user-side-brief-avatar" url="/uploadedFiles/#{profileManagedBean.profile.profilePic}.jpg" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
+                        <p:graphicImage style="height: auto; width: 50;" library="images" name="userDefault.png" rendered="#{profileManagedBean.profile.profilePic.length() == 0}"/>
+                    </div>
+
+                    <div class="user-side-description">
+                        <h:outputText value="#{profileManagedBean.profile.firstname} #{profileManagedBean.profile.lastName}"/>
+                    </div>
+                </div>
+
+                <div class="user-side-menu">
+                    <p:menu toggleable="true">
+                        <p:submenu icon="fa fa-user" label="My Account">
+                            <p:menuitem value="Profile" outcome="/userPages/profile.xhtml"/>
+                            <p:menuitem value="Banks &#38; Cards" outcome="/profileFeature/card.xhtml"/>
+                            <p:menuitem value="Addresses" outcome="/profileFeature/address.xhtml"/>
+                            <p:menuitem value="Change Password" outcome="/profileFeature/changePassword.xhtml"/>
+                        </p:submenu>
+
+                        <p:submenu icon="fa fa-book" label="My Purchases">
+                            <p:menuitem value="Transaction History" outcome="/profileFeature/transactionHistory.xhtml"/>
+                        </p:submenu>
+                    </p:menu>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="content-smaller">
+                    <div class="my-acct-section">
+                        <div class="my-acct-section-header">
+                            <div id="header">My Profile</div>
+                            <br/>
+                            <div id="subtitle">Manage and Protect your account</div>
+                        </div>
+
+                        <div class="my-acct-profile">
+                            <div class="my-acct-profile-left">
+                                <div class="input-with-label">
+                                    <div class="input-with-label-wrapper">
+                                        <div class="input-with-label-label">
+                                            <h:outputText value="Name: "/>
+                                        </div>
+                                        <div class="input-with-label-content">
+                                            <h:outputText value="#{profileManagedBean.profile.firstname} #{profileManagedBean.profile.lastName}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-with-label">
+                                    <div class="input-with-label-wrapper">
+                                        <div class="input-with-label-label">
+                                            <h:outputText value="Email: "/>
+
+                                        </div>
+                                        <div class="input-with-label-content">
+                                            <h:outputText value="#{profileManagedBean.profile.email}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-with-label">
+                                    <div class="input-with-label-wrapper">
+                                        <div class="input-with-label-label">
+                                            <h:outputText value="Contact Number: "/>
+
+                                        </div>
+                                        <div class="input-with-label-content">
+                                            <h:outputText value="#{profileManagedBean.profile.contactNum}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-with-label">
+                                    <div class="input-with-label-wrapper">
+                                        <div class="input-with-label-label">
+                                            <h:outputText value="Date Of Birth: "/>
+
+                                        </div>
+                                        <div class="input-with-label-content">
+                                            <h:outputText value="#{profileManagedBean.profileDate}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="my-acct-profile-left-edit">
+                                    <p:commandButton value="edit" oncomplete="PF('dialogUpdateDetails').show()" update="@form"/>
+                                </div>
+
+                            </div>
+                            <div class="my-acct-profile-right">
+                                <div class="profile-pic-uploader">
+                                    <div class="profile-pic-uploader-avatar">
+                                        <div class="profile-pic-uploader-placeholder">
+                                            <p:graphicImage url="/uploadedFiles/#{profileManagedBean.profile.profilePic}.jpg" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
+                                            <p:graphicImage style="height: auto; width: 90;" library="images" name="userDefault.png" rendered="#{profileManagedBean.profile.profilePic.length() == 0}"/>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="profile-pic-uploader-button">
+                                        <p:fileUpload listener="#{profileManagedBean.handleFileUpload}" mode="advanced" auto="true" sizeLimit="100000" update="formFileUpload" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/><br/>
+                                    </div>
+
+                                    <div class="profile-pic-uploader-description">
+                                        <h:outputText class="description" value="File Size: maximum 1 MB"/>
+                                        <h:outputText class="description" value="File extension: .jpg"/>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </h:form>
+
         <h:form id="formUpdateDetails">
-
-            <p:dialog id="dialogUpdateDetails" widgetVar="dialogUpdateDetails" header="Current Details" closable="true">
+            <p:dialog id="dialogUpdateDetails" widgetVar="dialogUpdateDetails" header="Current Details" closable="true" resizable="false">
 
                 <p:panelGrid>
                     <p:row>
                         <p:column>
-                            <p:outputLabel for="firstname" value="First Name: " />
+                            <p:outputLabel class="label-holder" for="firstname" value="First Name: " />
                         </p:column>
                         <p:column>
-                            <p:inputText id="firstname" value="#{profileManagedBean.profile.firstname}" placeholder="Benny" required="true" requiredMessage="First Name is required" />
+                            <p:inputText class="label-holder" id="firstname" value="#{profileManagedBean.profile.firstname}" placeholder="#{profileManagedBean.profile.firstname}" required="true" requiredMessage="First Name is required" />
                         </p:column>
                         <p:column>
                             <p:message for="firstname" />
@@ -62,10 +156,10 @@
 
                     <p:row>
                         <p:column>
-                            <p:outputLabel for="lastname" value="Last Name: " />
+                            <p:outputLabel class="label-holder" for="lastname" value="Last Name: " />
                         </p:column>
                         <p:column>
-                            <p:inputText id="lastname" value="#{profileManagedBean.profile.lastName}" placeholder="Phoe" required="true" requiredMessage="Last Name is required" />
+                            <p:inputText class="label-holder" id="lastname" value="#{profileManagedBean.profile.lastName}" placeholder="#{profileManagedBean.profile.lastName}" required="true" requiredMessage="Last Name is required" />
                         </p:column>
                         <p:column>
                             <p:message for="lastname" />
@@ -74,10 +168,10 @@
 
                     <p:row>
                         <p:column>
-                            <p:outputLabel for="contact" value="Contact Number: " />
+                            <p:outputLabel class="label-holder" for="contact" value="Contact Number: " />
                         </p:column>
                         <p:column>
-                            <p:inputText id="contact" value="#{profileManagedBean.profile.contactNum}" placeholder="90909090" required="true" requiredMessage="Contact number is required" />
+                            <p:inputText class="label-holder" id="contact" value="#{profileManagedBean.profile.contactNum}" placeholder="#{profileManagedBean.profile.contactNum}" required="true" requiredMessage="Contact number is required" />
                         </p:column>
                         <p:column>
                             <p:message for="contact" />
@@ -86,10 +180,10 @@
 
                     <p:row>
                         <p:column>
-                            <p:outputLabel for="dob" value="Date of birth: " />
+                            <p:outputLabel class="label-holder" for="dob" value="Date of birth: " />
                         </p:column>
                         <p:column>
-                            <p:inputText id="dob" type="date" value="#{profileManagedBean.profileDate}" required="true"/>
+                            <p:inputText class="label-holder" id="dob" type="date" value="#{profileManagedBean.profileDate}" required="true"/>
                         </p:column>
                         <p:column>
                             <p:message for="dob" />
@@ -97,149 +191,21 @@
                     </p:row>
 
                     <p:row>
-                    <p:column colspan="3">
-                        <p:commandButton value="Update Profile" update="formFileUpload" actionListener="#{profileManagedBean.updateDetails}" oncomplete="PF('dialogUpdateDetails').hide();" style="color: greenyellow"/>
-                    </p:column>
-                </p:row>
+                        <p:column colspan="3">
+                            <p:commandButton value="Update Profile" update="formFileUpload" actionListener="#{profileManagedBean.updateDetails}" style="color: orange;"/>
+                        </p:column>
+                    </p:row>
                 </p:panelGrid>
             </p:dialog>
         </h:form>
-        
-        <h:form id="userAddresses">
-             <div style="display: flex; flex-direction: row; width: 10%; margin: auto">
-                
-                <div><h1 style="color: white; text-align: center; font-size: 30px">Your Addresses</h1></div>
-                <div><p:commandButton icon="ui-icon-plusthick" oncomplete="PF('dialogAddAddress').show()" style="position: relative; left: 49.5%; font-size: 20px"/></div>
+
+        <footer class="page-footer">
+            <div id ="footer" class="ui-g-12">
+                <ui:insert name="footer">
+                    <ui:include src="/footer.xhtml"/>
+                </ui:insert>
             </div>
-            <p:dataView var="address" value="#{profileManagedBean.addresses}" rows="5">
-                <p:dataViewListItem>
-                    <div class="address-list-item">
-                        <div class="address-list-detail">
-                            
-                            <div class="address">
-                                <p:outputLabel for="addressName" value="Address: "/>
-                                <h:outputText id="addressName" value="#{address.address}"/>
-                            </div>
-                            <div class="address">
-                                <p:outputLabel for="addressPostal" value="Postal Code: "/>
-                                <h:outputText id="addressPostal" value="#{address.postalCode}"/>
-                            </div>
-                            <div class="address">
-                                <p:outputLabel for="addressRegion" value="Region: "/>
-                                <h:outputText id="addressRegion" value="#{address.region}"/>
-                            </div>
-                        </div>
-                        <div class="address-list-action">
-                            <p:commandButton value="Remove" update="userAddresses" actionListener="#{profileManagedBean.removeAddress}" style="font-size: 18px; color: palevioletred">
-                                <f:attribute name="addressId" value="#{address.addressId}"/>
-                            </p:commandButton>
-                        </div>
-                    </div>
-                    <br/>
-                </p:dataViewListItem>
-            </p:dataView>
-            
-        </h:form>
-        
-        <h:form id="userCreditCards">
-            <div style="display: flex; flex-direction: row; width: 10%; margin: auto">
-                
-                <div><h1 style="color: white; text-align: center; font-size: 30px">Your Credit Cards</h1></div>
-                <div><p:commandButton icon="ui-icon-plusthick" oncomplete="PF('dialogAddCreditCard').show()" style="position: relative; left: 49.5%; font-size: 20px"/></div>
-            </div>
-            <p:dataView var="credit" value="#{profileManagedBean.creditCards}" rows="5">
-                <p:dataViewListItem>
-                    <div class="address-list-item">
-                        <div class="address-list-detail">
-                            <div class="address">
-                                <p:outputLabel for="creditType" value="Card Type: "/>
-                                <h:outputText id="creditType" value="#{credit.type}"/>
-                            </div>
-                            <div class="address">
-                                <p:outputLabel for="creditName" value="Card Name: "/>
-                                <h:outputText id="creditName" value="#{credit.cardName}"/>
-                            </div>
-                            <div class="address">
-                                <p:outputLabel for="creditNum" value="Card Number: "/>
-                                <h:outputText id="creditNum" value="#{credit.cardNumber}"/>
-                            </div>
-                            <div class="address">
-                                <p:outputLabel for="creditDate" value="Expiry Date: "/>
-                                <h:outputText id="creditDate" value="#{credit.expiryDate}"/>
-                            </div>
-                        </div>
-                        <div class="address-list-action">
-                            <p:commandButton value="Remove" update="userCreditCards" actionListener="#{profileManagedBean.removeCreditCard}" style="font-size: 18px; color: palevioletred">
-                                <f:attribute name="cardId" value="#{credit.creditCardId}"/>
-                            </p:commandButton>
-                        </div>
-                    </div>
-                    <br/>
-                </p:dataViewListItem>
-            </p:dataView>
-            
-        </h:form>
-        
-        <h:form id="formAddAddress">
-
-            <p:dialog id="dialogAddAddress" widgetVar="dialogAddAddress" header="Add Address" closable="true">
-                
-                    <h:outputText value="Region: "/>
-                    <p:selectOneMenu value="#{profileManagedBean.region}">
-                        <f:selectItem itemLabel="Select One" itemValue=""/>
-                        <f:selectItems value="#{profileManagedBean.regions}" var="region" itemLabel="#{region}" itemValue="#{region}"/>
-                        <p:ajax event="change" listener="#{profileManagedBean.setRegion}"/>
-                    </p:selectOneMenu>
-                    <br/>
-                    <br/>
-                    <h:outputText value="Address Name: "/>
-                    <p:inputText value="#{profileManagedBean.newAddress.address}"/>
-                    <br/>
-                    <br/>
-                    <h:outputText value="Postal Code: "/>
-                    <p:inputText value="#{profileManagedBean.newAddress.postalCode}"/>
-                    <br/>
-                    <br/>
-                    <p:column colspan="2">
-                        <p:commandButton value="Add Address" update="userAddresses formAddAddress" actionListener="#{profileManagedBean.addAddress}" oncomplete="PF('dialogAddAddress').hide();" style="color: greenyellow"/>
-                    </p:column>
-                
-                
-            </p:dialog>
-            
-        </h:form>
-        
-        <h:form id="formAddCreditCard">
-
-            <p:dialog id="dialogAddCreditCard" widgetVar="dialogAddCreditCard" header="Add Credit Card" closable="true">
-                
-                    <h:outputText value="Type: "/>
-                    <p:inputText value="#{profileManagedBean.newCreditCard.type}"/>
-                    <br/>
-                    <br/>
-                    <h:outputText value="Card Name: "/>
-                    <p:inputText value="#{profileManagedBean.newCreditCard.cardName}"/>
-                    <br/>
-                    <br/>
-                    <h:outputText value="Card Number: "/>
-                    <p:inputText value="#{profileManagedBean.newCreditCard.cardNumber}"/>
-                    <br/>
-                    <br/>
-                    <h:outputText value="Card Expiry Date: "/>
-                    <p:inputText value="#{profileManagedBean.newCreditCard.expiryDate}"/>
-                    <br/>
-                    <br/>
-                    <p:column colspan="2">
-                        <p:commandButton value="Add Credit Card" update="userCreditCards formAddCreditCard" actionListener="#{profileManagedBean.addCreditCard}" oncomplete="PF('dialogAddCreditCard').hide();" style="color: greenyellow"/>
-                    </p:column>
-                
-                
-            </p:dialog>
-            
-        </h:form>
-
-                
-          
+        </footer>
     </ui:define>
 
 </ui:composition>

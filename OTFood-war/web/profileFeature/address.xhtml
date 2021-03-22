@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+    <ui:define name="css">
+        <h:outputStylesheet name="address.css" library="css"/>
+    </ui:define>
+
+
+    <ui:define name="content">
+        <h:form id="userAddresses" class="container">
+            <p:messages  redisplay="false">
+                <p:autoUpdate />
+            </p:messages>
+
+            <div class="sidebar-menu">
+                <div class="user-side-brief">
+                    <div id="avatar-placeholder">
+                        <p:graphicImage class="user-side-brief-avatar" url="/uploadedFiles/#{profileManagedBean.profile.profilePic}.jpg" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
+                        <p:graphicImage style="height: auto; width: 50;" library="images" name="userDefault.png" rendered="#{profileManagedBean.profile.profilePic.length() == 0}"/>
+                    </div>
+
+                    <div class="user-side-description">
+                        <h:outputText value="#{profileManagedBean.profile.firstname} #{profileManagedBean.profile.lastName}"/>
+                    </div>
+                </div>
+
+                <div class="user-side-menu">
+                    <p:menu toggleable="true">
+                        <p:submenu icon="fa fa-user" label="My Account">
+                            <p:menuitem value="Profile" outcome="/userPages/profile.xhtml"/>
+                            <p:menuitem value="Banks &#38; Cards" outcome="/profileFeature/card.xhtml"/>
+                            <p:menuitem value="Addresses" outcome="/profileFeature/address.xhtml"/>
+                            <p:menuitem value="Change Password" outcome="/profileFeature/changePassword.xhtml"/>
+                        </p:submenu>
+
+                        <p:submenu icon="fa fa-book" label="My Purchases">
+                            <p:menuitem value="Transaction History" outcome="/profileFeature/transactionHistory.xhtml"/>
+                        </p:submenu>
+                    </p:menu>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="content-smaller">
+                    <div class="my-acct-section-header">
+                        <div class="my-acct-section-header-left">
+                            <div id="header">My Addresses</div>
+                            <br/>
+                            <div id="subtitle">Manage your address information</div>
+                        </div>
+
+                        <div class="my-acct-section-header-button">
+                            <p:commandButton icon="ui-icon-plusthick" value="Add New Address" oncomplete="PF('dialogAddAddress').show()"/>
+                        </div>
+                    </div>
+
+                    <div class="my-acct-address">
+                        <p:dataView var="address" value="#{profileManagedBean.addresses}" rows="5">
+                            <p:dataViewListItem>
+                                <div class="address-list-item">
+                                    <div class="address-list-detail">
+                                        <div class="input-with-label">
+                                            <div class="input-with-label-wrapper">
+                                                <div class="address">
+                                                    <p:outputLabel class="address-label" for="addressName" value="Address: "/>
+                                                    <h:outputText class="address-content" id="addressName" value="#{address.address}"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="input-with-label">
+                                            <div class="input-with-label-wrapper">
+                                                <div class="address">
+                                                    <p:outputLabel class="address-label" for="addressPostal" value="Postal Code: "/>
+                                                    <h:outputText class="address-content" id="addressPostal" value="#{address.postalCode}"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="input-with-label">
+                                            <div class="input-with-label-wrapper">
+                                                <div class="address">
+                                                    <p:outputLabel class="address-label" for="addressRegion" value="Region: "/>
+                                                    <h:outputText class="address-content" id="addressRegion" value="#{address.region}"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="address-list-action">
+                                        <p:commandButton value="Remove" update="userAddresses" actionListener="#{profileManagedBean.removeAddress}">
+                                            <f:attribute name="addressId" value="#{address.addressId}"/>
+                                        </p:commandButton>
+                                    </div>
+                                </div>
+                                <br/>
+                            </p:dataViewListItem>
+                        </p:dataView>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+        <h:form id="formAddAddress">
+
+            <p:dialog id="dialogAddAddress" widgetVar="dialogAddAddress" header="Add Address" closable="true">
+
+                <h:outputText class="label-holder" value="Region: "/>
+                <p:selectOneMenu value="#{profileManagedBean.region}">
+                    <f:selectItem itemLabel="Select One" itemValue=""/>
+                    <f:selectItems value="#{profileManagedBean.regions}" var="region" itemLabel="#{region}" itemValue="#{region}"/>
+                    <p:ajax event="change" listener="#{profileManagedBean.setRegion}"/>
+                </p:selectOneMenu>
+                <br/>
+                <br/>
+                <h:outputText class="label-holder" value="Address Name: "/>
+                <p:inputText value="#{profileManagedBean.newAddress.address}"/>
+                <br/>
+                <br/>
+                <h:outputText class="label-holder" value="Postal Code: "/>
+                <p:inputText value="#{profileManagedBean.newAddress.postalCode}"/>
+                <br/>
+                <br/>
+                <p:column colspan="2">
+                    <p:commandButton value="Add Address" update="userAddresses formAddAddress" actionListener="#{profileManagedBean.addAddress}" oncomplete="PF('dialogAddAddress').hide();" style="color: orange"/>
+                </p:column>
+
+
+            </p:dialog>
+
+        </h:form>
+
+        <footer class="page-footer">
+            <div id ="footer" class="ui-g-12">
+                <ui:insert name="footer">
+                    <ui:include src="/footer.xhtml"/>
+                </ui:insert>
+            </div>
+        </footer>
+    </ui:define>
+
+</ui:composition>

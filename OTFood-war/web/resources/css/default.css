@@ -1,13 +1,14 @@
 body {
     background-color: #242f4b;
     font-size: 12px;
-    font-family: Andale Mono, monospace, Camphor,Open Sans,Segoe UI,sans-serif;
-    color: #000000;
-    margin: 0px;   
+    font-family: Roboto, "Helvetica Neue", Helvetica, sans-serif;
+    color: #ffffff;
+    margin: 0px;
 }
 
 h1 {
-    font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+    /*    font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;*/
+    font-family: Roboto, "Helvetica Neue", Helvetica, sans-serif;
     /*    border-bottom: 1px solid #AFAFAF;*/
     font-size:  16px;
     font-weight: bold;
@@ -35,7 +36,7 @@ a:link:hover, a:visited:hover  {
     width: 100%;
     margin:0%;
     /*    overflow: visible !important;*/
-    font-family: Andale Mono, monospace;
+    font-family: Roboto, "Helvetica Neue", Helvetica, sans-serif;
     font-weight: 500;
 }
 
@@ -51,5 +52,6 @@ a:link:hover, a:visited:hover  {
 }
 
 .headerValue {
-    font-family: Andale Mono, monospace;
+    /*    font-family: Andale Mono, monospace;*/
+    font-family: Roboto, "Helvetica Neue", Helvetica, sans-serif;
 }
