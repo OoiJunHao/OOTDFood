@@ -47,10 +47,10 @@ public class CYOBManagedBean implements Serializable {
 
     @EJB(name = "IngredientEntitySessionBeanLocal")
     private IngredientEntitySessionBeanLocal ingredientEntitySessionBeanLocal;
-    
+
     @Inject
     private cartManagedBean cartManagedBean;
-    
+
     private List<IngredientEntity> bases;
     private List<IngredientEntity> meats;
     private List<IngredientEntity> vegetables;
@@ -61,12 +61,10 @@ public class CYOBManagedBean implements Serializable {
     private List<IngredientCount> droppedIngredientsForVeges;
     private List<IngredientCount> droppedIngredientsForSauces;
     private List<IngredientCount> droppedIngredientsForAddons;
-    private Map<IngredientEntity, Integer> droppedIngredientsWithCount; 
+    private Map<IngredientEntity, Integer> droppedIngredientsWithCount;
     private int totalCalorie;
     private BigDecimal totalPrice;
-    
-    
-    
+
     /**
      * Creates a new instance of CYOBManagedBean
      */
@@ -80,7 +78,7 @@ public class CYOBManagedBean implements Serializable {
         droppedIngredientsForAddons = new ArrayList<>();
         droppedIngredientsWithCount = new HashMap<IngredientEntity, Integer>();
     }
-    
+
     public void onDropBase(DragDropEvent<IngredientEntity> ddEvent) {
         IngredientEntity product = ddEvent.getData();
         IngredientCount newIngredient = new IngredientCount(product, 1);
@@ -89,8 +87,9 @@ public class CYOBManagedBean implements Serializable {
         MathContext mc = new MathContext(10);
         totalPrice = totalPrice.add(product.getPrice(), mc);
         totalCalorie += product.getCalorie();
-        
+
     }
+
     public void onDropMeat(DragDropEvent<IngredientEntity> ddEvent) {
         IngredientEntity product = ddEvent.getData();
         IngredientCount newIngredient = new IngredientCount(product, 1);
@@ -100,6 +99,7 @@ public class CYOBManagedBean implements Serializable {
         totalPrice = totalPrice.add(product.getPrice(), mc);
         totalCalorie += product.getCalorie();
     }
+
     public void onDropVege(DragDropEvent<IngredientEntity> ddEvent) {
         IngredientEntity product = ddEvent.getData();
         IngredientCount newIngredient = new IngredientCount(product, 1);
@@ -109,6 +109,7 @@ public class CYOBManagedBean implements Serializable {
         totalPrice = totalPrice.add(product.getPrice(), mc);
         totalCalorie += product.getCalorie();
     }
+
     public void onDropSauce(DragDropEvent<IngredientEntity> ddEvent) {
         IngredientEntity product = ddEvent.getData();
         IngredientCount newIngredient = new IngredientCount(product, 1);
@@ -118,6 +119,7 @@ public class CYOBManagedBean implements Serializable {
         totalPrice = totalPrice.add(product.getPrice(), mc);
         totalCalorie += product.getCalorie();
     }
+
     public void onDropAddon(DragDropEvent<IngredientEntity> ddEvent) {
         IngredientEntity product = ddEvent.getData();
         IngredientCount newIngredient = new IngredientCount(product, 1);
@@ -128,16 +130,16 @@ public class CYOBManagedBean implements Serializable {
         totalCalorie += product.getCalorie();
 
     }
-    
+
     public void onRemoveBases(ActionEvent event) {
-        IngredientEntity ingredient = (IngredientEntity)event.getComponent().getAttributes().get("ingredient");
+        IngredientEntity ingredient = (IngredientEntity) event.getComponent().getAttributes().get("ingredient");
         String name = ingredient.getName();
         for (int i = 0; i < droppedIngredientsForBases.size(); i++) {
             if (droppedIngredientsForBases.get(i).getIngredient().getName().equals(name)) {
                 int count = droppedIngredientsForBases.get(i).getCount();
                 droppedIngredientsForBases.remove(i);
                 bases.add(ingredient);
-                for (int j = 0; j < count; j++){
+                for (int j = 0; j < count; j++) {
                     MathContext mc = new MathContext(10);
                     totalPrice = totalPrice.subtract(ingredient.getPrice(), mc);
                     totalCalorie -= ingredient.getCalorie();
@@ -145,17 +147,19 @@ public class CYOBManagedBean implements Serializable {
                 break;
             }
         }
+        PrimeFaces.current().ajax().update("allBases");
+        PrimeFaces.current().ajax().update("selectedBases");
     }
-    
+
     public void onRemoveMeats(ActionEvent event) {
-        IngredientEntity ingredient = (IngredientEntity)event.getComponent().getAttributes().get("ingredient");
+        IngredientEntity ingredient = (IngredientEntity) event.getComponent().getAttributes().get("ingredient");
         String name = ingredient.getName();
         for (int i = 0; i < droppedIngredientsForMeats.size(); i++) {
             if (droppedIngredientsForMeats.get(i).getIngredient().getName().equals(name)) {
                 int count = droppedIngredientsForMeats.get(i).getCount();
                 droppedIngredientsForMeats.remove(i);
                 meats.add(ingredient);
-                for (int j = 0; j < count; j++){
+                for (int j = 0; j < count; j++) {
                     MathContext mc = new MathContext(10);
                     totalPrice = totalPrice.subtract(ingredient.getPrice(), mc);
                     totalCalorie -= ingredient.getCalorie();
@@ -163,16 +167,18 @@ public class CYOBManagedBean implements Serializable {
                 break;
             }
         }
+        PrimeFaces.current().ajax().update("selectedMeats");
     }
+
     public void onRemoveVeges(ActionEvent event) {
-        IngredientEntity ingredient = (IngredientEntity)event.getComponent().getAttributes().get("ingredient");
+        IngredientEntity ingredient = (IngredientEntity) event.getComponent().getAttributes().get("ingredient");
         String name = ingredient.getName();
         for (int i = 0; i < droppedIngredientsForVeges.size(); i++) {
             if (droppedIngredientsForVeges.get(i).getIngredient().getName().equals(name)) {
                 int count = droppedIngredientsForVeges.get(i).getCount();
                 droppedIngredientsForVeges.remove(i);
                 vegetables.add(ingredient);
-                for (int j = 0; j < count; j++){
+                for (int j = 0; j < count; j++) {
                     MathContext mc = new MathContext(10);
                     totalPrice = totalPrice.subtract(ingredient.getPrice(), mc);
                     totalCalorie -= ingredient.getCalorie();
@@ -181,15 +187,16 @@ public class CYOBManagedBean implements Serializable {
             }
         }
     }
+
     public void onRemoveSauces(ActionEvent event) {
-        IngredientEntity ingredient = (IngredientEntity)event.getComponent().getAttributes().get("ingredient");
+        IngredientEntity ingredient = (IngredientEntity) event.getComponent().getAttributes().get("ingredient");
         String name = ingredient.getName();
         for (int i = 0; i < droppedIngredientsForSauces.size(); i++) {
             if (droppedIngredientsForSauces.get(i).getIngredient().getName().equals(name)) {
                 int count = droppedIngredientsForSauces.get(i).getCount();
                 droppedIngredientsForSauces.remove(i);
                 sauces.add(ingredient);
-                for (int j = 0; j < count; j++){
+                for (int j = 0; j < count; j++) {
                     MathContext mc = new MathContext(10);
                     totalPrice = totalPrice.subtract(ingredient.getPrice(), mc);
                     totalCalorie -= ingredient.getCalorie();
@@ -198,15 +205,16 @@ public class CYOBManagedBean implements Serializable {
             }
         }
     }
+
     public void onRemoveAddons(ActionEvent event) {
-        IngredientEntity ingredient = (IngredientEntity)event.getComponent().getAttributes().get("ingredient");
+        IngredientEntity ingredient = (IngredientEntity) event.getComponent().getAttributes().get("ingredient");
         String name = ingredient.getName();
         for (int i = 0; i < droppedIngredientsForAddons.size(); i++) {
             if (droppedIngredientsForAddons.get(i).getIngredient().getName().equals(name)) {
                 int count = droppedIngredientsForAddons.get(i).getCount();
                 droppedIngredientsForAddons.remove(i);
                 addons.add(ingredient);
-                for (int j = 0; j < count; j++){
+                for (int j = 0; j < count; j++) {
                     MathContext mc = new MathContext(10);
                     totalPrice = totalPrice.subtract(ingredient.getPrice(), mc);
                     totalCalorie -= ingredient.getCalorie();
@@ -228,7 +236,7 @@ public class CYOBManagedBean implements Serializable {
         description += "Meats:\n";
         for (int i = 0; i < droppedIngredientsForMeats.size(); i++) {
             for (int j = 0; j < droppedIngredientsForMeats.get(i).getCount(); j++) {
-                ingredients.add(droppedIngredientsForMeats.get(i).getIngredient());             
+                ingredients.add(droppedIngredientsForMeats.get(i).getIngredient());
             }
             description += "  \t\u2022 " + droppedIngredientsForMeats.get(i).getCount() + " " + droppedIngredientsForMeats.get(i).getIngredient().getName() + "\n";
         }
@@ -236,20 +244,20 @@ public class CYOBManagedBean implements Serializable {
         for (int i = 0; i < droppedIngredientsForVeges.size(); i++) {
             for (int j = 0; j < droppedIngredientsForVeges.get(i).getCount(); j++) {
                 ingredients.add(droppedIngredientsForVeges.get(i).getIngredient());
-            }                
+            }
             description += "  \t\u2022 " + droppedIngredientsForVeges.get(i).getCount() + " " + droppedIngredientsForVeges.get(i).getIngredient().getName() + "\n";
         }
         description += "Sauces:\n";
         for (int i = 0; i < droppedIngredientsForSauces.size(); i++) {
             for (int j = 0; j < droppedIngredientsForSauces.get(i).getCount(); j++) {
                 ingredients.add(droppedIngredientsForSauces.get(i).getIngredient());
-            }                
+            }
             description += "  \t\u2022 " + droppedIngredientsForSauces.get(i).getCount() + " " + droppedIngredientsForSauces.get(i).getIngredient().getName() + "\n";
         }
         description += "Add ons:\n";
         for (int i = 0; i < droppedIngredientsForAddons.size(); i++) {
             for (int j = 0; j < droppedIngredientsForAddons.get(i).getCount(); j++) {
-                ingredients.add(droppedIngredientsForAddons.get(i).getIngredient());               
+                ingredients.add(droppedIngredientsForAddons.get(i).getIngredient());
             }
             description += "  \t\u2022 " + droppedIngredientsForAddons.get(i).getCount() + " " + droppedIngredientsForAddons.get(i).getIngredient().getName() + "\n";
         }
@@ -260,20 +268,17 @@ public class CYOBManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please enter at least 1 ingredient!", null));
             return;
         }
-        
+
         MealEntity newMeal = new CYOBEntity("CYOB", totalPrice, description, totalCalorie, "CYOB", new ArrayList<CategoryEnum>());
         newMeal.setIngredients(ingredients);
         this.cartManagedBean.addCYOBToCart(newMeal);
         PrimeFaces.current().ajax().update("cartForm");
-        
+
     }
 
-
-    
-    
     public void addQuantityToList(ActionEvent event) {
         System.out.print("TEST");
-        IngredientEntity ingredient = (IngredientEntity)event.getComponent().getAttributes().get("ingredient");
+        IngredientEntity ingredient = (IngredientEntity) event.getComponent().getAttributes().get("ingredient");
         String name = ingredient.getName();
         IngredientTypeEnum type = ingredient.getType();
         if (type == IngredientTypeEnum.BASE) {
@@ -285,7 +290,7 @@ public class CYOBManagedBean implements Serializable {
                     break;
                 }
             }
-        } 
+        }
         if (type == IngredientTypeEnum.MEAT) {
             for (IngredientCount ingredientCount : droppedIngredientsForMeats) {
                 if (ingredientCount.getIngredient().getName().equals(name)) {
@@ -330,8 +335,7 @@ public class CYOBManagedBean implements Serializable {
         totalPrice = totalPrice.add(ingredient.getPrice(), mc);
         totalCalorie += ingredient.getCalorie();
     }
-    
-    
+
     @PostConstruct
     public void postConstruct() {
         bases = ingredientEntitySessionBeanLocal.retrieveListOfBases();
@@ -340,10 +344,10 @@ public class CYOBManagedBean implements Serializable {
         sauces = ingredientEntitySessionBeanLocal.retrieveListOfSauces();
         addons = ingredientEntitySessionBeanLocal.retrieveListOfAddons();
     }
-    
+
     public List<Map.Entry<IngredientEntity, Integer>> getIngredients() {
-        Set<Map.Entry<IngredientEntity, Integer>> productSet = 
-                     this.droppedIngredientsWithCount.entrySet();
+        Set<Map.Entry<IngredientEntity, Integer>> productSet
+                = this.droppedIngredientsWithCount.entrySet();
         return new ArrayList<Map.Entry<IngredientEntity, Integer>>(productSet);
     }
 
@@ -451,14 +455,4 @@ public class CYOBManagedBean implements Serializable {
         this.totalPrice = totalPrice;
     }
 
-    
-
-    
-   
-
-    
-    
-    
-    
-    
 }
