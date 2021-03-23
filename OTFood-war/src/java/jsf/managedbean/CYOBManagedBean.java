@@ -167,6 +167,7 @@ public class CYOBManagedBean implements Serializable {
                 break;
             }
         }
+        PrimeFaces.current().ajax().update("allMeats");
         PrimeFaces.current().ajax().update("selectedMeats");
     }
 
@@ -186,6 +187,10 @@ public class CYOBManagedBean implements Serializable {
                 break;
             }
         }
+
+        PrimeFaces.current().ajax().update("allVeges");
+        PrimeFaces.current().ajax().update("selectedVeges");
+
     }
 
     public void onRemoveSauces(ActionEvent event) {
@@ -204,6 +209,8 @@ public class CYOBManagedBean implements Serializable {
                 break;
             }
         }
+        PrimeFaces.current().ajax().update("allSauces");
+        PrimeFaces.current().ajax().update("selectedSauces");
     }
 
     public void onRemoveAddons(ActionEvent event) {
@@ -222,6 +229,8 @@ public class CYOBManagedBean implements Serializable {
                 break;
             }
         }
+        PrimeFaces.current().ajax().update("allAddons");
+        PrimeFaces.current().ajax().update("selectedAddons");
     }
 
     public void addtoCart() {

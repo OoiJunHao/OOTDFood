@@ -12,6 +12,17 @@ and open the template in the editor.
     font-family: Roboto, "Helvetica Neue", Helvetica, sans-serif;
 }
 
+form #selectedBases {
+    width: 50%;
+
+    /*    width: 17.5rem;*/
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    overflow: hidden;
+    border-left: 1px solid #efefef;
+}
+
 .images {
     width: 143px;
     height: 95px;
@@ -113,6 +124,7 @@ and open the template in the editor.
 
 }
 
+
 .droppables {
     width: 50%;
 
@@ -125,6 +137,10 @@ and open the template in the editor.
 
 }
 
+.droppables-content {
+    width: 100%;
+}
+
 .contain-footer {
     width: 100%;
     flex-direction: column;
@@ -135,6 +151,4 @@ and open the template in the editor.
     padding-top: 10px;
     padding-bottom: 10px;
 }
-
-
 
