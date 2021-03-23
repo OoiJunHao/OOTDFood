@@ -14,20 +14,35 @@ and open the template in the editor.
 }
 
 .item-image {
-    width: 150px;
-    box-shadow: 0 3px 6px rgb(0 0 0 / 16%), 0 3px 6px rgb(0 0 0 / 23%);
+    width: 70%;
+    height: auto;
+    /*    box-shadow: 0 3px 6px rgb(0 0 0 / 16%), 0 3px 6px rgb(0 0 0 / 23%);*/
     margin-right: 2rem;
     text-align: center;
+
 
 }
 
 .item-details {
-    width: 40%;
+    display: flex;
+    flex-direction: column;
+    border: hidden;
+
+    /*    width: 40%;*/
+}
+
+.item-details #bento-name {
+    font-weight: 700;
+   
 }
 
 .item-qty {
     width: 10%;
     text-align: center;
+}
+
+.items-action-button {
+    border: transparent
 }
 
 .product-price {
@@ -38,3 +53,39 @@ and open the template in the editor.
     text-align: center;
     width: 20%;
 }
+
+#warning {
+    font-weight: 600;
+    font-family: Andale Mono, monospace, Camphor,Open Sans,Segoe UI,sans-serif;
+    color: blanchedalmond;
+    font-size: 1.0rem;
+    padding-bottom: 20;
+}
+
+.cart-footer-price {
+    font-weight: 600;
+    font-family: Andale Mono, monospace, Camphor,Open Sans,Segoe UI,sans-serif;
+    color: blanchedalmond;
+    font-size: 1.0rem;
+    padding-bottom: 20;
+    margin-left: 10px;
+}
+
+.cart-footer {
+    font-family: Andale Mono, monospace, Camphor,Open Sans,Segoe UI,sans-serif;
+    color: blanchedalmond;
+    font-size: 0.9rem;
+    padding-bottom: 20;
+    margin-left: 10px;
+}
+
+.page-footer {
+
+    min-width: 75rem;
+    /*    border-top: 4px solid #ee4d2d;*/
+    border-top: 4px solid #ffaa0d;
+    background-color: #fff;
+    color: rgba(0,0,0,.54);
+}
+
+

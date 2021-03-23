@@ -24,10 +24,12 @@ public interface SaleTransactionEntitySessionBeanLocal {
 
     public List<SaleTransactionEntity> retrieveAllSaleTransaction() throws NoSaleTransactionFoundException;
 
-    public List<SaleTransactionEntity> retrieveSaleTransactionsByUserId(Long userId) throws NoSaleTransactionFoundException;
+    public List<SaleTransactionEntity> retrieveSaleTransactionsByUserId(Long userId);
 
     public SaleTransactionEntity retrieveSaleTransactionByUserId(Long userId, Long transactionId) throws NoSaleTransactionFoundException;
 
     public void updateSaleTransaction(Long userId, SaleTransactionEntity saleTransaction) throws UpdateSaleTransactionException;
+
+    public Long createNewSaleTransactionWithPromo(Long userId, Long ccId, Long adressId, Long promoId, SaleTransactionEntity saleTransaction) throws CreateNewSaleTransactionException, InputDataValidationException;
     
 }

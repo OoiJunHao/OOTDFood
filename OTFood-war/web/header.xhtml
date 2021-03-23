@@ -5,17 +5,15 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
-    <!--<<<<<<< HEAD
-        <h:head>
-            <h:outputStylesheet library="css" name="header.css"/>
-            <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
 
-        </h:head>-->
     <h:outputStylesheet library="css" name="header.css"/>
     <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
 
     <h:body>
-        <h:panelGroup rendered="#{sessionScope.isLogin == false}">
+        <ui:insert name="cart" id="cart">
+            <ui:include src="/cartFeatures/cart.xhtml"/>
+        </ui:insert>
+        <h:panelGroup rendered="#{sessionScope.isLogin == false}" style="margin-bottom: 30px">  
             <p:commandButton value="Login" type="button" onclick="PF('dialogLogin').show()" style="float: right;" icon="fa fa-sign-in"/> &nbsp;
             <p:commandButton value="Register" type="button" onclick="PF('dialogRegister').show()" style="float: right;" icon="fa fa-user-plus"/>
 
@@ -45,7 +43,7 @@
         </h:panelGroup>
 
         <h:form id ="loginForm">
-            <p:dialog id="dialogLogin" widgetVar="dialogLogin" header="Login" closable="true" height="120" draggable="false" resizable="false" modal="true">
+            <p:dialog id="dialogLogin" widgetVar="dialogLogin" header="Login" closable="true" draggable="false" resizable="false" modal="true">
                 <p:outputLabel for="email" value="Email"/>&nbsp;
                 <p:inputText id="email" value="#{loginManagedBean.email}" size="16" required="true" requiredMessage="Email is required">
                 </p:inputText>
@@ -168,25 +166,18 @@
             </p:dialog>
         </h:form>
 
-        <!-- shopping cart functionality needs to be developed-->
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
-            <h:outputText value="Welcome, #{sessionScope.currentUser.firstname} #{sessionScope.currentUser.lastName}" style="color: whitesmoke"/>&nbsp;
-            <div class="nav-buttons">
+            <h:outputText value="Welcome, #{sessionScope.currentUser.firstname} #{sessionScope.currentUser.lastName}" style="color: whitesmoke; font-size: 10pt"/>&nbsp;
+            <div class="nav-buttons" style="margin-right:35px">
                 <h:form>
 
-                    <p:menuButton  value="Profile" style="height: auto; width: auto; float: right">
+                    <p:menuButton  value="Profile" style="height: auto; width: auto; float: right;">
                         <p:menuitem value="Profile" outcome="/userPages/profile.xhtml" icon="fa fa-user"/>
-                        <p:menuitem value="View Transaction History" outcome="/userPages/transactionHistory.xhtml" icon="fa fa-money"/>
+                        <p:menuitem value="View Transaction History" outcome="/profileFeature/transactionHistory.xhtml" icon="fa fa-money"/>
                     </p:menuButton>
                     <p:commandButton value="Logout" actionListener="#{loginManagedBean.logout}" icon="fa fa-sign-out" style="float: right;"/>
 
                 </h:form>
-
-                <!--            <p:commandButton icon="fa fa-shopping-cart" onclick="PF('dialogCart').show()" style="float: right;" />-->
-
-                <ui:insert name="cart" id="cart">
-                    <ui:include src="/cartFeatures/cart.xhtml"/>
-                </ui:insert>
             </div>
 
             <p:separator/>

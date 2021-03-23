@@ -1,0 +1,193 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/*
+    Created on : 21 Mar, 2021, 11:01:09 PM
+    Author     : Mitsuki
+*/
+
+* {
+    font-family: Roboto, "Helvetica Neue", Helvetica, sans-serif;
+}
+.container {
+    display: flex;
+    padding: 1.25rem 0 3.125rem;
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+}
+.sidebar-menu {
+    display: block;
+    width: 180px;
+    flex-shrink: 0;
+    /*    flex-direction: column;*/
+}
+
+.content {
+    position: relative;
+    flex-grow: 1;
+    width: 100%;
+    box-sizing: border-box;
+    margin-left: 1.6875rem;
+    min-width: 0;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 13%);
+    border-radius: .125rem;
+}
+
+.user-side-brief {
+    display: flex;
+    padding: 15px 0;
+    border-bottom: 1px solid #efefef;
+    width: 100%;
+    height: 50px;
+}
+
+.user-side-brief-avatar #avatar-placeholder {
+    width: 100%;
+    position: relative;
+    padding-top: 100%;
+    background-color: #f5f5f5;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.user-side-description {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    min-height: 1rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 15px;
+    overflow: hidden;
+}
+
+.user-side-menu {
+    list-style: none;
+    padding: 0;
+    margin: 27px 0 0;
+    cursor: pointer;
+}
+
+.content-smaller {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-height: 100%;
+}
+
+.my-acct-section {
+    flex-direction: column;
+    padding: 0 30px 20px;
+    overflow: visible;
+    display: flex;
+}
+
+.my-acct-section-header {
+    align-items: center;
+    border-bottom: 1px solid #efefef;
+    padding: 22px 0;
+    height: 80px;
+    box-sizing: border-box;
+    display: flex;
+}
+
+.my-acct-section-header-left {
+    width: 70%;
+    flex-direction: row;
+}
+
+#header {
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.5rem;
+    text-transform: capitalize;
+}
+
+#subtitle {
+    font-size: .875rem;
+    line-height: 1.0625rem;
+    margin-top: 3px;
+}
+
+.my-acct-section-header-button {
+    margin-right: 2vw;
+    justify-content: flex-end;
+}
+
+.my-acct-card {
+    /*    display: flex;
+        flex-direction: row;
+
+    align-items: flex-start;*/
+    padding-top: 30px;
+}
+.card-list-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 25px 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #efefef;
+}
+.card-list-detail {
+    flex-direction: column;
+    width: 70%;
+}
+
+.card-list-action {
+    display: flex;
+    width: 300px;
+    margin-right: 2vw;
+    justify-content: flex-end;
+}
+
+.input-with-label {
+    margin-bottom: 30px;
+}
+
+.input-with-label-wrapper {
+    display: flex;
+    -webkit-box-pack: end;
+    justify-content: flex-end;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.card-label {
+    width: 20%;
+    text-align: right;
+    color: #87CEEB;
+    overflow: hidden;
+    font-size: 15;
+    font-weight: lighter;
+}
+
+.card-content {
+    width: 80%;
+    box-sizing: border-box;
+    padding-left: 1.25rem;
+    font-size: 15;
+}
+
+dialogAddCreditCard .label-holder {
+    font-family: Roboto, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 130%;
+
+}
+
+.page-footer {
+    margin-top: 20vw;
+    min-width: 75rem;
+    /*    border-top: 4px solid #ee4d2d;*/
+    border-top: 4px solid #ffaa0d;
+    background-color: #fff;
+    color: rgba(0,0,0,.54);
+}

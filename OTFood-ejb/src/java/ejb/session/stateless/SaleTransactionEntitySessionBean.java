@@ -6,16 +6,16 @@
 package ejb.session.stateless;
 
 import entity.AddressEntity;
+import entity.CYOBEntity;
 import entity.CreditCardEntity;
 import entity.IngredientEntity;
 import entity.MealEntity;
 import entity.OTUserEntity;
+import entity.PromoCodeEntity;
 import entity.SaleTransactionEntity;
 import entity.SaleTransactionLineEntity;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -32,6 +32,7 @@ import util.exception.CreditCardNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.NoAddressFoundException;
 import util.exception.NoSaleTransactionFoundException;
+import util.exception.PromotionNotFoundException;
 import util.exception.UpdateSaleTransactionException;
 import util.exception.UserNotFoundException;
 
@@ -43,11 +44,14 @@ import util.exception.UserNotFoundException;
 public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySessionBeanLocal {
 
     @EJB
+    private PromoSessionBeanLocal promoSessionBeanLocal;
+
+    @EJB
     private AddressEntitySessionBeanLocal addressEntitySessionBeanLocal;
 
     @EJB
     private CreditCardEntitySessionBeanLocal creditCardEntitySessionBeanLocal;
-            
+
     @EJB
     private OTUserEntitySessionBeanLocal oTUserEntitySessionBeanLocal;
 
@@ -56,15 +60,15 @@ public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySe
 
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
-    
+
     @PersistenceContext(unitName = "OTFood-ejbPU")
     private EntityManager em;
-    
+
     public SaleTransactionEntitySessionBean() {
         this.validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
     }
-    
+
     @Override
     public Long createNewSaleTransaction(Long userId, Long ccId, Long adressId, SaleTransactionEntity saleTransaction) throws CreateNewSaleTransactionException, InputDataValidationException {
         Set<ConstraintViolation<SaleTransactionEntity>> constraintViolations = validator.validate(saleTransaction);
@@ -82,6 +86,9 @@ public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySe
                     for (int i = 0; i < saleTransaction.getTotalLineItem(); i++) {
                         SaleTransactionLineEntity lineItem = saleTransaction.getSaleTransactionLineItemEntities().get(i);
                         em.persist(lineItem);
+                        if (lineItem.getMeal() instanceof CYOBEntity) {
+                            em.persist(lineItem.getMeal());
+                        }
                         for (int j = 0; j < lineItem.getQuantity(); j++) {
                             MealEntity meal = lineItem.getMeal();
                             List<IngredientEntity> ingredients = meal.getIngredients();
@@ -104,7 +111,58 @@ public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySe
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-    
+
+    @Override
+    public Long createNewSaleTransactionWithPromo(Long userId, Long ccId, Long adressId, Long promoId, SaleTransactionEntity saleTransaction) throws CreateNewSaleTransactionException, InputDataValidationException {
+        Set<ConstraintViolation<SaleTransactionEntity>> constraintViolations = validator.validate(saleTransaction);
+        if (constraintViolations.isEmpty()) {
+            if (saleTransaction != null) {
+                try {
+                    OTUserEntity user = oTUserEntitySessionBeanLocal.retrieveUserById(userId);
+                    CreditCardEntity cc = creditCardEntitySessionBeanLocal.retrieveCardById(ccId);
+                    AddressEntity addresss = addressEntitySessionBeanLocal.retrieveAddressById(adressId);
+                    PromoCodeEntity promoCode = promoSessionBeanLocal.retrieveCodeById(promoId);
+
+                    saleTransaction.setUser(user);
+                    user.getSaleTransaction().add(saleTransaction);
+
+                    promoCode.getSaleTransaction().add(saleTransaction);
+                    saleTransaction.setPromoCode(promoCode);
+
+                    saleTransaction.setCreditCardEntity(cc);
+
+                    saleTransaction.setAddress(addresss);
+
+                    em.persist(saleTransaction);
+                    for (int i = 0; i < saleTransaction.getTotalLineItem(); i++) {
+                        SaleTransactionLineEntity lineItem = saleTransaction.getSaleTransactionLineItemEntities().get(i);
+                        em.persist(lineItem);
+                        if (lineItem.getMeal() instanceof CYOBEntity) {
+                            em.persist(lineItem.getMeal());
+                        }
+                        for (int j = 0; j < lineItem.getQuantity(); j++) {
+                            MealEntity meal = lineItem.getMeal();
+                            List<IngredientEntity> ingredients = meal.getIngredients();
+                            for (IngredientEntity ingredient : ingredients) {
+                                //ingredientEntitySessionBeanLocal.deductStockQuantity(ingredient.getIngredientId(), 1);
+                            }
+                        }
+                    }
+                    em.flush();
+                    return saleTransaction.getSaleTransactionId();
+                } catch (UserNotFoundException ex) {
+                    throw new CreateNewSaleTransactionException("Error: User not found!");
+                } catch (CreditCardNotFoundException | NoAddressFoundException | PromotionNotFoundException ex) {
+                    throw new CreateNewSaleTransactionException("Error: Address or Credit Card or Promo Code not found!"); //should never get this
+                }
+            } else {
+                throw new CreateNewSaleTransactionException("Error: saleTransaction provided is null!");
+            }
+        } else {
+            throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+        }
+    }
+
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<SaleTransactionEntity>> constraintViolations) {
         String msg = "Input data validation error!:";
 
@@ -114,6 +172,7 @@ public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySe
 
         return msg;
     }
+
     @Override
     public List<SaleTransactionEntity> retrieveAllSaleTransaction() throws NoSaleTransactionFoundException {
         try {
@@ -123,19 +182,15 @@ public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySe
             throw new NoSaleTransactionFoundException("No sale transactions found!");
         }
     }
-    
+
     @Override
-    public List<SaleTransactionEntity> retrieveSaleTransactionsByUserId(Long userId) throws NoSaleTransactionFoundException {
-        try {
-            Query query = em.createQuery("SELECT st FROM OTUserEntity user JOIN user.saleTransaction st WHERE user.UserId = :userId");
-            query.setParameter("userId", userId);
-            List<SaleTransactionEntity> saleTransactions = query.getResultList();
-            return saleTransactions;
-        } catch (NoResultException | NonUniqueResultException ex) {
-            throw new NoSaleTransactionFoundException("userId: " + userId + " has no sale transactions!");
-        }
+    public List<SaleTransactionEntity> retrieveSaleTransactionsByUserId(Long userId) {
+        Query query = em.createQuery("SELECT st FROM OTUserEntity user JOIN user.saleTransaction st WHERE user.UserId = :userId");
+        query.setParameter("userId", userId);
+        List<SaleTransactionEntity> saleTransactions = query.getResultList();
+        return saleTransactions;
     }
-    
+
     @Override
     public SaleTransactionEntity retrieveSaleTransactionByUserId(Long userId, Long transactionId) throws NoSaleTransactionFoundException {
         try {
@@ -146,9 +201,9 @@ public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySe
             return saleTransaction;
         } catch (NoResultException | NonUniqueResultException ex) {
             throw new NoSaleTransactionFoundException("userId: " + userId + " has no sale transaction of Id: " + transactionId);
-        }   
+        }
     }
-    
+
     @Override
     public void updateSaleTransaction(Long userId, SaleTransactionEntity saleTransaction) throws UpdateSaleTransactionException {
         try {
@@ -166,10 +221,10 @@ public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySe
             throw new UpdateSaleTransactionException("Error: No sale Transaction detected!");
         }
     }
-    
-    //delete?
-    
-    
-    
-    
+
+    //delete?  will add later on -JH
+    public void persist(Object object) {
+        em.persist(object);
+    }
+
 }

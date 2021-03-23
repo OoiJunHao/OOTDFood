@@ -42,8 +42,7 @@ public class MealEntity implements Serializable {
     @NotNull
     @DecimalMin("0.00")
     private BigDecimal price;
-    @Column(length = 128)
-    @Size(max = 128)
+    @Column(nullable = false)
     private String description;
     @NotNull
     @Min(0)
@@ -209,7 +208,12 @@ public class MealEntity implements Serializable {
         for (int i = 0; i < this.reviews.size(); i++) {
             totalRatings += this.reviews.get(i).getRating();
         }
-        return (int) (totalRatings / this.reviews.size());
+        if (this.reviews.isEmpty()) { // just a placeholder for when there are no ratings yet
+            return (int) totalRatings;
+        } else {
+            return (int) (totalRatings / this.reviews.size());
+        }
+        
     }
 
 }

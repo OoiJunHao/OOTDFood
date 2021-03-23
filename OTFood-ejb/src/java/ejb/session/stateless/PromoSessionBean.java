@@ -80,6 +80,16 @@ public class PromoSessionBean implements PromoSessionBeanLocal {
         Query query = em.createQuery("SELECT p FROM PromoCodeEntity p");
         return query.getResultList();
     }
+    
+    @Override
+    public PromoCodeEntity retrieveCodeById(Long promoCodeId) throws PromotionNotFoundException {       
+        PromoCodeEntity promoCode = em.find(PromoCodeEntity.class, promoCodeId);
+        if (promoCode != null) {
+            return promoCode;
+        } else {
+            throw new PromotionNotFoundException("Promotion Code ID " + promoCodeId + " does not exist!");
+        }
+    }
 
     @Override
     public PromoCodeEntity retrieveCodeByDiscountCode(String code) throws PromotionNotFoundException {
@@ -87,7 +97,7 @@ public class PromoSessionBean implements PromoSessionBeanLocal {
         query.setParameter("code", code);
 
         try {
-            return (PromoCodeEntity) query.getResultList();
+            return (PromoCodeEntity) query.getSingleResult();
         } catch (NoResultException | NonUniqueResultException ex) {
             throw new PromotionNotFoundException("Promotion Code " + code + " does not exist!");
         }
@@ -104,14 +114,14 @@ public class PromoSessionBean implements PromoSessionBeanLocal {
             Date date = new Date();
 
             if (promo.getStartDate().compareTo(date) < 0 && promo.getEndDate().compareTo(date) > 0) {
-                valid = true;
+                if (promo.getSaleTransaction().size() < promo.getNumAvailable()) {
+                    valid = true;
+                }
             }
         } catch (PromotionNotFoundException ex) {
             Logger.getLogger(PromoSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return valid;
-
     }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<PromoCodeEntity>> constraintViolations) {

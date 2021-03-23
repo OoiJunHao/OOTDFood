@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
+
+    <ui:define name="css">
+        <h:outputStylesheet library="css" name="transactionHistory.css"/>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="form" class="container">
+            <p:messages  redisplay="false">
+                <p:autoUpdate />
+            </p:messages>
+
+            <div class="sidebar-menu">
+                <div class="user-side-brief">
+                    <div id="avatar-placeholder">
+                        <p:graphicImage class="user-side-brief-avatar" url="/uploadedFiles/#{profileManagedBean.profile.profilePic}.jpg" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
+                        <p:graphicImage style="height: auto; width: 50;" library="images" name="userDefault.png" rendered="#{profileManagedBean.profile.profilePic.length() == 0}"/>
+                    </div>
+
+                    <div class="user-side-description">
+                        <h:outputText value="#{profileManagedBean.profile.firstname} #{profileManagedBean.profile.lastName}"/>
+                    </div>
+                </div>
+
+                <div class="user-side-menu">
+                    <p:menu toggleable="false">
+                        <p:submenu icon="fa fa-user" label="My Account">
+                            <p:menuitem value="Profile" outcome="/userPages/profile.xhtml"/>
+                            <p:menuitem value="Banks &#38; Cards" outcome="/profileFeature/card.xhtml"/>
+                            <p:menuitem value="Addresses" outcome="/profileFeature/address.xhtml"/>
+                            <p:menuitem value="Change Password" outcome="/profileFeature/changePassword.xhtml"/>
+                        </p:submenu>
+
+                        <p:submenu icon="fa fa-book" label="My Purchases">
+                            <p:menuitem value="Transaction History" outcome="/profileFeature/transactionHistory.xhtml"/>
+                        </p:submenu>
+                    </p:menu>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="content-smaller">
+                    <div class="my-acct-section-header">
+                        <div class="my-acct-section-header-left">
+                            <div id="header">My Sale Transactions</div>
+                        </div>
+                    </div>
+
+                    <div class="card crud-demo">
+                        <p:growl id="messages" showDetail="true"/>
+                        <p:dataTable id="dt-products" widgetVar="dtProducts" var="transactions" value="#{viewTransactionDetailManagedBean.allSaleTransactions}"
+                                     reflow="true" styleClass="products-table"
+                                     rowKey="#{transactions.saleTransactionId}" paginator="true"
+                                     rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                            <f:facet name="header">
+                                <div class="products-table-header">
+                                    <span style="font-weight: bold">ALL TRANSACTIONS</span>
+                                </div>
+                            </f:facet>
+
+                            <p:column headerText="Transaction ID" sortBy="#{transactions.saleTransactionId}" >
+                                <h:outputText value="#{transactions.saleTransactionId}"/>
+                            </p:column>
+                            <p:column headerText="Delivery Date and Time" sortBy="#{transactions.deliveryDateTime}" >
+                                <h:outputText value="#{transactions.deliveryDateTime}"/>
+                            </p:column>
+                            <p:column headerText="Total Cost" sortBy="#{transactions.totalAmount}">
+                                <h:outputText value="#{transactions.totalAmount}" style="font-weight: 700">
+                                    <f:convertNumber currencySymbol="$" type="currency"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Transaction Date and Time" sortBy="#{transactions.transactionDateTime}">
+                                <h:outputText value="#{transactions.transactionDateTime}"/>
+                            </p:column>
+                            <p:column headerText="Delivery Status" sortBy="#{transactions.deliveryStatus}">
+                                <h:outputText value="#{transactions.deliveryStatus}"/>
+                            </p:column>
+                            <p:column exportable="false" style="width: 10%">
+                                <p:commandButton icon="pi pi-info-circle"
+                                                 update = "@form details"
+                                                 value="View more details"
+                                                 oncomplete="PF('viewTransactionDetails').show()"
+                                                 styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                    <f:setPropertyActionListener value="#{transactions}" target="#{viewTransactionDetailManagedBean.selectedSaleTransaction}"/>
+                                </p:commandButton>
+
+                            </p:column>
+
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+
+        </h:form>
+
+        <h:form id="details">
+            <p:dialog header="Transaction Details" showEffect="fade" draggable="false"
+                      widgetVar="viewTransactionDetails" responsive="true" resizable="false" fitViewport="true" >
+
+
+                <p:dataScroller value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.saleTransactionLineItemEntities}" var="lineItem" >
+                    <f:facet name="header">
+                        Order Details
+                    </f:facet>
+
+                    <f:facet name="loader">
+                        <b>Total Cost: </b>
+                        <h:outputText value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.totalAmount}" styleClass="product-price" style="font-weight: bold">
+                            <f:convertNumber currencySymbol="$" type="currency"/>
+                        </h:outputText>
+
+                    </f:facet>
+
+                    <div class="product">
+                        <div class="product-list-item p-p-5">
+                            <p:graphicImage url="/resources/images/mealImages/#{lineItem.meal.name}.jpg" style="width: 70px; height: 70px; float:left; margin-right: 10px"/>
+                            <div class="product-list-detail" >
+                                <div class="product-name"><b>#{lineItem.meal.name}</b></div>
+                                <div class="product-description">Quantity: #{lineItem.quantity}</div>
+                                Unit Cost: <h:outputText value="#{lineItem.meal.price}" styleClass="product-price">
+                                    <f:convertNumber currencySymbol="$" type="currency"/>
+                                </h:outputText>
+                                <br></br>
+                                Total Cost: <h:outputText value="#{lineItem.meal.price*lineItem.quantity}" styleClass="product-price">
+                                    <f:convertNumber currencySymbol="$" type="currency"/>
+                                </h:outputText>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </p:dataScroller>
+                <!--                            </h:form>-->
+
+                <p:panelGrid style="margin-top: 10px">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value ="Transaction ID" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="transactionID" value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.saleTransactionId}" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Transaction Date and Time" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="transactionDateAndTime" value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.transactionDateTime}" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Delivery Date and Time" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="deliveryDateAndTime" value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.deliveryDateTime}" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Promo Code (If applicable)" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="promoCode" value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.promoCode.discountCode}"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Driver Assigned" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="driverAssigned" value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.driver.firstname} #{viewTransactionDetailManagedBean.selectedSaleTransaction.driver.lastName}"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Delivery Status" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="deliveryStatus" value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.deliveryStatus}"/>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <p:commandButton value="Generate Receipt" style="margin-top: 10px; width: 40%; margin-left: 30%; margin-right: 30%"></p:commandButton>
+            </p:dialog>
+        </h:form>
+
+        <footer class="page-footer">
+            <div id ="footer" class="ui-g-12">
+                <ui:insert name="footer">
+                    <ui:include src="/footer.xhtml"/>
+                </ui:insert>
+            </div>
+        </footer>
+    </ui:define>
+</ui:composition>
+

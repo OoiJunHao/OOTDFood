@@ -2,9 +2,9 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="./../template/defaultTemplate.xhtml"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="css">
         <h:outputStylesheet name="css/viewBentos.css"/>
@@ -13,27 +13,52 @@
 
     <ui:define name="content">
 
+        <h:outputScript library="js" name="ifSpinnerQuantityZero.js" />
         <h:form>
-            <p:tabView value="#{viewBentoManagedBean.listOfCategories}" var="bentoCategory" >
+            <p:dialog header="Enter Bento Quantiy" widgetVar="enterQtyDlg" >
+                <p:outputLabel for="bentoQty" value="Quantity"/>
+                <p:spinner id="bentoQty" value="#{viewBentoManagedBean.selectedBentoQuantity}"/>
+                <p:commandButton title="Add To Cart" actionListener="#{viewBentoManagedBean.addBentoToCart}" onclick="PF('enterQtyDlg').hide();"/>
+            </p:dialog>
+            
+            <p:tabView value="#{viewBentoManagedBean.listOfCategories}" var="bentoCategory" cache="false">
 
-                <p:ajax event="tabChange" listener="#{viewBentoManagedBean.refreshListByTabSelected}" update="dataViewOfBentos"/> 
-                
-                <p:tab transient="true" title="#{bentoCategory}">
+                <p:ajax event="tabChange" listener="#{viewBentoManagedBean.refreshListByTabSelected}" update="@form"/>
 
+                <p:tab title="#{bentoCategory}">
 
                     <p:dataView id="dataViewOfBentos" var="bentoEntity" value="#{viewBentoManagedBean.listOfBentos}" paginator="true"
                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                                 gridIcon="pi pi-th-large" listIcon="pi pi-bars"
-                                layout="grid" >
+                                layout="grid">
 
                         <p:dataViewGridItem>
+
                             <p:graphicImage url="./../resources/images/mealImages/bento5.jpg" styleClass="viewBentoSingleImage"/>
                             <div><span>#{bentoEntity.name}</span></div>
+
+                            <h:outputText value="#{bentoEntity.description}"/><br/>
+                            <h:outputText value="Calories: #{bentoEntity.calorie} kCal"/><br/>
+                            <p:outputLabel value="$#{bentoEntity.price}"/><br/>
+
+                            <p:commandButton title="Order" onclick="PF('enterQtyDlg').show();">
+                                <f:setPropertyActionListener value="#{bentoEntity}" target="#{viewBentoManagedBean.selectedBento}" />
+                            </p:commandButton>
+
                         </p:dataViewGridItem>
+
 
                         <p:dataViewListItem>
                             <p:graphicImage url="./../resources/images/mealImages/bento5.jpg" styleClass="viewBentoSingleImage"/>
                             <div><span>#{bentoEntity.name}</span></div>
+
+                            <h:outputText value="#{bentoEntity.description}"/><br/>
+                            <h:outputText value="Calories: #{bentoEntity.calorie} kCal"/><br/>
+                            <p:outputLabel value="$#{bentoEntity.price}"/><br/>
+
+                            <p:commandButton title="Order" onclick="PF('enterQtyDlg').show();">
+                                <f:setPropertyActionListener value="#{bentoEntity}" target="#{viewBentoManagedBean.selectedBento}" />
+                            </p:commandButton>
                         </p:dataViewListItem>
 
                     </p:dataView>
@@ -43,6 +68,7 @@
                 </p:tab>
 
             </p:tabView>
+
 
 
         </h:form>

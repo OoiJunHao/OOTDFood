@@ -11,7 +11,7 @@
 #mainIntroduction {
     background-image: url(../resources/images/bento5.jpg);
     height: 100vh; width:100%;
-    background-size: 100% 100%;
+    background-size: 100%;
     background-repeat:  no-repeat;
 }
 
@@ -44,7 +44,7 @@
 #benefits {
     background-image: url(../resources/images/benefits.jpg);
     height: 100vh; width:100%;
-    background-size: 100% 100%;
+    background-size: 100%;
     background-repeat:  no-repeat;
 }
 
@@ -54,4 +54,24 @@
 
 #contentflow {
     width: 100%;
+}
+
+.gridItems {
+    margin-left: 0;
+    align-content: flex-start;
+    padding-right: 0;
+    font-family: Camphor,Open Sans,Segoe UI,sans-serif;
+}
+
+.datatable {
+    width: 100%;
+}
+
+.page-footer {
+    margin-top: 20vw;
+    min-width: 75rem;
+    /*    border-top: 4px solid #ee4d2d;*/
+    border-top: 4px solid #ffaa0d;
+    background-color: #fff;
+    color: rgba(0,0,0,.54);
 }
