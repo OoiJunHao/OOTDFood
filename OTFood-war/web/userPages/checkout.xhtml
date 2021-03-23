@@ -30,13 +30,15 @@
 
                     <p:column headerText="Bento" class="item-details">
                         <div id="bento-name">
-                            <h:outputText value="#{items.meal.name}"/>
+                            <h:outputText value="#{items.meal.name}" style="font-size:20"/>
                         </div>
+                        <br/>
                         <div>
                             <h:outputText value="#{items.meal.description}"/>
                         </div>
+                        <br/>
                         <div>Calorie: #{items.meal.calorie}</div>
-                        <div>Average Rating: #{items.meal.calculateAverageRating()}</div>
+
                     </p:column>
 
                     <p:column headerText="Qty" class="item-qty">
@@ -81,7 +83,7 @@
 
             </div>
 
-            <div class='cart-footer'>
+            <div class='cart-footer' >
                 <h:panelGroup rendered="#{cartManagedBean.lineItems.isEmpty() == false and cartManagedBean.missingDetails == false}">
 
                     <p:outputLabel for="creditCard" value="Select Credit Card: "/>
@@ -122,11 +124,17 @@
                     </div>
                 </h:panelGroup>
 
-                <h:panelGroup rendered="#{cartManagedBean.missingDetails == true}">
-                    <h4 id="warning" style="color: red">Please enter and link a credit card or an address to your account in the profile section to continue with payment.</h4>
+                <h:panelGroup rendered="#{sessionScope.isLogin == false}">
+                    <h4 id="warning" style="color: red">Please create an account or log in before checking out!</h4>
                 </h:panelGroup>
-                <h:panelGroup rendered="#{cartManagedBean.lineItems.isEmpty() == true}">
-                    <h4 id="warning" style="color: red">Please add items to cart to checkout!</h4>
+                    
+                <h:panelGroup rendered="#{sessionScope.isLogin == true}"> 
+                    <h:panelGroup rendered="#{cartManagedBean.missingDetails == true}">
+                        <h4 id="warning" style="color: red">Please enter and link a credit card or an address to your account in the profile section to continue with payment.</h4>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{cartManagedBean.lineItems.isEmpty() == true}">
+                        <h4 id="warning" style="color: red">Please add items to cart to checkout!</h4>
+                    </h:panelGroup>
                 </h:panelGroup>
             </div>
         </h:form>
@@ -150,37 +158,16 @@
         </p:dialog>
 
         <h:form id="mealDetails">
-            <p:dialog  header="Edit Purchase Details" showEffect="fade" closable="true" resizable="false" widgetVar="editItemsDialog">
+            <p:dialog  header="Edit Purchase Details (#{cartManagedBean.selectedItem.meal.name})" showEffect="fade" closable="true" resizable="false" widgetVar="editItemsDialog" modal="true" closeOnEscape="true" draggable="false">
                 <p:outputPanel class="ui-fluid">
-                    <p:outputPanel rendered="#{not empty cartManagedBean.selectedItem}">
-                        <div class='p-field'>
-                            <p:outputLabel for="name">Name: </p:outputLabel>
-                            <h:outputText id='name' value='#{cartManagedBean.selectedItem.meal.name}'/>
-                        </div>
-                        <div class='p-field'>
-                            <p:outputLabel for="description">Description: </p:outputLabel>
-                            <h:outputText id='description' value='#{cartManagedBean.selectedItem.meal.description}'/>
-                        </div>
-                        <div class='p-field'>
-                            <p:outputLabel for="Calorie">Calorie: </p:outputLabel>
-                            <h:outputText id='Calorie' value='#{cartManagedBean.selectedItem.meal.calorie}'/>
-                        </div>
-                        <div class='p-field'>
-                            <p:outputLabel for="Categories">Categories: </p:outputLabel>
-                            <h:outputText id='Categories' value='#{cartManagedBean.selectedItem.meal.categories}'/>
-                        </div>
-                        <div class='p-field'>
-                            <p:outputLabel for="Rating">Rating: </p:outputLabel>
-                            <h:outputText id='Rating' value='#{cartManagedBean.selectedItem.meal.averageRating}'/>
-                        </div>
+                    <p:outputPanel rendered="#{not empty cartManagedBean.selectedItem}">              
+                        <br/>
                         <div class='p-field'>
                             <p:outputLabel for='qty'>Quantity: </p:outputLabel>
                             <p:spinner id="qty" min="0" value="#{cartManagedBean.selectedItem.quantity}" style="width: 50%"/>
                         </div>
                         <br/>
-                        <!--                        <f:facet name="footer">-->
                         <p:commandButton value="Update" icon="fa fa-check-circle-o" actionListener="#{cartManagedBean.updateOrderList}" update="@form checkoutForm" process="@this,qty" style="width: 50%; flex-direction: row;">
-                            <!--                            <f:attribute name="qty" value=""-->
                         </p:commandButton>
 
                     </p:outputPanel>

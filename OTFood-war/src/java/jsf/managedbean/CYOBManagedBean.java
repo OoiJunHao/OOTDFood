@@ -10,6 +10,7 @@ import ejb.session.stateless.IngredientEntitySessionBeanLocal;
 import entity.CYOBEntity;
 import entity.IngredientEntity;
 import entity.MealEntity;
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -18,15 +19,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.DragDropEvent;
+import util.enumeration.CategoryEnum;
 import util.enumeration.IngredientTypeEnum;
 
 /**
@@ -39,6 +47,9 @@ public class CYOBManagedBean implements Serializable {
 
     @EJB(name = "IngredientEntitySessionBeanLocal")
     private IngredientEntitySessionBeanLocal ingredientEntitySessionBeanLocal;
+    
+    @Inject
+    private cartManagedBean cartManagedBean;
     
     private List<IngredientEntity> bases;
     private List<IngredientEntity> meats;
@@ -205,36 +216,56 @@ public class CYOBManagedBean implements Serializable {
         }
     }
 
-    public void AddtoCart() {
+    public void addtoCart() {
         List<IngredientEntity> ingredients = new ArrayList<>();
+        String description = "Bases:\n";
         for (int i = 0; i < droppedIngredientsForBases.size(); i++) {
             for (int j = 0; j < droppedIngredientsForBases.get(i).getCount(); j++) {
                 ingredients.add(droppedIngredientsForBases.get(i).getIngredient());
             }
+            description += " \t\u2022 " + droppedIngredientsForBases.get(i).getCount() + " " + droppedIngredientsForBases.get(i).getIngredient().getName() + "\n";
         }
+        description += "Meats:\n";
         for (int i = 0; i < droppedIngredientsForMeats.size(); i++) {
             for (int j = 0; j < droppedIngredientsForMeats.get(i).getCount(); j++) {
-                ingredients.add(droppedIngredientsForMeats.get(i).getIngredient());
+                ingredients.add(droppedIngredientsForMeats.get(i).getIngredient());             
             }
+            description += "  \t\u2022 " + droppedIngredientsForMeats.get(i).getCount() + " " + droppedIngredientsForMeats.get(i).getIngredient().getName() + "\n";
         }
+        description += "Veges:\n";
         for (int i = 0; i < droppedIngredientsForVeges.size(); i++) {
             for (int j = 0; j < droppedIngredientsForVeges.get(i).getCount(); j++) {
                 ingredients.add(droppedIngredientsForVeges.get(i).getIngredient());
-            }
+            }                
+            description += "  \t\u2022 " + droppedIngredientsForVeges.get(i).getCount() + " " + droppedIngredientsForVeges.get(i).getIngredient().getName() + "\n";
         }
+        description += "Sauces:\n";
         for (int i = 0; i < droppedIngredientsForSauces.size(); i++) {
             for (int j = 0; j < droppedIngredientsForSauces.get(i).getCount(); j++) {
                 ingredients.add(droppedIngredientsForSauces.get(i).getIngredient());
-            }
+            }                
+            description += "  \t\u2022 " + droppedIngredientsForSauces.get(i).getCount() + " " + droppedIngredientsForSauces.get(i).getIngredient().getName() + "\n";
         }
+        description += "Add ons:\n";
         for (int i = 0; i < droppedIngredientsForAddons.size(); i++) {
             for (int j = 0; j < droppedIngredientsForAddons.get(i).getCount(); j++) {
-                ingredients.add(droppedIngredientsForAddons.get(i).getIngredient());
+                ingredients.add(droppedIngredientsForAddons.get(i).getIngredient());               
             }
+            description += "  \t\u2022 " + droppedIngredientsForAddons.get(i).getCount() + " " + droppedIngredientsForAddons.get(i).getIngredient().getName() + "\n";
         }
         //MealEntity newMeal = new CYOBEntity("CYOB", totalPrice, "New CYOB", false, totalCalorie);
         //newMeal.setIngredients(ingredients);
         //push to cart
+        if (ingredients.isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please enter at least 1 ingredient!", null));
+            return;
+        }
+        
+        MealEntity newMeal = new CYOBEntity("CYOB", totalPrice, description, totalCalorie, "CYOB", new ArrayList<CategoryEnum>());
+        newMeal.setIngredients(ingredients);
+        this.cartManagedBean.addCYOBToCart(newMeal);
+        PrimeFaces.current().ajax().update("cartForm");
+        
     }
 
 

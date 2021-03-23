@@ -17,9 +17,13 @@
             }
         </script>
         
+        <h1 style="font-size: 40; width: 100%; color: white; text-align: center; margin-top: 20px" >Welcome to Create Your Own Bento</h1>
+        <h3 style="width: 100%; color: white; text-align: center; margin-top: 20px" >OOTD Food allows for customization of Bento Meals, so go crazy and make your own one by dragging and dropping your desired ingredients!</h3>
+        
         <div id="form" style="height: 100%">
-            <div style="width: 50%; float: left; ">
-                <div id="bases" style="width:100%;">
+        
+            <div style="width: 50%; float: left; margin-bottom: 40px">
+                <div id="bases" style="width:100%; margin-top: 20px;">
                     <p:dataView id="allBases" var="base" value="#{cYOBManagedBean.bases}" rows="1" layout="grid" paginator="true" pageLinks="3" paginatorPosition="top" style="height: 40%; background-color: black">
                         <p:dataViewGridItem>
                             <p:panel id="draggablePanel" header="#{base.name}" style="text-align: center">
@@ -38,7 +42,7 @@
                     </p:dataView>
                 </div>
 
-                <div id="meats" style="width:100%;">
+                <div id="meats" style="width:100%; margin-top: 20px;">
                     <p:dataView id="allMeats" var="meat" value="#{cYOBManagedBean.meats}" rows="1" layout="grid" paginator="true" pageLinks="3" paginatorPosition="top" style="height: 40%; background-color: black">
                         <p:dataViewGridItem>
                             <p:panel id="draggablePanel" header="#{meat.name}" style="text-align: center">
@@ -57,7 +61,7 @@
                     </p:dataView>
                 </div>
 
-                <div id="vegetables" style="width:100%;">
+                <div id="vegetables" style="width:100%; margin-top: 50px;">
                     <p:dataView id="allVeges" var="vege" value="#{cYOBManagedBean.vegetables}" rows="1" layout="grid" paginator="true" pageLinks="3" paginatorPosition="top" style="height: 40%; background-color: black">
                         <p:dataViewGridItem>
                             <p:panel id="draggablePanel" header="#{vege.name}" style="text-align: center">
@@ -76,7 +80,7 @@
                     </p:dataView>
                 </div>
 
-                <div id="addons" style="width:100%;">
+                <div id="addons" style="width:100%; margin-top: 50px;">
                     <p:dataView id="allAddons" var="addon" value="#{cYOBManagedBean.addons}" rows="1" layout="grid" paginator="true" pageLinks="3" paginatorPosition="top" style="height: 40%; background-color: black">
                         <p:dataViewGridItem>
                             <p:panel id="draggablePanel" header="#{addon.name}" style="text-align: center">
@@ -95,7 +99,7 @@
                     </p:dataView>
                 </div>
 
-                <div id="sauces" style="width:100%;">
+                <div id="sauces" style="width:100%; margin-top: 20px; margin-bottom: 30px">
                     <p:dataView id="allSauces" var="sauce" value="#{cYOBManagedBean.sauces}" rows="1" layout="grid" paginator="true" pageLinks="3" paginatorPosition="top" style="height: 40%; background-color: black">
                         <p:dataViewGridItem>
                             <p:panel id="draggablePanel" header="#{sauce.name}" style="text-align: center">
@@ -118,7 +122,7 @@
                 
             </div>
             
-            <div style="width: 46%; float: right;">
+            <div style="width: 50%; float: right;">
                 <h:form id="selectedBases">
                     <p:fieldset  legend="Selected Bases" style="margin-top: 20px; font-size: 30px; height: 30vh; margin: 30px; margin-bottom: 100px">
                         <p:outputPanel id="dropAreaBases">
@@ -293,16 +297,18 @@
                 
                 
             </div>
+              
+            
             <h:form id="newForm">
-                <div style="float: right">
-                <h:panelGroup style="position:relative; right: -10vw; overflow: visible" >
-                        <p:outputLabel for="totalPrice" value="total Price: " style="font-size: 35px; color: white"/>
+                <p:panel style="float: right; width: 40%; " rendered="true" >
+   
+                        <p:outputLabel for="totalPrice" value="Total Price: " style="font-size: 35px; color: white"/>
                         <h:outputText id="totalPrice" value="#{cYOBManagedBean.totalPrice}" style="font-size: 35px; color: white; margin-right: 30px" />
-                        <p:outputLabel for="totalCalorie" value="total Calorie: " style="font-size: 35px; color: white"/>
+                        <p:outputLabel for="totalCalorie" value="Total Calorie: " style="font-size: 35px; color: white"/>
                         <h:outputText id="totalCalorie" value="#{cYOBManagedBean.totalCalorie}" style="font-size: 35px; color: white; margin-right: 30px"/>
-                        <p:commandButton value="Add To Cart" style="font-size: 20px;"/>
-                </h:panelGroup>
-                </div>
+                        <p:commandButton value="Add To Cart" icon="fa fa-shopping-cart" style="font-size: 25px;" action="#{cYOBManagedBean.addtoCart}"/>
+           
+                </p:panel>
             </h:form>
             
             
