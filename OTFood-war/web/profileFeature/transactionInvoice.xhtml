@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
+
+    <ui:define name="css">
+        <h:outputStylesheet library="css" name="transactionHistory.css"/>
+    </ui:define>
+
+    <ui:define name="content">
+        
+        <h:form>
+            
+        <p:commandButton value="Generate Receipt" style="margin-top: 10px; width: 40%; margin-left: 30%; margin-right: 30%" 
+                         actionListener="#{transactionInvoiceManagedBean.generateReport}" ajax="false" update="@all">
+            <f:setPropertyActionListener value="#{flash['selectedID']}" target="#{transactionInvoiceManagedBean.selectedTransactionID}"/>
+        </p:commandButton>
+        </h:form>
+        
+        <footer class="page-footer">
+            <div id ="footer" class="ui-g-12">
+                <ui:insert name="footer">
+                    <ui:include src="/footer.xhtml"/>
+                </ui:insert>
+            </div>
+        </footer>
+    </ui:define>
+</ui:composition>
+
