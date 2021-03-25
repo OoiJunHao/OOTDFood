@@ -44,7 +44,7 @@
                                                     <p:panel id="draggablePanel" header="#{base.name}" style="text-align: center">
                                                         <h:panelGrid columns="2">
                                                             <f:facet name='header'>
-                                                                <p:graphicImage class="images" url="/resources/images/ingredientsImages/#{base.name}.jpg" style="text-align: center; height: auto; width:100%;"/>
+                                                                <p:graphicImage class="images" url="/uploadedFiles/#{base.name}.jpg" style="text-align: center; height: auto; width:100%;"/>
                                                             </f:facet>
                                                             <h:outputText value="Cost:" style="color: white"/>
                                                             <h:outputText value="#{base.price}" style="color: white"/>
@@ -109,7 +109,7 @@
                                                     <p:panel id="draggablePanel" header="#{meat.name}" style="text-align: center">
                                                         <h:panelGrid columns="2">
                                                             <f:facet name='header'>
-                                                                <p:graphicImage class="images" url="/resources/images/ingredientsImages/#{meat.name}.jpg"/>
+                                                                <p:graphicImage class="images" url="/uploadedFiles/#{meat.name}.jpg" style="text-align: center; height: auto; width:100%;"/>
                                                             </f:facet>
                                                             <h:outputText value="Cost:" style="color: white"/>
                                                             <h:outputText value="#{meat.price}" style="color: white"/>
@@ -173,7 +173,7 @@
                                                     <p:panel id="draggablePanel" header="#{vege.name}">
                                                         <h:panelGrid columns="2">
                                                             <f:facet name='header'>
-                                                                <p:graphicImage class="images" url="/resources/images/ingredientsImages/#{vege.name}.jpg"/>
+                                                                <p:graphicImage class="images" url="/uploadedFiles/#{vege.name}.jpg" style="text-align: center; height: auto; width:100%;"/>
                                                             </f:facet>
                                                             <h:outputText value="Cost:" style="color: white"/>
                                                             <h:outputText value="#{vege.price}" style="color: white"/>
@@ -237,7 +237,7 @@
                                                     <p:panel id="draggablePanel" header="#{addon.name}">
                                                         <h:panelGrid columns="2">
                                                             <f:facet name='header'>
-                                                                <p:graphicImage class="images" url="/resources/images/ingredientsImages/#{addon.name}.jpg"/>
+                                                                <p:graphicImage class="images" url="/uploadedFiles/#{addon.name}.jpg" style="text-align: center; height: auto; width:100%;"/>
                                                             </f:facet>
                                                             <h:outputText value="Cost:" style="color: white"/>
                                                             <h:outputText value="#{addon.price}" style="color: white"/>
@@ -302,7 +302,7 @@
                                                         <h:panelGrid columns="2">
 
                                                             <f:facet name='header'>
-                                                                <p:graphicImage class="images" url="/resources/images/ingredientsImages/#{sauce.name}.jpg"/>
+                                                                <p:graphicImage class="images" value="/uploadedFiles/#{sauce.name}.jpg" style="text-align: center; height: auto; width:100%;"/>
                                                             </f:facet>
 
                                                             <h:outputText value="Cost:" style="color: white"/>
