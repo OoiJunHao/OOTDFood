@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.DecimalMin;
@@ -42,6 +43,7 @@ public class MealEntity implements Serializable {
     @NotNull
     @DecimalMin("0.00")
     private BigDecimal price;
+    @Lob
     @Column(nullable = false)
     private String description;
     @NotNull

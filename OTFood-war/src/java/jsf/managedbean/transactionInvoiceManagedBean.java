@@ -32,7 +32,7 @@ public class transactionInvoiceManagedBean {
 
     @Resource(name = "OTFoodDataSource")
     private DataSource otFoodDataSource;
-    
+
     private long selectedTransactionID;
 
     /**
@@ -40,34 +40,29 @@ public class transactionInvoiceManagedBean {
      */
     public transactionInvoiceManagedBean() {
     }
-    
+
     @PostConstruct
-    public void postConstruct(){
+    public void postConstruct() {
         System.out.println("Creating this transactionInvoiceManagedBean");
-      
+
     }
 
-    public void generateReport(ActionEvent event) {
+    public void generateReport() {
         try {
-            
-            HashMap parameters = new HashMap();
-            parameters.put("SaleTransactionID", 2l);
-            System.out.println("selected ID ---------------->" + this.selectedTransactionID);
-            //FacesContext.getCurrentInstance().responseComplete();
 
-            InputStream reportStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/jasperreport/transactionInvoice.jasper");   
+            System.out.println("PRINTING RECEIPT------------------------->   " + this.selectedTransactionID);
+            HashMap parameters = new HashMap();
+            parameters.put("SaleTransactionID", this.selectedTransactionID);
+            parameters.put("IMAGEPATH", "http://localhost:8080/OTFood-war/jasperreport/cherry.jpg");
+
+            InputStream reportStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/jasperreport/transactionInvoice.jasper");
             OutputStream outputStream = FacesContext.getCurrentInstance().getExternalContext().getResponseOutputStream();
 
-            //JasperRunManager.runReportToPdfFile(" /jasperreport/transactionInvoice.jasper", "test", parameters, otFoodDataSource.getConnection());
             JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, otFoodDataSource.getConnection());
-            //FacesContext.getCurrentInstance().responseComplete();
-
         } catch (JRException ex) {
             ex.printStackTrace();
-
         } catch (SQLException ex) {
             ex.printStackTrace();
-
         } catch (IOException ex) {
         }
     }

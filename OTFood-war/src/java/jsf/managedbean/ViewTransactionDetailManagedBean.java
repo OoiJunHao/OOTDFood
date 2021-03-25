@@ -44,17 +44,6 @@ public class ViewTransactionDetailManagedBean implements Serializable {
         OTUserEntity user = (OTUserEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentUser");
         this.allSaleTransactions = saleTransactionEntitySessionBeanLocal.retrieveSaleTransactionsByUserId(user.getUserId());      
         System.out.println("Calling vtmb");
-        System.out.println(this.allSaleTransactions.get(2).getDeliveryStatus().toString());
-        this.selectedSaleTransaction =this.allSaleTransactions.get(2);
-    }
-    
-    public void redirectToInvoice(){
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("selectedID", this.selectedSaleTransaction.getSaleTransactionId());
-        try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/profileFeature/transactionInvoice.xhtml");
-        } catch (IOException ex) {
-            Logger.getLogger(ViewTransactionDetailManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     /**
