@@ -7,323 +7,399 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
 
-    
+    <ui:define name="css">
+        <h:outputStylesheet library="css" name="cyob.css"/>
+    </ui:define>
+
+
     <ui:define name="content">
         <script type="text/javascript">
             function handleDrop(event, ui) {
-            var droppedProduct = ui.draggable;
+                var droppedProduct = ui.draggable;
 
-            droppedProduct.fadeOut('fast');
+                droppedProduct.fadeOut('fast');
             }
         </script>
-        
-        <h1 style="font-size: 40; width: 100%; color: white; text-align: center; margin-top: 20px" >Welcome to Create Your Own Bento</h1>
-        <h3 style="width: 100%; color: white; text-align: center; margin-top: 20px" >OOTD Food allows for customization of Bento Meals, so go crazy and make your own one by dragging and dropping your desired ingredients!</h3>
-        
-        <div id="form" style="height: 100%">
-        
-            <div style="width: 50%; float: left; margin-bottom: 40px">
-                <div id="bases" style="width:100%; margin-top: 20px;">
-                    <p:dataView id="allBases" var="base" value="#{cYOBManagedBean.bases}" rows="1" layout="grid" paginator="true" pageLinks="3" paginatorPosition="top" style="height: 40%; background-color: black">
-                        <p:dataViewGridItem>
-                            <p:panel id="draggablePanel" header="#{base.name}" style="text-align: center">
-                                <h:panelGrid columns="2">
-                                    <f:facet name='header'>
-                                        <p:graphicImage url="/resources/images/ingredientsImages/#{base.name}.jpg" style="text-align: center; height: auto; width:100%;"/>
-                                    </f:facet>    
-                                    <h:outputText value="Cost:" style="color: white"/>
-                                    <h:outputText value="#{base.price}" style="color: white"/>
-                                    <h:outputText value="Calorie Count:" style="color: white"/>
-                                    <h:outputText value="#{base.calorie}" style="color: white"/>
-                                </h:panelGrid>
-                            </p:panel>
-                            <p:draggable for="draggablePanel" revert="true" zindex="1" axis="x"/>
-                        </p:dataViewGridItem>
-                    </p:dataView>
+
+        <div class="container" >
+            <div class="container-sub">
+                <div class="header">
+                    <div class="header-smaller">
+                        <div class="header-section">
+                            <h1 id="opening">Create Your Own Bento</h1>
+                            <h3 id="description">OOTD Food allows for customization of Bento Meals, so go crazy and make your own one by dragging and dropping your desired ingredients!</h3>
+                        </div>
+                    </div>
                 </div>
 
-                <div id="meats" style="width:100%; margin-top: 20px;">
-                    <p:dataView id="allMeats" var="meat" value="#{cYOBManagedBean.meats}" rows="1" layout="grid" paginator="true" pageLinks="3" paginatorPosition="top" style="height: 40%; background-color: black">
-                        <p:dataViewGridItem>
-                            <p:panel id="draggablePanel" header="#{meat.name}" style="text-align: center">
-                                <h:panelGrid columns="2">
-                                    <f:facet name='header'>
-                                        <p:graphicImage url="/resources/images/ingredientsImages/#{meat.name}.jpg" style="text-align: center; height: auto; width:100%;"/>
-                                    </f:facet>    
-                                    <h:outputText value="Cost:" style="color: white"/>
-                                    <h:outputText value="#{meat.price}" style="color: white"/>
-                                    <h:outputText value="Calorie Count:" style="color: white"/>
-                                    <h:outputText value="#{meat.calorie}" style="color: white"/>
-                                </h:panelGrid>
-                            </p:panel>
-                            <p:draggable for="draggablePanel" revert="true" zindex="1" axis="x"/>
-                        </p:dataViewGridItem>
-                    </p:dataView>
+                <div class="content">
+                    <div class="content-smaller">
+                        <div class ="content-dragdrop-table-column">
+                            <h:form id="selectedBases">
+                                <div class="row-container">
+                                    <div class="dragdrop-row" id="bases">
+                                        <div class="dragdrop-row-items">
+                                            <p:dataView class="draggables" id="allBases" var="base" value="#{cYOBManagedBean.bases}" rows="1" layout="grid" paginator="true" pageLinks="3" paginatorPosition="top">
+                                                <p:dataViewGridItem>
+                                                    <p:panel id="draggablePanel" header="#{base.name}" style="text-align: center">
+                                                        <h:panelGrid columns="2">
+                                                            <f:facet name='header'>
+                                                                <p:graphicImage class="images" url="/resources/images/ingredientsImages/#{base.name}.jpg" style="text-align: center; height: auto; width:100%;"/>
+                                                            </f:facet>
+                                                            <h:outputText value="Cost:" style="color: white"/>
+                                                            <h:outputText value="#{base.price}" style="color: white"/>
+                                                            <h:outputText value="Calorie Count:" style="color: white"/>
+                                                            <h:outputText value="#{base.calorie}" style="color: white"/>
+                                                        </h:panelGrid>
+                                                    </p:panel>
+                                                    <p:draggable for="draggablePanel" revert="true" zindex="1" axis="x"/>
+                                                </p:dataViewGridItem>
+                                            </p:dataView>
+
+
+                                            <div class="droppables">
+                                                <div class="droppables-content">
+                                                    <p:fieldset legend="Selected Bases">
+                                                        <p:outputPanel id="dropAreaBases">
+                                                            <h:outputText value="Drop Bases Here!" rendered="#{cYOBManagedBean.droppedIngredientsForBases.size() == 0}"/>
+                                                            <p:dataTable id="selectedBasesTable" var="base" value="#{cYOBManagedBean.droppedIngredientsForBases}" rendered="#{cYOBManagedBean.droppedIngredientsForBases.size() != 0}">
+                                                                <p:column headerText="Name">
+                                                                    <h:outputText value="#{base.ingredient.name}"/>
+                                                                </p:column>
+                                                                <p:column headerText="Calorie" >
+                                                                    <h:outputText value="#{base.ingredient.calorie}" />
+                                                                </p:column>
+                                                                <p:column headerText="Price">
+                                                                    <h:outputText value="#{base.ingredient.price}" />
+                                                                </p:column>
+                                                                <p:column headerText="Quantity" id="quantity">
+                                                                    <h:outputText value="#{base.count}" />
+                                                                    <p:commandButton icon="fa fa-plus" type="submit" actionListener="#{cYOBManagedBean.addQuantityToList}" update="selectedBasesTable newForm" style="margin-left: 2rem;">
+                                                                        <f:attribute name="ingredient" value="#{base.ingredient}"/>
+                                                                    </p:commandButton>
+                                                                </p:column>
+                                                                <p:column headerText="Remove" id="remove">
+                                                                    <p:commandButton icon="fa fa-trash-o" actionListener="#{cYOBManagedBean.onRemoveBases}" update="selectedBasesTable newForm" style="align-self: center;">
+                                                                        <f:attribute name="ingredient" value="#{base.ingredient}"/>
+                                                                    </p:commandButton>
+                                                                </p:column>
+                                                            </p:dataTable>
+
+                                                        </p:outputPanel>
+                                                    </p:fieldset>
+                                                    <p:droppable for="selectedBases" tolerance="touch" datasource="allBases" onDrop="handleDrop">
+                                                        <p:ajax listener="#{cYOBManagedBean.onDropBase}" update="dropAreaBases allBases selectedBasesTable newForm"/>
+                                                    </p:droppable>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </h:form>
+
+                            <h:form id="selectedMeats">
+                                <div class="row-container">
+                                    <div class="dragdrop-row" id="meat">
+                                        <div class="dragdrop-row-items">
+                                            <p:dataView class="draggables" id="allMeats" var="meat" value="#{cYOBManagedBean.meats}" rows="1" layout="grid" paginator="true" pageLinks="3" paginatorPosition="top">
+                                                <p:dataViewGridItem>
+                                                    <p:panel id="draggablePanel" header="#{meat.name}" style="text-align: center">
+                                                        <h:panelGrid columns="2">
+                                                            <f:facet name='header'>
+                                                                <p:graphicImage class="images" url="/resources/images/ingredientsImages/#{meat.name}.jpg"/>
+                                                            </f:facet>
+                                                            <h:outputText value="Cost:" style="color: white"/>
+                                                            <h:outputText value="#{meat.price}" style="color: white"/>
+                                                            <h:outputText value="Calorie Count:" style="color: white"/>
+                                                            <h:outputText value="#{meat.calorie}" style="color: white"/>
+                                                        </h:panelGrid>
+                                                    </p:panel>
+                                                    <p:draggable for="draggablePanel" revert="true" zindex="1" axis="x"/>
+                                                </p:dataViewGridItem>
+                                            </p:dataView>
+
+                                            <div class="droppables">
+                                                <div class="droppables-content">
+                                                    <p:fieldset legend="Selected Meats">
+                                                        <p:outputPanel  id="dropAreaMeats">
+                                                            <h:outputText value="Drop Meats Here!" rendered="#{cYOBManagedBean.droppedIngredientsForMeats.size() == 0}"/>
+                                                            <p:dataTable id="selectedMeatsTable" var="meat" value="#{cYOBManagedBean.droppedIngredientsForMeats}" rendered="#{cYOBManagedBean.droppedIngredientsForMeats.size() != 0}">
+                                                                <p:column headerText="Name">
+                                                                    <h:outputText value="#{meat.ingredient.name}" />
+                                                                </p:column>
+                                                                <p:column headerText="Calorie" >
+                                                                    <h:outputText value="#{meat.ingredient.calorie}"/>
+                                                                </p:column>
+                                                                <p:column headerText="Price" >
+                                                                    <h:outputText value="#{meat.ingredient.price}"/>
+                                                                </p:column>
+                                                                <p:column headerText="Quantity" id="quantity">
+                                                                    <h:outputText value="#{meat.count}"/>
+                                                                    <p:commandButton icon="fa fa-plus" style="margin-left: 2rem;" actionListener="#{cYOBManagedBean.addQuantityToList}" update="selectedMeatsTable newForm" >
+                                                                        <f:attribute name="ingredient" value="#{meat.ingredient}"/>
+                                                                    </p:commandButton>
+                                                                </p:column>
+                                                                <p:column headerText="Remove" id="remove">
+                                                                    <p:commandButton icon="fa fa-trash-o" style="align-self: center;" actionListener="#{cYOBManagedBean.onRemoveMeats}" update="selectedMeatsTable newForm" >
+                                                                        <f:attribute name="ingredient" value="#{meat.ingredient}"/>
+                                                                    </p:commandButton>
+                                                                </p:column>
+                                                            </p:dataTable>
+                                                        </p:outputPanel>
+                                                    </p:fieldset>
+
+                                                    <p:droppable for="selectedMeats" tolerance="touch" datasource="allMeats" onDrop="handleDrop">
+                                                        <p:ajax listener="#{cYOBManagedBean.onDropMeat}" update="dropAreaMeats allMeats selectedMeatsTable newForm"/>
+                                                    </p:droppable>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </h:form>
+
+                            <h:form id="selectedVeges">
+                                <div class="row-container">
+                                    <div class="dragdrop-row" id="veges">
+                                        <div class="dragdrop-row-items">
+                                            <p:dataView class="draggables" id="allVeges" var="vege" value="#{cYOBManagedBean.vegetables}" rows="1" layout="grid" paginator="true" pageLinks="3" paginatorPosition="top">
+                                                <p:dataViewGridItem>
+                                                    <p:panel id="draggablePanel" header="#{vege.name}">
+                                                        <h:panelGrid columns="2">
+                                                            <f:facet name='header'>
+                                                                <p:graphicImage class="images" url="/resources/images/ingredientsImages/#{vege.name}.jpg"/>
+                                                            </f:facet>
+                                                            <h:outputText value="Cost:" style="color: white"/>
+                                                            <h:outputText value="#{vege.price}" style="color: white"/>
+                                                            <h:outputText value="Calorie Count:" style="color: white"/>
+                                                            <h:outputText value="#{vege.calorie}" style="color: white"/>
+                                                        </h:panelGrid>
+                                                    </p:panel>
+                                                    <p:draggable for="draggablePanel" revert="true" zindex="1" axis="x"/>
+                                                </p:dataViewGridItem>
+                                            </p:dataView>
+
+                                            <div class="droppables">
+                                                <div class="droppables-content">
+                                                    <p:fieldset legend="Selected Veges">
+                                                        <p:outputPanel id="dropAreaVeges">
+                                                            <h:outputText value="Drop Veges Here!" rendered="#{cYOBManagedBean.droppedIngredientsForVeges.size() == 0}"/>
+                                                            <p:dataTable id="selectedVegesTable" var="vege" value="#{cYOBManagedBean.droppedIngredientsForVeges}" rendered="#{cYOBManagedBean.droppedIngredientsForVeges.size() != 0}">
+                                                                <p:column headerText="Name">
+                                                                    <h:outputText value="#{vege.ingredient.name}"/>
+                                                                </p:column>
+                                                                <p:column headerText="Calorie">
+                                                                    <h:outputText value="#{vege.ingredient.calorie}"/>
+                                                                </p:column>
+                                                                <p:column headerText="Price">
+                                                                    <h:outputText value="#{vege.ingredient.price}"/>
+                                                                </p:column>
+                                                                <p:column headerText="Quantity" id="quantity" >
+                                                                    <h:outputText value="#{vege.count}"/>
+                                                                    <p:commandButton icon="fa fa-plus" style="margin-left: 2rem;" actionListener="#{cYOBManagedBean.addQuantityToList}" update="selectedVegesTable newForm">
+                                                                        <f:attribute name="ingredient" value="#{vege.ingredient}"/>
+                                                                    </p:commandButton>
+                                                                </p:column>
+                                                                <p:column headerText="Remove" id="remove">
+                                                                    <p:commandButton icon="fa fa-trash-o" style="align-self: center;" actionListener="#{cYOBManagedBean.onRemoveVeges}" update="selectedVegesTable newForm">
+                                                                        <f:attribute name="ingredient" value="#{vege.ingredient}"/>
+                                                                    </p:commandButton>
+                                                                </p:column>
+                                                            </p:dataTable>
+                                                        </p:outputPanel>
+                                                    </p:fieldset>
+
+                                                    <p:droppable for="selectedVeges" tolerance="touch" datasource="allVeges" onDrop="handleDrop">
+                                                        <p:ajax listener="#{cYOBManagedBean.onDropVege}" update="dropAreaVeges allVeges selectedVegesTable newForm"/>
+                                                    </p:droppable>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </h:form>
+
+                            <h:form id="selectedAddons">
+                                <div class="row-container">
+                                    <div class="dragdrop-row" id="addOns">
+                                        <div class="dragdrop-row-items">
+                                            <p:dataView class="draggables" id="allAddons" var="addon" value="#{cYOBManagedBean.addons}" rows="1" layout="grid" paginator="true" pageLinks="3" paginatorPosition="top">
+                                                <p:dataViewGridItem>
+                                                    <p:panel id="draggablePanel" header="#{addon.name}">
+                                                        <h:panelGrid columns="2">
+                                                            <f:facet name='header'>
+                                                                <p:graphicImage class="images" url="/resources/images/ingredientsImages/#{addon.name}.jpg"/>
+                                                            </f:facet>
+                                                            <h:outputText value="Cost:" style="color: white"/>
+                                                            <h:outputText value="#{addon.price}" style="color: white"/>
+                                                            <h:outputText value="Calorie Count:" style="color: white"/>
+                                                            <h:outputText value="#{addon.calorie}" style="color: white"/>
+                                                        </h:panelGrid>
+                                                    </p:panel>
+                                                    <p:draggable for="draggablePanel" revert="true" zindex="1" axis="x"/>
+                                                </p:dataViewGridItem>
+                                            </p:dataView>
+
+                                            <div class="droppables">
+                                                <div class="droppables-content">
+                                                    <p:fieldset legend="Selected Addons">
+                                                        <p:outputPanel id="dropAreaAddons">
+                                                            <h:outputText value="Drop Addons Here!" rendered="#{cYOBManagedBean.droppedIngredientsForAddons.size() == 0}"/>
+                                                            <p:dataTable id="selectedAddonsTable" var="addon" value="#{cYOBManagedBean.droppedIngredientsForAddons}" rendered="#{cYOBManagedBean.droppedIngredientsForAddons.size() != 0}">
+                                                                <p:column headerText="Name">
+                                                                    <h:outputText value="#{addon.ingredient.name}"/>
+                                                                </p:column>
+                                                                <p:column headerText="Calorie" style="font-size: 30px">
+                                                                    <h:outputText value="#{addon.ingredient.calorie}"/>
+                                                                </p:column>
+                                                                <p:column headerText="Price">
+                                                                    <h:outputText value="#{addon.ingredient.price}"/>
+                                                                </p:column>
+                                                                <p:column headerText="Quantity" id="quantity">
+                                                                    <h:outputText value="#{addon.count}"/>
+                                                                    <p:commandButton icon="fa fa-plus" style="margin-left: 2rem;" actionListener="#{cYOBManagedBean.addQuantityToList}" update="selectedAddonsTable newForm">
+                                                                        <f:attribute name="ingredient" value="#{addon.ingredient}"/>
+                                                                    </p:commandButton>
+                                                                </p:column>
+                                                                <p:column headerText="Remove" id="remove">
+                                                                    <p:commandButton icon="fa fa-trash-o" style="align-self: center;" actionListener="#{cYOBManagedBean.onRemoveAddons}" update="selectedAddonsTable newForm">
+                                                                        <f:attribute name="ingredient" value="#{addon.ingredient}"/>
+                                                                    </p:commandButton>
+                                                                </p:column>
+                                                            </p:dataTable>
+                                                        </p:outputPanel>
+                                                    </p:fieldset>
+
+                                                    <p:droppable for="selectedAddons" tolerance="touch" datasource="allAddons" onDrop="handleDrop">
+                                                        <p:ajax listener="#{cYOBManagedBean.onDropAddon}" update="dropAreaAddons allAddons selectedAddonsTable newForm"/>
+                                                    </p:droppable>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </h:form>
+
+                            <h:form id="selectedSauces">
+                                <div class="row-container">
+                                    <div class="dragdrop-row" id="sauces">
+                                        <div class="dragdrop-row-items">
+                                            <p:dataView class="draggables" id="allSauces" var="sauce" value="#{cYOBManagedBean.sauces}" rows="1" layout="grid" paginator="true" pageLinks="3" paginatorPosition="top">
+                                                <p:dataViewGridItem>
+                                                    <p:panel id="draggablePanel" header="#{sauce.name}" style="text-align: center">
+                                                        <h:panelGrid columns="2">
+
+                                                            <f:facet name='header'>
+                                                                <p:graphicImage class="images" url="/resources/images/ingredientsImages/#{sauce.name}.jpg"/>
+                                                            </f:facet>
+
+                                                            <h:outputText value="Cost:" style="color: white"/>
+                                                            <h:outputText value="#{sauce.price}" style="color: white"/>
+                                                            <h:outputText value="Calorie Count:" style="color: white"/>
+                                                            <h:outputText value="#{sauce.calorie}" style="color: white"/>
+                                                        </h:panelGrid>
+                                                    </p:panel>
+                                                    <p:draggable for="draggablePanel" revert="true" zindex="1" axis="x"/>
+                                                </p:dataViewGridItem>
+                                            </p:dataView>
+
+                                            <div class="droppables">
+                                                <div class="droppables-content">
+                                                    <p:fieldset legend="Selected Sauces">
+                                                        <p:outputPanel id="dropAreaSauces">
+                                                            <h:outputText value="Drop Sauces Here!" rendered="#{cYOBManagedBean.droppedIngredientsForSauces.size() == 0}"/>
+                                                            <p:dataTable id="selectedSaucesTable" var="sauce" value="#{cYOBManagedBean.droppedIngredientsForSauces}" rendered="#{cYOBManagedBean.droppedIngredientsForSauces.size() != 0}">
+                                                                <p:column headerText="Name">
+                                                                    <h:outputText value="#{sauce.ingredient.name}"/>
+                                                                </p:column>
+                                                                <p:column headerText="Calorie">
+                                                                    <h:outputText value="#{sauce.ingredient.calorie}"/>
+                                                                </p:column>
+                                                                <p:column headerText="Price">
+                                                                    <h:outputText value="#{sauce.ingredient.price}"/>
+                                                                </p:column>
+                                                                <p:column headerText="Quantity" id="quantity">
+                                                                    <h:outputText value="#{sauce.count}"/>
+                                                                    <p:commandButton icon="fa fa-plus" style="margin-left: 2rem;" actionListener="#{cYOBManagedBean.addQuantityToList}" update="selectedSaucesTable newForm">
+                                                                        <f:attribute name="ingredient" value="#{sauce.ingredient}"/>
+                                                                    </p:commandButton>
+                                                                </p:column>
+                                                                <p:column headerText="Remove" id="remove">
+                                                                    <p:commandButton icon="fa fa-trash-o" style="align-self: center;" actionListener="#{cYOBManagedBean.onRemoveSauces}" update="selectedSaucesTable newForm">
+                                                                        <f:attribute name="ingredient" value="#{sauce.ingredient}"/>
+                                                                    </p:commandButton>
+                                                                </p:column>
+                                                            </p:dataTable>
+                                                        </p:outputPanel>
+                                                    </p:fieldset>
+
+
+                                                    <p:droppable for="selectedSauces" tolerance="touch" datasource="allSauces" onDrop="handleDrop">
+                                                        <p:ajax listener="#{cYOBManagedBean.onDropSauce}" update="dropAreaSauces allSauces selectedSaucesTable newForm"/>
+                                                    </p:droppable>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </h:form>
+                        </div>
+                    </div>
                 </div>
 
-                <div id="vegetables" style="width:100%; margin-top: 50px;">
-                    <p:dataView id="allVeges" var="vege" value="#{cYOBManagedBean.vegetables}" rows="1" layout="grid" paginator="true" pageLinks="3" paginatorPosition="top" style="height: 40%; background-color: black">
-                        <p:dataViewGridItem>
-                            <p:panel id="draggablePanel" header="#{vege.name}" style="text-align: center">
-                                <h:panelGrid columns="2">
-                                    <f:facet name='header'>
-                                        <p:graphicImage url="/resources/images/ingredientsImages/#{vege.name}.jpg" style="text-align: center; height: auto; width:100%;"/>
-                                    </f:facet>    
-                                    <h:outputText value="Cost:" style="color: white"/>
-                                    <h:outputText value="#{vege.price}" style="color: white"/>
-                                    <h:outputText value="Calorie Count:" style="color: white"/>
-                                    <h:outputText value="#{vege.calorie}" style="color: white"/>
-                                </h:panelGrid>
-                            </p:panel>
-                            <p:draggable for="draggablePanel" revert="true" zindex="1" axis="x"/>
-                        </p:dataViewGridItem>
-                    </p:dataView>
+                <div class="contain-footer">
+                    <h:form id="newForm">
+                        <p:panel rendered="true" >
+                            <div class="inputs">
+                                <p:outputLabel for="totalPrice" value="Total Price: "/>
+                                <h:outputText id="totalPrice" value="#{cYOBManagedBean.totalPrice}"/>
+                            </div>
+                            <div class="inputs">
+                                <p:outputLabel for="totalCalorie" value="Total Calorie: " />
+                                <h:outputText id="totalCalorie" value="#{cYOBManagedBean.totalCalorie}" />
+                            </div>
+                            <div class="inputs">
+                                <p:commandButton value="Add To Cart" icon="fa fa-shopping-cart" action="#{cYOBManagedBean.addtoCart}"/>
+                            </div>
+                        </p:panel>
+                    </h:form>
                 </div>
-
-                <div id="addons" style="width:100%; margin-top: 50px;">
-                    <p:dataView id="allAddons" var="addon" value="#{cYOBManagedBean.addons}" rows="1" layout="grid" paginator="true" pageLinks="3" paginatorPosition="top" style="height: 40%; background-color: black">
-                        <p:dataViewGridItem>
-                            <p:panel id="draggablePanel" header="#{addon.name}" style="text-align: center">
-                                <h:panelGrid columns="2">
-                                    <f:facet name='header'>
-                                        <p:graphicImage url="/resources/images/ingredientsImages/#{addon.name}.jpg" style="text-align: center; height: auto; width:100%;"/>
-                                    </f:facet>    
-                                    <h:outputText value="Cost:" style="color: white"/>
-                                    <h:outputText value="#{addon.price}" style="color: white"/>
-                                    <h:outputText value="Calorie Count:" style="color: white"/>
-                                    <h:outputText value="#{addon.calorie}" style="color: white"/>
-                                </h:panelGrid>
-                            </p:panel>
-                            <p:draggable for="draggablePanel" revert="true" zindex="1" axis="x"/>
-                        </p:dataViewGridItem>
-                    </p:dataView>
-                </div>
-
-                <div id="sauces" style="width:100%; margin-top: 20px; margin-bottom: 30px">
-                    <p:dataView id="allSauces" var="sauce" value="#{cYOBManagedBean.sauces}" rows="1" layout="grid" paginator="true" pageLinks="3" paginatorPosition="top" style="height: 40%; background-color: black">
-                        <p:dataViewGridItem>
-                            <p:panel id="draggablePanel" header="#{sauce.name}" style="text-align: center">
-                                <h:panelGrid columns="2">
-                                    <f:facet name='header'>
-                                        <p:graphicImage url="/resources/images/ingredientsImages/#{sauce.name}.jpg" style="text-align: center; height: auto; width:100%;"/>
-                                    </f:facet>    
-                                    <h:outputText value="Cost:" style="color: white"/>
-                                    <h:outputText value="#{sauce.price}" style="color: white"/>
-                                    <h:outputText value="Calorie Count:" style="color: white"/>
-                                    <h:outputText value="#{sauce.calorie}" style="color: white"/>
-                                </h:panelGrid>
-                            </p:panel>
-                            <p:draggable for="draggablePanel" revert="true" zindex="1" axis="x"/>
-                        </p:dataViewGridItem>
-                    </p:dataView>
-                </div>
-                
-                
-                
             </div>
-            
-            <div style="width: 50%; float: right;">
-                <h:form id="selectedBases">
-                    <p:fieldset  legend="Selected Bases" style="margin-top: 20px; font-size: 30px; height: 30vh; margin: 30px; margin-bottom: 100px">
-                        <p:outputPanel id="dropAreaBases">
-                            <h:outputText value="Drop Bases Here!" rendered="#{cYOBManagedBean.droppedIngredientsForBases.size() == 0}" style="font-size: 30px;"/>
-                            <p:dataTable id="selectedBasesTable" var="base" value="#{cYOBManagedBean.droppedIngredientsForBases}" rendered="#{cYOBManagedBean.droppedIngredientsForBases.size() != 0}">
-                                <p:column headerText="Name" style="font-size: 30px">
-                                    <h:outputText value="#{base.ingredient.name}" style="font-size: 25px"/>
-                                </p:column>
-                                <p:column headerText="Calorie" style="font-size: 30px">
-                                    <h:outputText value="#{base.ingredient.calorie}" style="font-size: 25px"/>
-                                </p:column>
-                                <p:column headerText="Price" style="font-size: 30px">
-                                    <h:outputText value="#{base.ingredient.price}" style="font-size: 25px"/>
-                                </p:column>
-                                <p:column headerText="Quantity" style="font-size: 30px" id="quantity">
-                                    <h:outputText value="#{base.count}" style="font-size: 25px"/>
-                                    <p:commandButton value="ADD" style="float: right; font-size: 15px; color: aquamarine" type="submit" actionListener="#{cYOBManagedBean.addQuantityToList}" update="selectedBasesTable newForm">
-                                        <f:attribute name="ingredient" value="#{base.ingredient}"/>
-                                    </p:commandButton>
-                                </p:column>
-                                <p:column headerText="Remove" style="font-size: 30px" id="remove">
-                                    <p:commandButton value="REMOVE" style="font-size: 15px; position: relative; left:55px; color: hotpink" actionListener="#{cYOBManagedBean.onRemoveBases}" update="selectedBasesTable allBases selectedBases newForm">
-                                        <f:attribute name="ingredient" value="#{base.ingredient}"/>
-                                    </p:commandButton>
-                                </p:column>
-                            </p:dataTable>
-
-                        </p:outputPanel>
-                    </p:fieldset>
-                    <p:droppable for="selectedBases" tolerance="touch" datasource="allBases" onDrop="handleDrop">
-                        <p:ajax listener="#{cYOBManagedBean.onDropBase}" update="dropAreaBases allBases selectedBasesTable newForm"/>
-                    </p:droppable>
-                </h:form>
-                
-                <h:form id="selectedMeats">
-                    <p:fieldset legend="Selected Meats" style="margin-top: 20px; font-size: 30px; height: 30vh; margin: 30px; margin-bottom: 100px">
-                        <p:outputPanel id="dropAreaMeats">
-                            <h:outputText value="Drop Meats Here!" rendered="#{cYOBManagedBean.droppedIngredientsForMeats.size() == 0}" style="font-size: 30px;"/>
-                            <p:dataTable id="selectedMeatsTable" var="meat" value="#{cYOBManagedBean.droppedIngredientsForMeats}" rendered="#{cYOBManagedBean.droppedIngredientsForMeats.size() != 0}">
-                                <p:column headerText="Name" style="font-size: 30px">
-                                    <h:outputText value="#{meat.ingredient.name}" style="font-size: 25px"/>
-                                </p:column>
-                                <p:column headerText="Calorie" style="font-size: 30px">
-                                    <h:outputText value="#{meat.ingredient.calorie}" style="font-size: 25px"/>
-                                </p:column>
-                                <p:column headerText="Price" style="font-size: 30px">
-                                    <h:outputText value="#{meat.ingredient.price}" style="font-size: 25px"/>
-                                </p:column>
-                                <p:column headerText="Quantity" style="font-size: 30px" id="quantity">
-                                    <h:outputText value="#{meat.count}" style="font-size: 25px"/>
-                                    <p:commandButton value="ADD" style="float: right; font-size: 15px; color: aquamarine" actionListener="#{cYOBManagedBean.addQuantityToList}" update="selectedMeatsTable newForm">
-                                        <f:attribute name="ingredient" value="#{meat.ingredient}"/>
-                                    </p:commandButton>
-                                </p:column>
-                                <p:column headerText="Remove" style="font-size: 30px" id="remove">
-                                    <p:commandButton value="REMOVE" style="font-size: 15px; position: relative; left:55px; color: hotpink" actionListener="#{cYOBManagedBean.onRemoveMeats}" update="selectedMeatsTable allMeats selectedMeats newForm">
-                                        <f:attribute name="ingredient" value="#{meat.ingredient}"/>
-                                    </p:commandButton>
-                                </p:column>
-                            </p:dataTable>
-                        </p:outputPanel>
-                    </p:fieldset>
-
-                    <p:droppable for="selectedMeats" tolerance="touch" datasource="allMeats" onDrop="handleDrop">
-                        <p:ajax listener="#{cYOBManagedBean.onDropMeat}" update="dropAreaMeats allMeats selectedMeatsTable newForm"/>
-                    </p:droppable>
-                </h:form>
-                
-                <h:form id="selectedVeges">
-                    <p:fieldset legend="Selected Veges" style="margin-top: 20px; font-size: 30px; height: 30vh; margin: 30px; margin-bottom: 100px">
-                        <p:outputPanel id="dropAreaVeges">
-                            <h:outputText value="Drop Veges Here!" rendered="#{cYOBManagedBean.droppedIngredientsForVeges.size() == 0}" style="font-size: 30px;"/>
-                            <p:dataTable id="selectedVegesTable" var="vege" value="#{cYOBManagedBean.droppedIngredientsForVeges}" rendered="#{cYOBManagedBean.droppedIngredientsForVeges.size() != 0}">
-                                <p:column headerText="Name" style="font-size: 30px">
-                                    <h:outputText value="#{vege.ingredient.name}" style="font-size: 25px"/>
-                                </p:column>
-                                <p:column headerText="Calorie" style="font-size: 30px">
-                                    <h:outputText value="#{vege.ingredient.calorie}" style="font-size: 25px"/>
-                                </p:column>
-                                <p:column headerText="Price" style="font-size: 30px">
-                                    <h:outputText value="#{vege.ingredient.price}" style="font-size: 25px"/>
-                                </p:column>
-                                <p:column headerText="Quantity" style="font-size: 30px" id="quantity" >
-                                    <h:outputText value="#{vege.count}" style="font-size: 25px"/>
-                                    <p:commandButton value="ADD" style="float: right; font-size: 15px; color: aquamarine" actionListener="#{cYOBManagedBean.addQuantityToList}" update="selectedVegesTable newForm">
-                                        <f:attribute name="ingredient" value="#{vege.ingredient}"/>
-                                    </p:commandButton>
-                                </p:column>
-                                <p:column headerText="Remove" style="font-size: 30px" id="remove">
-                                    <p:commandButton value="REMOVE" style="font-size: 15px; position: relative; left:55px; color: hotpink" actionListener="#{cYOBManagedBean.onRemoveVeges}" update="selectedVegesTable allVeges selectedVeges newForm">
-                                        <f:attribute name="ingredient" value="#{vege.ingredient}"/>
-                                    </p:commandButton>
-                                </p:column>
-                            </p:dataTable>
-                        </p:outputPanel>
-                    </p:fieldset>
-
-                    <p:droppable for="selectedVeges" tolerance="touch" datasource="allVeges" onDrop="handleDrop">
-                        <p:ajax listener="#{cYOBManagedBean.onDropVege}" update="dropAreaVeges allVeges selectedVegesTable newForm"/>
-                    </p:droppable>
-                </h:form>
-                
-                <h:form id="selectedAddons">
-                    <p:fieldset id="selectedAddons" legend="Selected Addons" style="margin-top: 20px; font-size: 30px; height: 30vh; margin: 30px; margin-bottom: 100px">
-                        <p:outputPanel id="dropAreaAddons">
-                            <h:outputText value="Drop Addons Here!" rendered="#{cYOBManagedBean.droppedIngredientsForAddons.size() == 0}" style="font-size: 30px;"/>
-                            <p:dataTable id="selectedAddonsTable" var="addon" value="#{cYOBManagedBean.droppedIngredientsForAddons}" rendered="#{cYOBManagedBean.droppedIngredientsForAddons.size() != 0}">
-                                <p:column headerText="Name" style="font-size: 30px">
-                                    <h:outputText value="#{addon.ingredient.name}" style="font-size: 25px"/>
-                                </p:column>
-                                <p:column headerText="Calorie" style="font-size: 30px">
-                                    <h:outputText value="#{addon.ingredient.calorie}" style="font-size: 25px"/>
-                                </p:column>
-                                <p:column headerText="Price" style="font-size: 30px">
-                                    <h:outputText value="#{addon.ingredient.price}" style="font-size: 25px"/>
-                                </p:column>
-                                <p:column headerText="Quantity" style="font-size: 30px" id="quantity">
-                                    <h:outputText value="#{addon.count}" style="font-size: 25px"/>
-                                    <p:commandButton value="ADD" style="float: right; font-size: 15px; color: aquamarine" actionListener="#{cYOBManagedBean.addQuantityToList}" update="selectedAddonsTable newForm">
-                                        <f:attribute name="ingredient" value="#{addon.ingredient}"/>
-                                    </p:commandButton>
-                                </p:column>
-                                <p:column headerText="Remove" style="font-size: 30px" id="remove">
-                                    <p:commandButton value="REMOVE" style="font-size: 15px; position: relative; left:55px; color: hotpink" actionListener="#{cYOBManagedBean.onRemoveAddons}" update="selectedAddonsTable allAddons selectedAddons newForm">
-                                        <f:attribute name="ingredient" value="#{addon.ingredient}"/>
-                                    </p:commandButton>
-                                </p:column>
-                            </p:dataTable>
-                        </p:outputPanel>
-                    </p:fieldset>
-
-                    <p:droppable for="selectedAddons" tolerance="touch" datasource="allAddons" onDrop="handleDrop">
-                        <p:ajax listener="#{cYOBManagedBean.onDropAddon}" update="dropAreaAddons allAddons selectedAddonsTable newForm"/>
-                    </p:droppable>
-                </h:form>
-                
-                <h:form id="selectedSauces">
-                    <p:fieldset legend="Selected Sauces" style="margin-top: 20px; font-size: 30px; height: 30vh; margin: 30px; margin-bottom: 100px">
-                        <p:outputPanel id="dropAreaSauces">
-                            <h:outputText value="Drop Sauces Here!" rendered="#{cYOBManagedBean.droppedIngredientsForSauces.size() == 0}" style="font-size: 30px;"/>
-                            <p:dataTable id="selectedSaucesTable" var="sauce" value="#{cYOBManagedBean.droppedIngredientsForSauces}" rendered="#{cYOBManagedBean.droppedIngredientsForSauces.size() != 0}">
-                                <p:column headerText="Name" style="font-size: 30px">
-                                    <h:outputText value="#{sauce.ingredient.name}" style="font-size: 25px"/>
-                                </p:column>
-                                <p:column headerText="Calorie" style="font-size: 30px">
-                                    <h:outputText value="#{sauce.ingredient.calorie}" style="font-size: 25px"/>
-                                </p:column>
-                                <p:column headerText="Price" style="font-size: 30px">
-                                    <h:outputText value="#{sauce.ingredient.price}" style="font-size: 25px"/>
-                                </p:column>
-                                <p:column headerText="Quantity" style="font-size: 30px" id="quantity">
-                                    <h:outputText value="#{sauce.count}" style="font-size: 25px"/>
-                                    <p:commandButton value="ADD" style="float: right; font-size: 15px; color: aquamarine" actionListener="#{cYOBManagedBean.addQuantityToList}" update="selectedSaucesTable newForm"> 
-                                        <f:attribute name="ingredient" value="#{sauce.ingredient}"/>
-                                    </p:commandButton>
-                                </p:column>
-                                <p:column headerText="Remove" style="font-size: 30px" id="remove">
-                                    <p:commandButton value="REMOVE" style="font-size: 15px; position: relative; left:55px; color: hotpink" actionListener="#{cYOBManagedBean.onRemoveSauces}" update="selectedSaucesTable selectedSauces allSauces newForm">
-                                        <f:attribute name="ingredient" value="#{sauce.ingredient}"/>
-                                    </p:commandButton>
-                                </p:column>
-                            </p:dataTable>
-                        </p:outputPanel>
-                    </p:fieldset>
-                        
-
-                    <p:droppable for="selectedSauces" tolerance="touch" datasource="allSauces" onDrop="handleDrop">
-                        <p:ajax listener="#{cYOBManagedBean.onDropSauce}" update="dropAreaSauces allSauces selectedSaucesTable newForm"/>
-                    </p:droppable>
-                </h:form>
-                
-                
-                
-            </div>
-              
-            
-            <h:form id="newForm">
-                <p:panel style="float: right; width: 40%; " rendered="true" >
-   
-                        <p:outputLabel for="totalPrice" value="Total Price: " style="font-size: 35px; color: white"/>
-                        <h:outputText id="totalPrice" value="#{cYOBManagedBean.totalPrice}" style="font-size: 35px; color: white; margin-right: 30px" />
-                        <p:outputLabel for="totalCalorie" value="Total Calorie: " style="font-size: 35px; color: white"/>
-                        <h:outputText id="totalCalorie" value="#{cYOBManagedBean.totalCalorie}" style="font-size: 35px; color: white; margin-right: 30px"/>
-                        <p:commandButton value="Add To Cart" icon="fa fa-shopping-cart" style="font-size: 25px;" action="#{cYOBManagedBean.addtoCart}"/>
-           
-                </p:panel>
-            </h:form>
-            
-            
         </div>
-        
-        
-        
-        
-        <div id ="footer" class="ui-g-12">
-            <ui:insert name="footer">
-                <ui:include src="/footer.xhtml"/>
-            </ui:insert>
-        </div>
+
+
+
+
+
+        <!--
+
+
+    </div>
+        -->
+
+        <!--
+                <div id ="footer" class="ui-g-12">
+                    <ui:insert name="footer">
+                        <ui:include src="/footer.xhtml"/>
+                    </ui:insert>
+                </div>-->
     </ui:define>
-    
-    
+
+
 
 </ui:composition>
