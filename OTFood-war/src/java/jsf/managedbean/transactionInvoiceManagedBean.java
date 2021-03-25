@@ -32,8 +32,7 @@ public class transactionInvoiceManagedBean {
 
     @Resource(name = "OTFoodDataSource")
     private DataSource oTFoodDataSource;
-    
-    
+
     private long selectedTransactionID;
 
     /**
@@ -41,21 +40,23 @@ public class transactionInvoiceManagedBean {
      */
     public transactionInvoiceManagedBean() {
     }
-    
+
     @PostConstruct
-    public void postConstruct(){
+    public void postConstruct() {
         System.out.println("Creating this transactionInvoiceManagedBean");
-      
+
     }
 
-    public void generateReport(ActionEvent event) {
+    public void generateReport() {
         try {
-            
+
+            System.out.println("PRINTING RECEIPT------------------------->   " + this.selectedTransactionID);
             HashMap parameters = new HashMap();
-            parameters.put("SaleTransactionID", 1l);
+
+            parameters.put("SaleTransactionID", this.selectedTransactionID);
             //FacesContext.getCurrentInstance().responseComplete();
 
-            InputStream reportStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/jasperreport/transactionInvoice.jasper");   
+            InputStream reportStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/jasperreport/transactionInvoice.jasper");
             OutputStream outputStream = FacesContext.getCurrentInstance().getExternalContext().getResponseOutputStream();
 
             //JasperRunManager.runReportToPdfFile(" /jasperreport/transactionInvoice.jasper", "test", parameters, otFoodDataSource.getConnection());
@@ -64,10 +65,8 @@ public class transactionInvoiceManagedBean {
 
         } catch (JRException ex) {
             ex.printStackTrace();
-
         } catch (SQLException ex) {
             ex.printStackTrace();
-
         } catch (IOException ex) {
         }
     }
