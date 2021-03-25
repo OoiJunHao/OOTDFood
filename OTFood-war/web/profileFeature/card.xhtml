@@ -61,7 +61,7 @@
 
                         <div class="my-acct-card">
                             <p:dataView var="credit" value="#{profileManagedBean.creditCards}" rows="5">
-                                <p:dataViewListItem>
+                                <p:dataViewListItem rendered="#{credit.isRemoved == false}">
                                     <div class="card-list-item">
                                         <div class="card-list-detail">
 

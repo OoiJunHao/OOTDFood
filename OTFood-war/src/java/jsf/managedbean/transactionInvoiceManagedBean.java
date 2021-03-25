@@ -31,7 +31,8 @@ import net.sf.jasperreports.engine.JasperRunManager;
 public class transactionInvoiceManagedBean {
 
     @Resource(name = "OTFoodDataSource")
-    private DataSource otFoodDataSource;
+    private DataSource oTFoodDataSource;
+    
     
     private long selectedTransactionID;
 
@@ -51,15 +52,14 @@ public class transactionInvoiceManagedBean {
         try {
             
             HashMap parameters = new HashMap();
-            parameters.put("SaleTransactionID", 2l);
-            System.out.println("selected ID ---------------->" + this.selectedTransactionID);
+            parameters.put("SaleTransactionID", 1l);
             //FacesContext.getCurrentInstance().responseComplete();
 
             InputStream reportStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/jasperreport/transactionInvoice.jasper");   
             OutputStream outputStream = FacesContext.getCurrentInstance().getExternalContext().getResponseOutputStream();
 
             //JasperRunManager.runReportToPdfFile(" /jasperreport/transactionInvoice.jasper", "test", parameters, otFoodDataSource.getConnection());
-            JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, otFoodDataSource.getConnection());
+            JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, oTFoodDataSource.getConnection());
             //FacesContext.getCurrentInstance().responseComplete();
 
         } catch (JRException ex) {

@@ -146,11 +146,17 @@ public class DataInitializationSessionBean {
 
             // Create Meals
             List<MealEntity> bentoSets = new ArrayList<>();
-            bentoSets.add(new BentoEntity("bento1", BigDecimal.valueOf(8.00), "this is chicken bento 1", 450, "bento5.jpg", chickenList));
-            bentoSets.add(new BentoEntity("bento2", BigDecimal.valueOf(8.50), "this is fish bento 2", 500, "bento5.jpg", fishList));
-            bentoSets.add(new BentoEntity("bento3", BigDecimal.valueOf(9.00), "this is pig bento 3", 550, "bento5.jpg", cowList));
-            bentoSets.add(new BentoEntity("bento4", BigDecimal.valueOf(9.50), "this is cow bento 4", 600, "bento5.jpg", sadList));
-            bentoSets.add(new BentoEntity("bento6", BigDecimal.valueOf(99.00), "this is impossible meat bento ", 650, "bento5.jpg", coolList));
+            bentoSets.add(new BentoEntity("Teriyaki Chicken Bento with Home-Style Greens", BigDecimal.valueOf(8.00), "The timeless healthy classic that we all know and love", 450, "bento5.jpg", chickenList));
+            bentoSets.add(new BentoEntity("Spicy Chicken Bento with Omelette and Asparagus", BigDecimal.valueOf(8.00), "Our widely acclaimed Spicy Chicken Bento! Soft Eggs and Crisp Asparagus!", 450, "bento5.jpg", chickenList));
+            
+            bentoSets.add(new BentoEntity("Grilled Smoked Salmon Bento with Onsen Egg, Sauté Mushrooms", BigDecimal.valueOf(8.50), "Indulge in the umami of our 24hour Smoked Salmon, shipped directly from Hokkaido", 500, "bento5.jpg", fishList));
+            bentoSets.add(new BentoEntity("Chirashi Don", BigDecimal.valueOf(12.50), "Bless your soul after a long day of 'pls fix thx' with our soul-warming Chirashi Don. Generously topped with diced Fatty Tuna, Salmon, Tako(Octopus)) and Fish Roe", 500, "bento5.jpg", fishList));
+            
+            
+            bentoSets.add(new BentoEntity("Pork Shōgayaki (Ginger Pork) Bento with Hard-Boiled Egg, Pickled Lotus Root", BigDecimal.valueOf(9.00), "Seek Comfort in our Mirin-Glazed, Ginger Pork slices accompanied with cozy, warm rice.", 550, "bento5.jpg", pigList));
+            bentoSets.add(new BentoEntity("Shittiest Bento In Our Store! You would rather eat a prepacked salad from 7-11!", BigDecimal.valueOf(9.50), "Life is Short, Eat some Meat", 600, "bento5.jpg", sadList));
+            bentoSets.add(new BentoEntity("Spicy Wagyu Beef Bento with Omelette and Avocado Salad", BigDecimal.valueOf(19.00), "Tatalise your tastebuds with our Melty Wagyu Beef, paird with a refreshing Avocado Salad, Topped with a soft, ASMR-esque Japanese style Omelette. Mmmmm...", 650, "bento5.jpg", cowList));
+            
             for (MealEntity mealEntity : bentoSets) {
                 mealEntitySessionBeanLocal.createNewMeal(mealEntity);
             }

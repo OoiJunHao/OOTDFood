@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.CreditCardEntity;
 import entity.OTUserEntity;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -55,6 +56,17 @@ public class CreditCardEntitySessionBean implements CreditCardEntitySessionBeanL
         Set<ConstraintViolation<CreditCardEntity>> constraintViolations = validator.validate(card);
 
         if (constraintViolations.isEmpty()) {
+            
+            //To check for already persisted card, setting isRemoved back to false
+            String maybePersistedCardNumber = card.getCardNumber();
+            Query query = em.createQuery("SELECT c FROM CreditCardEntity c WHERE c.cardNumber = :inCcNum");
+            query.setParameter("inCcNum", maybePersistedCardNumber);
+            Object maybePersistedCardEntity = query.getSingleResult();
+            if( maybePersistedCardEntity != null) { //maybe-card Exists
+                CreditCardEntity alreadyPersistedCard = (CreditCardEntity)maybePersistedCardEntity;
+                alreadyPersistedCard.setIsRemoved(Boolean.FALSE);
+            }
+            
             try {
                 if (userId != null) {
                     try {
@@ -103,8 +115,16 @@ public class CreditCardEntitySessionBean implements CreditCardEntitySessionBeanL
     public List<CreditCardEntity> retrieveAllCardByUser(Long userId) {
         Query query = em.createQuery("SELECT c FROM CreditCardEntity c WHERE c.user.UserId = :id");
         query.setParameter("id", userId);
-
-        return query.getResultList();
+        
+        List<CreditCardEntity> nonRemovedCards = new ArrayList<>();
+        for (Object c : query.getResultList()) {
+            CreditCardEntity card = (CreditCardEntity)c;
+            if (!card.getIsRemoved()) {
+                nonRemovedCards.add(card);
+            }
+        
+        }
+        return nonRemovedCards;
     }
 
     @Override
@@ -119,12 +139,13 @@ public class CreditCardEntitySessionBean implements CreditCardEntitySessionBeanL
     public void deleteCreditCard(Long id) throws CreditCardNotFoundException {
         try {
             CreditCardEntity card = retrieveCardById(id);
-
-            if (card.getUser() != null) {
-                OTUserEntity user = card.getUser();
-                user.getCreditCard().remove(card);
-            }
-
+            
+            //Commmented out because we using pseudo remove
+//            if (card.getUser() != null) {
+//                OTUserEntity user = card.getUser();
+//                user.getCreditCard().remove(card);
+//            }
+//            
             em.remove(card);
         } catch (CreditCardNotFoundException ex) {
             throw new CreditCardNotFoundException(ex.getMessage());

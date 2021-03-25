@@ -16,7 +16,7 @@
         <h:form>
             
         <p:commandButton value="Generate Receipt" style="margin-top: 10px; width: 40%; margin-left: 30%; margin-right: 30%" 
-                         actionListener="#{transactionInvoiceManagedBean.generateReport}" ajax="false" update="@all">
+                         actionListener="#{transactionInvoiceManagedBean.generateReport}" ajax="false" update="@all" async="true">
             <f:setPropertyActionListener value="#{flash['selectedID']}" target="#{transactionInvoiceManagedBean.selectedTransactionID}"/>
         </p:commandButton>
         </h:form>

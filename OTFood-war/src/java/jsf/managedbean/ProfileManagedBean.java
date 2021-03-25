@@ -5,6 +5,8 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.AddressEntitySessionBeanLocal;
+import ejb.session.stateless.CreditCardEntitySessionBeanLocal;
 import ejb.session.stateless.OTUserEntitySessionBeanLocal;
 import entity.AddressEntity;
 import entity.CreditCardEntity;
@@ -36,8 +38,12 @@ import javax.faces.view.ViewScoped;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
 import util.enumeration.RegionEnum;
+import util.exception.AddressExistException;
+import util.exception.CardCreationException;
+import util.exception.CreditCardExistException;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.UnknownPersistenceException;
 import util.exception.UpdateUserException;
 import util.exception.UserNotFoundException;
 import util.security.CryptographicHelper;
@@ -50,9 +56,16 @@ import util.security.CryptographicHelper;
 @ViewScoped
 public class ProfileManagedBean implements Serializable {
 
+    @EJB(name = "CreditCardEntitySessionBeanLocal")
+    private CreditCardEntitySessionBeanLocal creditCardEntitySessionBeanLocal;
+
+    @EJB(name = "AddressEntitySessionBeanLocal")
+    private AddressEntitySessionBeanLocal addressEntitySessionBeanLocal;
+
     @EJB(name = "OTUserEntitySessionBeanLocal")
     private OTUserEntitySessionBeanLocal oTUserEntitySessionBeanLocal;
-
+    
+    
     /**
      * Creates a new instance of ProfileManagedBean
      */
@@ -197,6 +210,7 @@ public class ProfileManagedBean implements Serializable {
 
     public void addAddress(ActionEvent event) {
         try {
+            addressEntitySessionBeanLocal.addAddressWithUserId(newAddress, profile.getUserId());
             addresses.add(newAddress);
             profile.setAddress(addresses);
             oTUserEntitySessionBeanLocal.updateUserDetails(profile);
@@ -206,11 +220,16 @@ public class ProfileManagedBean implements Serializable {
             PrimeFaces.current().executeScript("PF('dialogAddAddress').hide()");
         } catch (UpdateUserException | UserNotFoundException | InputDataValidationException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Add Address error: " + ex.getMessage(), ""));
+        } catch (UnknownPersistenceException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Add Address error: " + ex.getMessage(), ""));
+        } catch (AddressExistException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Add Address error: " + ex.getMessage(), ""));
         }
     }
 
     public void addCreditCard(ActionEvent event) {
         try {
+            creditCardEntitySessionBeanLocal.createNewCreditCardForUser(newCreditCard, profile.getUserId());
             creditCards.add(newCreditCard);
             profile.setCreditCard(creditCards);
             oTUserEntitySessionBeanLocal.updateUserDetails(profile);
@@ -219,6 +238,12 @@ public class ProfileManagedBean implements Serializable {
             PrimeFaces.current().executeScript("PF('dialogAddCreditCard').hide()");
 
         } catch (UpdateUserException | UserNotFoundException | InputDataValidationException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Add Card error: " + ex.getMessage(), ""));
+        } catch (UnknownPersistenceException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Add Card error: " + ex.getMessage(), ""));
+        } catch (CreditCardExistException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Add Card error: " + ex.getMessage(), ""));
+        } catch (CardCreationException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Add Card error: " + ex.getMessage(), ""));
         }
     }

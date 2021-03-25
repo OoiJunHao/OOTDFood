@@ -354,7 +354,7 @@ public class cartManagedBean implements Serializable {
             }
         }
 
-        this.setMissingDetails(this.creditCards.isEmpty() && this.address.isEmpty());
+        this.setMissingDetails(this.creditCards.isEmpty() || this.address.isEmpty());
     }
 
     public void getMealOrderDetails(ActionEvent event) {

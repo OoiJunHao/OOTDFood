@@ -45,6 +45,9 @@ public class CreditCardEntity implements Serializable {
     @NotNull
     @Size(max = 5)
     private String expiryDate;
+    @Column
+    @NotNull
+    private Boolean isRemoved;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
@@ -58,6 +61,7 @@ public class CreditCardEntity implements Serializable {
         this.cardName = cardName;
         this.cardNumber = cardNumber;
         this.expiryDate = expiryDate;
+        this.isRemoved = false;
     }
 
     public String getType() {
@@ -131,6 +135,20 @@ public class CreditCardEntity implements Serializable {
     @Override
     public String toString() {
         return "entity.CreditCardEntity[ id=" + creditCardId + " ]";
+    }
+
+    /**
+     * @return the isRemoved
+     */
+    public Boolean getIsRemoved() {
+        return isRemoved;
+    }
+
+    /**
+     * @param isRemoved the isRemoved to set
+     */
+    public void setIsRemoved(Boolean isRemoved) {
+        this.isRemoved = isRemoved;
     }
 
 }
