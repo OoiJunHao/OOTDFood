@@ -52,6 +52,7 @@ import util.exception.DriverExistsException;
 import util.exception.FaqExistException;
 import util.exception.IngredientEntityExistsException;
 import util.exception.InputDataValidationException;
+import util.exception.MealExistsException;
 import util.exception.PromoCodeExistException;
 import util.exception.ReviewExistException;
 import util.exception.UnknownPersistenceException;
@@ -145,16 +146,18 @@ public class DataInitializationSessionBean {
             coolList.add(CategoryEnum.IMPOSSIBLE);
 
             // Create Meals
-            List<MealEntity> bentoSets = new ArrayList<>();
-            bentoSets.add(new BentoEntity("bento1", BigDecimal.valueOf(8.00), "this is chicken bento 1", 450, "bento5.jpg", chickenList));
-            bentoSets.add(new BentoEntity("bento2", BigDecimal.valueOf(8.50), "this is fish bento 2", 500, "bento5.jpg", fishList));
-            bentoSets.add(new BentoEntity("bento3", BigDecimal.valueOf(9.00), "this is pig bento 3", 550, "bento5.jpg", cowList));
-            bentoSets.add(new BentoEntity("bento4", BigDecimal.valueOf(9.50), "this is cow bento 4", 600, "bento5.jpg", sadList));
-            bentoSets.add(new BentoEntity("bento6", BigDecimal.valueOf(99.00), "this is impossible meat bento ", 650, "bento5.jpg", coolList));
+            List<MealEntity> bentoSets = new ArrayList<>();  
+            bentoSets.add(new BentoEntity("Teriyaki Chicken Bento with Home-Style Greens", BigDecimal.valueOf(8.00), "The timeless healthy classic that we all know and love", 450, "bento1", chickenList));
+            bentoSets.add(new BentoEntity("Spicy Chicken Bento with Omelette and Asparagus", BigDecimal.valueOf(8.00), "Our widely acclaimed Spicy Chicken Bento! Soft Eggs and Crisp Asparagus!", 450, "bento2", chickenList));
+            bentoSets.add(new BentoEntity("Grilled Smoked Salmon Bento with Onsen Egg, Sauté Mushrooms", BigDecimal.valueOf(8.50), "Indulge in the umami of our 24hour Smoked Salmon, shipped directly from Hokkaido", 500, "bento3", fishList));
+            bentoSets.add(new BentoEntity("Chirashi Don", BigDecimal.valueOf(12.50), "Bless your soul after a long day of 'pls fix thx' with our soul-warming Chirashi Don. Generously topped with diced Fatty Tuna, Salmon, Tako(Octopus)) and Fish Roe", 500, "bento4", fishList));
+            bentoSets.add(new BentoEntity("Pork Shōgayaki (Ginger Pork) Bento with Hard-Boiled Egg, Pickled Lotus Root", BigDecimal.valueOf(9.00), "Seek Comfort in our Mirin-Glazed, Ginger Pork slices accompanied with cozy, warm rice.", 550, "bento5", pigList));
+            bentoSets.add(new BentoEntity("Shittiest Bento In Our Store! You would rather eat a prepacked salad from 7-11!", BigDecimal.valueOf(9.50), "Life is Short, Eat some Meat", 600, "bento1", sadList));
+            bentoSets.add(new BentoEntity("Spicy Wagyu Beef Bento with Omelette and Avocado Salad", BigDecimal.valueOf(19.00), "Tatalise your tastebuds with our Melty Wagyu Beef, paird with a refreshing Avocado Salad, Topped with a soft, ASMR-esque Japanese style Omelette. Mmmmm...", 650, "bento5", cowList));
+
             for (MealEntity mealEntity : bentoSets) {
                 mealEntitySessionBeanLocal.createNewMeal(mealEntity);
             }
- 
             
             List<IngredientEntity> allIngredients = new ArrayList<>();
             allIngredients.add(new IngredientEntity("Japanese Rice", BigDecimal.valueOf(1.50), 150, IngredientTypeEnum.BASE));
@@ -218,8 +221,8 @@ public class DataInitializationSessionBean {
             faqSessionBean.createNewFaq(new FaqEntity("Can i make custom orders", "Yes, of course! You can do so under our CYOB page under meals.", "Orders"));
             faqSessionBean.createNewFaq(new FaqEntity("What payment methods do you accept?", "We accept Visa and Mastercard for online orders.", "Orders"));
 
-            faqSessionBean.createNewFaq(new FaqEntity("How long would it take to receieve my order?", "We have fixed delivery timings, lunch : 12-2pm, dinner: 6-8pm, supper : 12am-2am", "Delivery"));
-            faqSessionBean.createNewFaq(new FaqEntity("How much is delivery fee?", "We have a flat rate of $2 for regions within 5km from us and $5 for the rest", "Delivery"));
+            faqSessionBean.createNewFaq(new FaqEntity("How long would it take to receieve my order?", "We deliver around the clock and we will try our best to accomodate to your requested delivery date and time. Do be patient if you have yet to recieve your order past your requested date and time. In the event that your order still has not arrived, please contact us immediately.", "Delivery"));
+            faqSessionBean.createNewFaq(new FaqEntity("How much is delivery fee?", "Our delivery costs are already included in the meal costs. There is no need to worry about delivery fees and surge pricings.", "Delivery"));
             faqSessionBean.createNewFaq(new FaqEntity("How do i know my order is on the way?", "If the 'Ordered' status changes to 'Delivering', you can look forward to having your scrumptious bentos within 30mins.", "Delivery"));
 
             faqSessionBean.createNewFaq(new FaqEntity("Where do we get our ingredients from?", "We source them from trustable suppliers providing only the best of the crops.", "Product"));
@@ -227,7 +230,7 @@ public class DataInitializationSessionBean {
             faqSessionBean.createNewFaq(new FaqEntity("Are there different sizes to the bento?", "Sorry but at the moment, we only offer a fixed protion size.", "Product"));
             faqSessionBean.createNewFaq(new FaqEntity("Can I visit your shop?", "Currently we are a home grown business, hence we do not have an outlet store. We do appreciate your continuous support to allow us to achieve the dream of opening our own store", "Product"));
 
-        } catch (UserExistException | UnknownPersistenceException | InputDataValidationException | ReviewExistException | UserNotFoundException | FaqExistException | CreateNewSaleTransactionException | DriverExistsException | IngredientEntityExistsException | AddressExistException | CreditCardExistException | CardCreationException | PromoCodeExistException ex) {
+        } catch (UserExistException | UnknownPersistenceException | InputDataValidationException | ReviewExistException | UserNotFoundException | FaqExistException | CreateNewSaleTransactionException | DriverExistsException | IngredientEntityExistsException | AddressExistException | CreditCardExistException | PromoCodeExistException | MealExistsException ex) {
             Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         } 
 

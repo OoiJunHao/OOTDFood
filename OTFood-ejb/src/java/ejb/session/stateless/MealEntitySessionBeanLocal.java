@@ -24,13 +24,9 @@ public interface MealEntitySessionBeanLocal {
 
     public List<MealEntity> retrieveAllMeals();
 
-    public List<MealEntity> retrieveAllMealsOrderedByUser(Long userId) throws UserNotFoundException;
-
     public MealEntity retrieveMealById(Long mealId) throws MealNotFoundException;
 
-    public Long createNewMealForUser(Long userId, MealEntity meal) throws UnknownPersistenceException, InputDataValidationException, UserNotFoundException, MealExistsException;
-
-    public Long createNewMeal(MealEntity meal);
+   public Long createNewMeal(MealEntity meal) throws InputDataValidationException, UnknownPersistenceException, MealExistsException;
 
     public List<MealEntity> retrieveTop5MealEntityByRating();
 

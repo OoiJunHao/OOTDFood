@@ -5,10 +5,11 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.AddressEntitySessionBeanLocal;
+import ejb.session.stateless.CreditCardEntitySessionBeanLocal;
 import ejb.session.stateless.OTUserEntitySessionBeanLocal;
 import entity.AddressEntity;
 import entity.CreditCardEntity;
-import entity.IngredientEntity;
 import entity.OTUserEntity;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,8 +27,6 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -36,8 +35,13 @@ import javax.faces.view.ViewScoped;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
 import util.enumeration.RegionEnum;
+import util.exception.AddressExistException;
+import util.exception.CreditCardExistException;
+import util.exception.CreditCardNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.NoAddressFoundException;
+import util.exception.UnknownPersistenceException;
 import util.exception.UpdateUserException;
 import util.exception.UserNotFoundException;
 import util.security.CryptographicHelper;
@@ -50,13 +54,19 @@ import util.security.CryptographicHelper;
 @ViewScoped
 public class ProfileManagedBean implements Serializable {
 
-    @EJB(name = "OTUserEntitySessionBeanLocal")
+    @EJB
+    private AddressEntitySessionBeanLocal addressEntitySessionBeanLocal;
+
+    @EJB
+    private CreditCardEntitySessionBeanLocal creditCardEntitySessionBeanLocal;
+
+    @EJB
     private OTUserEntitySessionBeanLocal oTUserEntitySessionBeanLocal;
 
     /**
      * Creates a new instance of ProfileManagedBean
      */
-    private OTUserEntity profile;
+    private OTUserEntity profile; // purely used for static field updates (not for related entity manipulation)
     private String profileDate;
     private List<AddressEntity> addresses;
     private List<CreditCardEntity> creditCards;
@@ -90,8 +100,8 @@ public class ProfileManagedBean implements Serializable {
         } catch (ParseException ex) {
             Logger.getLogger(ProfileManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        addresses = profile.getAddress();
-        creditCards = profile.getCreditCard();
+        addresses = addressEntitySessionBeanLocal.retrieveAddressesByUserId(profile.getUserId());
+        creditCards = creditCardEntitySessionBeanLocal.retrieveAllCardByUser(profile.getUserId());
         regions = Arrays.asList(RegionEnum.values());
 
     }
@@ -156,19 +166,9 @@ public class ProfileManagedBean implements Serializable {
     public void removeAddress(ActionEvent event) {
         try {
             Long addressId = (Long) event.getComponent().getAttributes().get("addressId");
-            for (int i = 0; i < addresses.size(); i++) {
-                if (addresses.get(i).getAddressId() == addressId) {
-                    addresses.remove(i);
-                    break;
-                }
-            }
-            profile.setAddress(addresses);
-            oTUserEntitySessionBeanLocal.updateUserDetails(profile);
-        } catch (UpdateUserException ex) {
-            Logger.getLogger(ProfileManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UserNotFoundException ex) {
-            Logger.getLogger(ProfileManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InputDataValidationException ex) {
+            addressEntitySessionBeanLocal.removeAddress(addressId);
+            addresses = addressEntitySessionBeanLocal.retrieveAddressesByUserId(profile.getUserId());
+        } catch (NoAddressFoundException ex) {
             Logger.getLogger(ProfileManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -177,50 +177,37 @@ public class ProfileManagedBean implements Serializable {
     public void removeCreditCard(ActionEvent event) {
         try {
             Long creditCardId = (Long) event.getComponent().getAttributes().get("cardId");
-            for (int i = 0; i < creditCards.size(); i++) {
-                if (creditCards.get(i).getCreditCardId() == creditCardId) {
-                    creditCards.remove(i);
-                    break;
-                }
-            }
-            profile.setCreditCard(creditCards);
-            oTUserEntitySessionBeanLocal.updateUserDetails(profile);
-        } catch (UpdateUserException ex) {
-            Logger.getLogger(ProfileManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UserNotFoundException ex) {
-            Logger.getLogger(ProfileManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InputDataValidationException ex) {
-            Logger.getLogger(ProfileManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            creditCardEntitySessionBeanLocal.deleteCreditCard(creditCardId);
+            creditCards = creditCardEntitySessionBeanLocal.retrieveAllCardByUser(profile.getUserId());
+        } catch (CreditCardNotFoundException ex) {
+            Logger.getLogger(ProfileManagedBean.class.getName()).log(Level.SEVERE, null, ex); 
         }
 
     }
 
     public void addAddress(ActionEvent event) {
         try {
-            addresses.add(newAddress);
-            profile.setAddress(addresses);
-            oTUserEntitySessionBeanLocal.updateUserDetails(profile);
+            addressEntitySessionBeanLocal.addAddressWithUserId(newAddress, profile.getUserId());
+            addresses = addressEntitySessionBeanLocal.retrieveAddressesByUserId(profile.getUserId());
             region = null;
             newAddress = new AddressEntity();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Address Added successfully", ""));
             PrimeFaces.current().executeScript("PF('dialogAddAddress').hide()");
-        } catch (UpdateUserException | UserNotFoundException | InputDataValidationException ex) {
+        } catch (UserNotFoundException | InputDataValidationException | UnknownPersistenceException | AddressExistException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Add Address error: " + ex.getMessage(), ""));
-        }
+        } 
     }
 
     public void addCreditCard(ActionEvent event) {
         try {
-            creditCards.add(newCreditCard);
-            profile.setCreditCard(creditCards);
-            oTUserEntitySessionBeanLocal.updateUserDetails(profile);
+            creditCardEntitySessionBeanLocal.createNewCreditCardForUser(newCreditCard, profile.getUserId());         
             newCreditCard = new CreditCardEntity();
+            creditCards = creditCardEntitySessionBeanLocal.retrieveAllCardByUser(profile.getUserId());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Credit Card Added successfully", ""));
             PrimeFaces.current().executeScript("PF('dialogAddCreditCard').hide()");
-
-        } catch (UpdateUserException | UserNotFoundException | InputDataValidationException ex) {
+        } catch (UnknownPersistenceException | CreditCardExistException | InputDataValidationException | UserNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Add Card error: " + ex.getMessage(), ""));
-        }
+        } 
     }
 
     public void changePassword() {

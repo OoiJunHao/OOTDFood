@@ -53,7 +53,8 @@ public class MealEntity implements Serializable {
     @Max(5)
     @NotNull
     private Integer averageRating;
-    @Column(nullable = false, length = 24)
+    @Lob
+    @Column(nullable = false)
     @Size(min = 0)
     @NotNull
     private String name;
@@ -66,8 +67,6 @@ public class MealEntity implements Serializable {
     @NotNull
     List<CategoryEnum> categories;
     
-    @ManyToMany
-    private List<OTUserEntity> users;
     
     @OneToMany(mappedBy = "meal")
     private List<ReviewEntity> reviews;
@@ -75,7 +74,6 @@ public class MealEntity implements Serializable {
     private List<IngredientEntity> ingredients;
 
     public MealEntity() {
-        users = new ArrayList<>();
         categories = new ArrayList<>();
         reviews = new ArrayList<>();
         ingredients = new ArrayList<>();
@@ -130,14 +128,6 @@ public class MealEntity implements Serializable {
 
     public void setCalorie(Integer calorie) {
         this.calorie = calorie;
-    }
-
-    public List<OTUserEntity> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<OTUserEntity> users) {
-        this.users = users;
     }
 
     public List<CategoryEnum> getCategories() {

@@ -16,7 +16,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import util.enumeration.RegionEnum;
@@ -34,6 +33,7 @@ public class AddressEntity implements Serializable {
     private Long addressId;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @NotNull
     private RegionEnum region;
     @Column(nullable = false, length = 64)
     @NotNull
@@ -43,15 +43,20 @@ public class AddressEntity implements Serializable {
     @NotNull
     @Size(min = 6, max = 6)
     private String postalCode;
+    @NotNull
+    @Column(nullable = false)
+    private boolean isRemoved;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     private OTUserEntity user;
 
     public AddressEntity() {
+        this.isRemoved = false;
     }
 
     public AddressEntity(RegionEnum region, String address, String postalCode) {
+        this();
         this.region = region;
         this.address = address;
         this.postalCode = postalCode;
@@ -120,6 +125,14 @@ public class AddressEntity implements Serializable {
     @Override
     public String toString() {
         return "entity.AddressEntity[ id=" + addressId + " ]";
+    }
+
+    public boolean isIsRemoved() {
+        return isRemoved;
+    }
+
+    public void setIsRemoved(boolean isRemoved) {
+        this.isRemoved = isRemoved;
     }
 
 }
