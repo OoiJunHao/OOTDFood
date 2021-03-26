@@ -277,11 +277,6 @@ WHERE
 		<property name="com.jaspersoft.studio.field.tree.path" value="creditcardentity"/>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="COLUMN_33" class="java.lang.Long">
-		<property name="com.jaspersoft.studio.field.name" value="USER_USERID"/>
-		<property name="com.jaspersoft.studio.field.label" value="USER_USERID"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="creditcardentity"/>
-	</field>
 	<field name="ADDRESSID" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.name" value="ADDRESSID"/>
 		<property name="com.jaspersoft.studio.field.label" value="ADDRESSID"/>
@@ -305,11 +300,6 @@ WHERE
 		<property name="com.jaspersoft.studio.field.label" value="REGION"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="addressentity"/>
 		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="COLUMN_38" class="java.lang.Long">
-		<property name="com.jaspersoft.studio.field.name" value="USER_USERID"/>
-		<property name="com.jaspersoft.studio.field.label" value="USER_USERID"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="addressentity"/>
 	</field>
 	<field name="USERID" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.name" value="USERID"/>
