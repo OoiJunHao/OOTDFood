@@ -17,6 +17,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import util.enumeration.StaffTypeEnum;
+import util.security.CryptographicHelper;
 
 /**
  *
@@ -53,17 +54,17 @@ public class StaffEntity implements Serializable {
     private StaffTypeEnum type;
 
     public StaffEntity() {
+        this.salt = CryptographicHelper.getInstance().generateRandomString(32);
     }
 
-    public StaffEntity(Long staffId, String firstname, String lastName, String username, String password, String salt, String profilePicture, StaffTypeEnum type) {
-        this.staffId = staffId;
+    public StaffEntity(String firstname, String lastName, String username, String password, String profilePicture, StaffTypeEnum type) {
         this.firstname = firstname;
         this.lastName = lastName;
         this.username = username;
-        this.password = password;
-        this.salt = salt;
         this.profilePicture = profilePicture;
         this.type = type;
+
+        setPassword(password);
     }
 
     public String getFirstname() {
@@ -95,7 +96,11 @@ public class StaffEntity implements Serializable {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        if (password != null) {
+            this.password = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + this.salt));
+        } else {
+            this.password = null;
+        }
     }
 
     public String getSalt() {
