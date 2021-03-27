@@ -53,9 +53,6 @@ public class userManagementManagedBean implements Serializable {
     //reviews
     private List<ReviewEntity> reviews;
 
-    //favourited meals
-    private List<MealEntity> favouriteMeals;
-
     /**
      * Creates a new instance of userManagementManagedBean
      */
@@ -70,8 +67,7 @@ public class userManagementManagedBean implements Serializable {
         if (currentUser != null) {
             cards = currentUser.getCreditCard();
             address = currentUser.getAddress();
-            reviews = currentUser.getReviews();
-            favouriteMeals = currentUser.getMeals();
+            reviews = currentUser.getReviews();  
         }
     }
 
@@ -144,14 +140,6 @@ public class userManagementManagedBean implements Serializable {
 
     public void setReviews(List<ReviewEntity> reviews) {
         this.reviews = reviews;
-    }
-
-    public List<MealEntity> getFavouriteMeals() {
-        return favouriteMeals;
-    }
-
-    public void setFavouriteMeals(List<MealEntity> favouriteMeals) {
-        this.favouriteMeals = favouriteMeals;
     }
 
     public String getCheckingPassword() {

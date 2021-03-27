@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 /**
  *
@@ -23,8 +24,10 @@ public class FaqEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Lob
     @Column(nullable = false)
     private String question;
+    @Lob
     @Column(nullable = false)
     private String answer;
     @Column(nullable = false)

@@ -5,15 +5,9 @@
  */
 package ejb.session.stateless;
 
-import entity.AddressEntity;
-import entity.BentoEntity;
-import entity.MealEntity;
 import entity.OTUserEntity;
-import entity.StaffEntity;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -27,8 +21,6 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
-import util.exception.StaffNotFoundException;
-import util.exception.StaffUsernameExistException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateUserException;
 import util.exception.UserExistException;

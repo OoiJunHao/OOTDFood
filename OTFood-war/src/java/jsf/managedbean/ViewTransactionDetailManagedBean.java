@@ -8,9 +8,12 @@ package jsf.managedbean;
 import ejb.session.stateless.SaleTransactionEntitySessionBeanLocal;
 import entity.OTUserEntity;
 import entity.SaleTransactionEntity;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
@@ -40,9 +43,6 @@ public class ViewTransactionDetailManagedBean implements Serializable {
     public void postConstruct() {
         OTUserEntity user = (OTUserEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentUser");
         this.allSaleTransactions = saleTransactionEntitySessionBeanLocal.retrieveSaleTransactionsByUserId(user.getUserId());      
-        System.out.println("Calling vtmb");
-        System.out.println(this.allSaleTransactions.get(2).getDeliveryStatus().toString());
-        this.selectedSaleTransaction =this.allSaleTransactions.get(2);
     }
 
     /**
