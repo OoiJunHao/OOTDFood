@@ -22,7 +22,7 @@ import util.exception.UserNotFoundException;
 @Local
 public interface CreditCardEntitySessionBeanLocal {
 
-    public CreditCardEntity createNewCreditCardForUser(CreditCardEntity card, Long userId) throws InputDataValidationException, UnknownPersistenceException, CreditCardExistException, CardCreationException, UserNotFoundException;
+    public CreditCardEntity createNewCreditCardForUser(CreditCardEntity card, Long userId) throws InputDataValidationException, UnknownPersistenceException, CreditCardExistException, UserNotFoundException;
 
     public CreditCardEntity retrieveCardById(Long id) throws CreditCardNotFoundException;
 

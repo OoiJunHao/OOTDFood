@@ -70,8 +70,6 @@ public class OTUserEntity implements Serializable {
     private List<AddressEntity> address;
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<ReviewEntity> reviews;
-    @ManyToMany(mappedBy = "users")
-    private List<MealEntity> meals;
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<SaleTransactionEntity> saleTransaction;
 
@@ -80,7 +78,6 @@ public class OTUserEntity implements Serializable {
         creditCard = new ArrayList<>();
         address = new ArrayList<>();
         reviews = new ArrayList<>();
-        meals = new ArrayList<>();
         saleTransaction = new ArrayList<>();
         this.profilePic = "";
     }
@@ -196,14 +193,6 @@ public class OTUserEntity implements Serializable {
 
     public void setReviews(List<ReviewEntity> reviews) {
         this.reviews = reviews;
-    }
-
-    public List<MealEntity> getMeals() {
-        return meals;
-    }
-
-    public void setMeals(List<MealEntity> meals) {
-        this.meals = meals;
     }
 
     public List<SaleTransactionEntity> getSaleTransaction() {

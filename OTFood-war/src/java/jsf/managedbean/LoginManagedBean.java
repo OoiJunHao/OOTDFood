@@ -45,6 +45,7 @@ public class LoginManagedBean {
     }
 
     public void login(ActionEvent event) throws IOException {
+        System.out.println("TEST");
         try {
             OTUserEntity user = oTUserEntitySessionBean.login(email, password);
             FacesContext.getCurrentInstance().getExternalContext().getSession(true);

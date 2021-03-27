@@ -20,7 +20,6 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,7 +32,6 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.validation.constraints.Future;
 import org.primefaces.PrimeFaces;
 import util.exception.CreateNewSaleTransactionException;
 import util.exception.InputDataValidationException;
@@ -292,26 +290,6 @@ public class cartManagedBean implements Serializable {
 //        PrimeFaces.current().executeScript("PF('dialogPay').show()");
     }
 
-    private void getFakeData() throws MealNotFoundException {
-        System.out.println(">>>>>> fake data <<<<<<<<");
-        SaleTransactionLineEntity order1 = new SaleTransactionLineEntity(mealEntitySessionBean.retrieveMealById(1l), 2);
-        SaleTransactionLineEntity order2 = new SaleTransactionLineEntity(mealEntitySessionBean.retrieveMealById(2l), 1);
-        SaleTransactionLineEntity order3 = new SaleTransactionLineEntity(mealEntitySessionBean.retrieveMealById(3l), 4);
-        SaleTransactionLineEntity order4 = new SaleTransactionLineEntity(mealEntitySessionBean.retrieveMealById(4l), 3);
-        lineItems.add(order1);
-        lineItems.add(order2);
-        lineItems.add(order3);
-        lineItems.add(order4);
-
-        System.out.println(lineItems.size());
-
-        for (int i = 0; i < lineItems.size(); i++) {
-            System.out.println(lineItems.get(i).getMeal().getName());
-
-        }
-        totalAmount();
-    }
-
     //after checkout complete
     public void removeEverything() {
         System.out.println(">>>>>>> RESETTING DATA <<<<<<<<<");
@@ -338,23 +316,19 @@ public class cartManagedBean implements Serializable {
     public void directToCheckout(ActionEvent event) throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/userPages/checkout.xhtml");
         setCurrentUser((OTUserEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentUser"));
-
         if (getCurrentUser() != null) {
             this.creditCards = getCurrentUser().getCreditCard();
             this.address = getCurrentUser().getAddress();
-
             // Generate list of credit card numbers as strings for display
             for (CreditCardEntity cc : this.creditCards) {
                 this.getCreditCardNumbers().add(cc.getCardNumber());
             }
-
             // Generate list of adress names as string for display
             for (AddressEntity add : this.address) {
                 this.getAddressNames().add(add.getAddress());
             }
         }
-
-        this.setMissingDetails(this.creditCards.isEmpty() && this.address.isEmpty());
+        this.setMissingDetails(this.creditCards.isEmpty() || this.address.isEmpty());
     }
 
     public void getMealOrderDetails(ActionEvent event) {

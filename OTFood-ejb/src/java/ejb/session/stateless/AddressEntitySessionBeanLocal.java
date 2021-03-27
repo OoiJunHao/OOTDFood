@@ -23,13 +23,13 @@ import util.exception.UserNotFoundException;
 @Local
 public interface AddressEntitySessionBeanLocal {
 
-    public void removeAddressByUserId(Long userId, Long addressId) throws UserNotFoundException, NoAddressFoundException, DeleteAddressException;
+    public void removeAddress(long addressId) throws NoAddressFoundException;
 
     public void updateAddressByUserId(Long userId, AddressEntity newAddress) throws NoAddressFoundException, UserNotFoundException, UpdateAddressException;
 
     public AddressEntity retrieveAddressByUserId(long userId, Long addressId) throws UserNotFoundException, NoAddressFoundException;
 
-    public List<AddressEntity> retrieveAddressesByUserId(Long userId) throws NoAddressFoundException, UserNotFoundException;
+    public List<AddressEntity> retrieveAddressesByUserId(Long userId);
 
     public Long addAddressWithUserId(AddressEntity address, Long userId) throws UnknownPersistenceException, InputDataValidationException, UserNotFoundException, AddressExistException;
 

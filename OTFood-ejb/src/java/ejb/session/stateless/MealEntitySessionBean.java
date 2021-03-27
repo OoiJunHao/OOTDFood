@@ -50,17 +50,12 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
     }
 
     @Override
-    public Long createNewMealForUser(Long userId, MealEntity meal) throws UnknownPersistenceException, InputDataValidationException, UserNotFoundException, MealExistsException {
+    public Long createNewMeal(MealEntity meal) throws InputDataValidationException, UnknownPersistenceException, MealExistsException {
         Set<ConstraintViolation<MealEntity>> constraintViolations = validator.validate(meal);
         if (constraintViolations.isEmpty()) {
             try {
-
-                OTUserEntity user = OTUserEntitySessionBeanLocal.retrieveUserById(userId);
                 em.persist(meal);
-                user.getMeals().add(meal);
-                meal.getUsers().add(user);
                 em.flush();
-
                 return meal.getMealId();
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
@@ -79,30 +74,12 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
     }
 
     @Override
-    public Long createNewMeal(MealEntity meal) {
-        em.persist(meal);
-        em.flush();
-        return meal.getMealId();
-    }
-
-    @Override
     public MealEntity retrieveMealById(Long mealId) throws MealNotFoundException {
         MealEntity meal = em.find(MealEntity.class, mealId);
         if (meal != null) {
             return meal;
         } else {
             throw new MealNotFoundException("Meal Entity Id " + mealId + " does not exist!");
-        }
-    }
-
-    @Override
-    public List<MealEntity> retrieveAllMealsOrderedByUser(Long userId) throws UserNotFoundException {
-        try {
-            OTUserEntity user = OTUserEntitySessionBeanLocal.retrieveUserById(userId);
-            user.getMeals().size();
-            return user.getMeals();
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException("User Id " + userId + " does not exist!");
         }
     }
 

@@ -45,15 +45,20 @@ public class CreditCardEntity implements Serializable {
     @NotNull
     @Size(max = 5)
     private String expiryDate;
+    @NotNull
+    @Column(nullable = false)
+    private boolean isRemoved;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     private OTUserEntity user;
 
     public CreditCardEntity() {
+        this.isRemoved = false;
     }
 
     public CreditCardEntity(String type, String cardName, String cardNumber, String expiryDate) {
+        this();
         this.type = type;
         this.cardName = cardName;
         this.cardNumber = cardNumber;
@@ -131,6 +136,14 @@ public class CreditCardEntity implements Serializable {
     @Override
     public String toString() {
         return "entity.CreditCardEntity[ id=" + creditCardId + " ]";
+    }
+
+    public boolean isIsRemoved() {
+        return isRemoved;
+    }
+
+    public void setIsRemoved(boolean isRemoved) {
+        this.isRemoved = isRemoved;
     }
 
 }
