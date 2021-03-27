@@ -239,6 +239,7 @@ public class DataInitializationSessionBean {
             staffEntitySessionBean.createNewStaff(new StaffEntity("Ong", "Bik Jeun", "Boss", "password", "", StaffTypeEnum.ADMIN));
             staffEntitySessionBean.createNewStaff(new StaffEntity("Benny", "Phoe", "Employee", "password", "", StaffTypeEnum.EMPLOYEE));
 
+            System.out.println("Data Init done!");
         } catch (UserExistException | UnknownPersistenceException | InputDataValidationException | ReviewExistException | UserNotFoundException | FaqExistException | CreateNewSaleTransactionException | DriverExistsException | IngredientEntityExistsException | AddressExistException | CreditCardExistException | PromoCodeExistException | MealExistsException | StaffUsernameExistException ex) {
             Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
