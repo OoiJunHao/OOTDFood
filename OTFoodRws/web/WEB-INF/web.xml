@@ -6,9 +6,16 @@
         </session-timeout>
     </session-config>
     <ejb-local-ref>
+<<<<<<< HEAD
         <ejb-ref-name>IngredientEntitySessionBeanLocal</ejb-ref-name>
         <ejb-ref-type>Session</ejb-ref-type>
         <local>ejb.session.stateless.IngredientEntitySessionBeanLocal</local>
         <ejb-link>OTFood-ejb.jar#IngredientEntitySessionBean</ejb-link>
+=======
+        <ejb-ref-name>StaffEntitySessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.StaffEntitySessionBeanLocal</local>
+        <ejb-link>OTFood-ejb.jar#StaffEntitySessionBean</ejb-link>
+>>>>>>> edfd4f5267aea5baae363f02b45676dba2359caa
     </ejb-local-ref>
 </web-app>
