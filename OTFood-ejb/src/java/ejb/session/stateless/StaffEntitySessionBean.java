@@ -105,6 +105,7 @@ public class StaffEntitySessionBean implements StaffEntitySessionBeanLocal {
 
     @Override
     public StaffEntity staffLogin(String username, String password) throws InvalidLoginCredentialException {
+        System.out.println(">>>>>>>> Login <<<<<<<");
         try {
             StaffEntity staff = retrieveStaffByUsername(username);
             String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + staff.getSalt()));
