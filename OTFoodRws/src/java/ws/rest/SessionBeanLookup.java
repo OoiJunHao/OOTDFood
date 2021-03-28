@@ -5,6 +5,7 @@
  */
 package ws.rest;
 
+import ejb.session.stateless.IngredientEntitySessionBeanLocal;
 import ejb.session.stateless.MealEntitySessionBeanLocal;
 import ejb.session.stateless.StaffEntitySessionBeanLocal;
 import java.util.logging.Level;
@@ -18,6 +19,8 @@ import javax.naming.NamingException;
  * @author benny
  */
 public class SessionBeanLookup {
+
+    IngredientEntitySessionBeanLocal ingredientEntitySessionBean = lookupIngredientEntitySessionBeanLocal();
 
     MealEntitySessionBeanLocal mealEntitySessionBean = lookupMealEntitySessionBeanLocal();
     private final String ejbModuleJndiPath;
@@ -46,4 +49,13 @@ public class SessionBeanLookup {
         }
     }
 
+    private IngredientEntitySessionBeanLocal lookupIngredientEntitySessionBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (IngredientEntitySessionBeanLocal) c.lookup("java:global/OTFood/OTFood-ejb/IngredientEntitySessionBean!ejb.session.stateless.IngredientEntitySessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
 }
