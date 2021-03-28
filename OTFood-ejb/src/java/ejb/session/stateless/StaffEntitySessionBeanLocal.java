@@ -36,4 +36,6 @@ public interface StaffEntitySessionBeanLocal {
 
     public void updatePassword(StaffEntity staff, String oldPassword, String newPassword) throws InvalidLoginCredentialException, StaffNotFoundException;
 
+    public void deleteStaff(Long id) throws StaffNotFoundException;
+
 }
