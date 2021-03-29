@@ -55,7 +55,7 @@ public class StaffManagementResource {
      */
     public StaffManagementResource() {
         sessionBeanLookUp = new SessionBeanLookup();
-        staffEntitySessionBean = sessionBeanLookUp.lookupStaffEntitySessionBeanLocal();
+        staffEntitySessionBean = sessionBeanLookUp.staffEntitySessionBean;
     }
 
     @PUT
