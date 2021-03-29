@@ -11,18 +11,18 @@ import entity.MealEntity;
  *
  * @author benny
  */
-public class CreateMealReq {
+public class UpdateMealReq {
     private String username;
     private String password;
     private MealEntity mealEntity;
 
-    public CreateMealReq(String username, String password, MealEntity mealEntity) {
+    public UpdateMealReq(String username, String password, MealEntity mealEntity) {
         this.username = username;
         this.password = password;
         this.mealEntity = mealEntity;
     }
 
-    public CreateMealReq() {
+    public UpdateMealReq() {
     }
 
     public String getUsername() {

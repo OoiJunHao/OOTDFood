@@ -36,4 +36,6 @@ public interface MealEntitySessionBeanLocal {
 
     public void removeMeal(Long mealId) throws MealNotFoundException;
 
+    public void updateMeal(MealEntity meal) throws MealNotFoundException;
+
 }

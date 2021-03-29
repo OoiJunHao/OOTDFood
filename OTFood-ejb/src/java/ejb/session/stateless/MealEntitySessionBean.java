@@ -9,6 +9,7 @@ import entity.BentoEntity;
 import entity.MealEntity;
 import entity.OTUserEntity;
 import entity.ReviewEntity;
+import entity.SaleTransactionLineEntity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -36,8 +37,13 @@ import util.exception.UserNotFoundException;
 @Stateless
 public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
 
+    @EJB(name = "SaleTransactionEntitySessionBeanLocal")
+    private SaleTransactionEntitySessionBeanLocal saleTransactionEntitySessionBeanLocal;
+
     @EJB
     private OTUserEntitySessionBeanLocal OTUserEntitySessionBeanLocal;
+    
+    
 
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
@@ -141,16 +147,36 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
         return top5Meals;
     }
     
+    @Override
     public void removeMeal(Long mealId) throws MealNotFoundException {
         MealEntity mealToBeDeleted = retrieveMealById(mealId);
-        System.out.println(mealToBeDeleted.getMealId());
-        for (ReviewEntity review : mealToBeDeleted.getReviews()) {
-            review.setMeal(null);
-            OTUserEntity user = review.getUser();
-            user.getReviews().remove(review);
-            em.remove(review);
+        List<SaleTransactionLineEntity> saleTransactionLineItems = saleTransactionEntitySessionBeanLocal.retrieveSaleTransactionLineItemsByMealId(mealId);
+        if (saleTransactionLineItems.isEmpty()) {
+            for (ReviewEntity review : mealToBeDeleted.getReviews()) {
+                OTUserEntity user = review.getUser();
+                user.getReviews().remove(review);
+                em.remove(review);
+            }
+            em.remove(mealToBeDeleted);
+        } else {
+            throw new MealNotFoundException("the meal to be deleted contains sale transaction line items associated with it!");
         }
-        em.remove(mealToBeDeleted);
+    }
+    @Override
+    public void updateMeal(MealEntity meal) throws MealNotFoundException {
+        MealEntity currentMealEntity = retrieveMealById(meal.getMealId());
+        if (currentMealEntity != null) {
+            currentMealEntity.setName(meal.getName());
+            currentMealEntity.setDescription(meal.getDescription());
+            currentMealEntity.setPrice(meal.getPrice());
+            currentMealEntity.setCalorie(meal.getCalorie());
+            currentMealEntity.setAverageRating(meal.getAverageRating());
+            currentMealEntity.setCategories(meal.getCategories());
+            currentMealEntity.setImage(meal.getImage());
+            currentMealEntity.setIngredients(meal.getIngredients());
+        } else {
+            throw new MealNotFoundException("The meal entered is null!");
+        }
     }
 
 }
