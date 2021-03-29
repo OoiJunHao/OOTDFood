@@ -51,7 +51,7 @@ public class OTUserEntity implements Serializable {
     @Column(nullable = false, length = 32)
     @NotNull
     @Size(max = 32)
-    private String firstname;
+    private String firstName;
     @Column(nullable = false, length = 32)
     @NotNull
     @Size(max = 32)
@@ -87,7 +87,7 @@ public class OTUserEntity implements Serializable {
         this.email = email;
         this.password = password;
         this.contactNum = contactNum;
-        this.firstname = firstname;
+        this.firstName = firstname;
         this.lastName = lastName;
         this.dob = dob;
         this.profilePic = profilePic;
@@ -131,12 +131,12 @@ public class OTUserEntity implements Serializable {
         this.contactNum = contactNum;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
