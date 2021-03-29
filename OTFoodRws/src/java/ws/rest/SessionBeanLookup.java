@@ -32,7 +32,7 @@ public class SessionBeanLookup {
 
     
 
-    public MealEntitySessionBeanLocal lookupMealEntitySessionBeanLocal() {
+    private MealEntitySessionBeanLocal lookupMealEntitySessionBeanLocal() {
         try {
             Context c = new InitialContext();
             return (MealEntitySessionBeanLocal) c.lookup("java:global/OTFood/OTFood-ejb/MealEntitySessionBean!ejb.session.stateless.MealEntitySessionBeanLocal");
