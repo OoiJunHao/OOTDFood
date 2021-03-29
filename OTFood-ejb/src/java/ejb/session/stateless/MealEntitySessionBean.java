@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.BentoEntity;
 import entity.MealEntity;
 import entity.OTUserEntity;
+import entity.ReviewEntity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -138,6 +139,18 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
             top5Meals.add(sortedList.get(i));
         }
         return top5Meals;
+    }
+    
+    public void removeMeal(Long mealId) throws MealNotFoundException {
+        MealEntity mealToBeDeleted = retrieveMealById(mealId);
+        System.out.println(mealToBeDeleted.getMealId());
+        for (ReviewEntity review : mealToBeDeleted.getReviews()) {
+            review.setMeal(null);
+            OTUserEntity user = review.getUser();
+            user.getReviews().remove(review);
+            em.remove(review);
+        }
+        em.remove(mealToBeDeleted);
     }
 
 }

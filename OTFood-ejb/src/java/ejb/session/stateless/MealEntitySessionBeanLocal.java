@@ -34,4 +34,6 @@ public interface MealEntitySessionBeanLocal {
 
     public List<BentoEntity> retrieveBentosByCategory(String category);
 
+    public void removeMeal(Long mealId) throws MealNotFoundException;
+
 }
