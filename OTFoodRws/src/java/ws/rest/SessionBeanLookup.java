@@ -58,4 +58,5 @@ public class SessionBeanLookup {
             throw new RuntimeException(ne);
         }
     }
+
 }
