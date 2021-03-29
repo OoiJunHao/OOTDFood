@@ -15,10 +15,10 @@
         <local>ejb.session.stateless.StaffEntitySessionBeanLocal</local>
         <ejb-link>OTFood-ejb.jar#StaffEntitySessionBean</ejb-link>
     </ejb-local-ref>-->
-    <ejb-local-ref>
-        <ejb-ref-name>StaffEntitySessionBean</ejb-ref-name>
+    <!-- <ejb-local-ref>
+        <ejb-ref-name>StaffEntitySessionBeanLocal</ejb-ref-name>
         <ejb-ref-type>Session</ejb-ref-type>
         <local>ejb.session.stateless.StaffEntitySessionBeanLocal</local>
         <ejb-link>OTFood-ejb.jar#StaffEntitySessionBean</ejb-link>
-    </ejb-local-ref>
+    </ejb-local-ref> -->
 </web-app>

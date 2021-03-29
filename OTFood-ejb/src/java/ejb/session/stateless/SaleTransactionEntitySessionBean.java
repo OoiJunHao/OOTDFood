@@ -226,5 +226,11 @@ public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySe
     public void persist(Object object) {
         em.persist(object);
     }
+    
+    public List<SaleTransactionLineEntity> retrieveSaleTransactionLineItemsByMealId(Long mealId) {
+        Query query = em.createQuery("SELECT lineItems from SaleTransactionLineEntity lineItems WHERE lineItems.meal.mealId = :mealId");
+        query.setParameter("mealId", mealId);
+        return query.getResultList();
+    }
 
 }
