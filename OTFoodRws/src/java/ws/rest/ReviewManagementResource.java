@@ -7,6 +7,8 @@ package ws.rest;
 
 import ejb.session.stateless.ReviewEntitySessionBeanLocal;
 import ejb.session.stateless.StaffEntitySessionBeanLocal;
+import entity.MealEntity;
+import entity.OTUserEntity;
 import entity.ReviewEntity;
 import entity.StaffEntity;
 import java.util.List;
@@ -59,9 +61,19 @@ public class ReviewManagementResource {
 
         try {
             StaffEntity staff = staffEntitySessionBeanLocal.staffLogin(username, password);
-            System.out.println("********** StaffManagement.retrieveAllStaff(): Staff " + staff.getUsername() + " login remotely via web service");
+            System.out.println("********** ReviewManagent.retrieveAllReviews(): Staff " + staff.getUsername() + " login remotely via web service");
 
             List<ReviewEntity> reviews = reviewEntitySessionBean.retrieveAllReviews();
+
+            for (ReviewEntity review : reviews) {
+
+                review.getUser().getReviews().clear();
+                review.getUser().getCreditCard().clear();
+                review.getUser().getAddress().clear();
+                review.getUser().getSaleTransaction().clear();
+                review.getMeal().getReviews().clear();
+
+            }
             GenericEntity<List<ReviewEntity>> genericReview = new GenericEntity<List<ReviewEntity>>(reviews) {
 
             };

@@ -106,7 +106,9 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
 
     @Override
     public List<ReviewEntity> retrieveAllReviews() {
+        System.out.println(">>>>>> reviews <<<<<<<<");
         Query query = em.createQuery("SELECT r FROM ReviewEntity r");
+        System.out.println(query.getResultList());
         return query.getResultList();
     }
 
