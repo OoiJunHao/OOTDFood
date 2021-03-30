@@ -5,24 +5,25 @@
  */
 package ws.datamodel;
 
-import entity.MealEntity;
+import entity.StaffEntity;
 
 /**
  *
- * @author benny
+ * @author Mitsuki
  */
-public class CreateMealReq {
+public class CreateStaffReq {
+
     private String username;
     private String password;
-    private MealEntity mealEntity;
+    private StaffEntity staff;
 
-    public CreateMealReq(String username, String password, MealEntity mealEntity) {
-        this.username = username;
-        this.password = password;
-        this.mealEntity = mealEntity;
+    public CreateStaffReq() {
     }
 
-    public CreateMealReq() {
+    public CreateStaffReq(String username, String password, StaffEntity staff) {
+        this.username = username;
+        this.password = password;
+        this.staff = staff;
     }
 
     public String getUsername() {
@@ -41,13 +42,12 @@ public class CreateMealReq {
         this.password = password;
     }
 
-    public MealEntity getMealEntity() {
-        return mealEntity;
+    public StaffEntity getStaff() {
+        return staff;
     }
 
-    public void setMealEntity(MealEntity mealEntity) {
-        this.mealEntity = mealEntity;
+    public void setStaff(StaffEntity staff) {
+        this.staff = staff;
     }
-    
-    
+
 }

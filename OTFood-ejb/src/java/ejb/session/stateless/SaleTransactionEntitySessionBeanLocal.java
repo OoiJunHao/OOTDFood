@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.SaleTransactionEntity;
+import entity.SaleTransactionLineEntity;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.CreateNewSaleTransactionException;
@@ -31,5 +32,7 @@ public interface SaleTransactionEntitySessionBeanLocal {
     public void updateSaleTransaction(Long userId, SaleTransactionEntity saleTransaction) throws UpdateSaleTransactionException;
 
     public Long createNewSaleTransactionWithPromo(Long userId, Long ccId, Long adressId, Long promoId, SaleTransactionEntity saleTransaction) throws CreateNewSaleTransactionException, InputDataValidationException;
+
+    public List<SaleTransactionLineEntity> retrieveSaleTransactionLineItemsByMealId(Long mealId);
     
 }
