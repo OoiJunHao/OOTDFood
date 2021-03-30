@@ -44,7 +44,7 @@ public class StaffResource {
      */
     public StaffResource() {
         sessionBeanLookup = new SessionBeanLookup();
-        staffEntitySessionBean = sessionBeanLookup.lookupStaffEntitySessionBeanLocal();
+        staffEntitySessionBean = sessionBeanLookup.staffEntitySessionBean;
     }
 
     @Path("staffLogin")

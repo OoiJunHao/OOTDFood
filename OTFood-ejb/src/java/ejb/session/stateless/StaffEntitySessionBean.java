@@ -124,8 +124,9 @@ public class StaffEntitySessionBean implements StaffEntitySessionBeanLocal {
     public void updateStaff(StaffEntity staff) throws StaffNotFoundException, UpdateStaffException, InputDataValidationException {
         if (staff != null && staff.getStaffId() != null) {
             Set<ConstraintViolation<StaffEntity>> constraintViolations = validator.validate(staff);
-
+            System.out.println(">>>>>>>>>> IN SESSION BEAN <<<<<<<<");
             if (constraintViolations.isEmpty()) {
+                System.out.println(">>>>>> NO VIOLATION <<<<<<");
                 StaffEntity staffToUpdate = retrieveStaffById(staff.getStaffId());
 
                 if (staffToUpdate.getUsername().equals(staff.getUsername())) {
@@ -161,6 +162,16 @@ public class StaffEntitySessionBean implements StaffEntitySessionBeanLocal {
                 throw new StaffNotFoundException("Staff ID not provided");
             }
 
+        }
+    }
+
+    @Override
+    public void deleteStaff(Long id) throws StaffNotFoundException {
+        try {
+            StaffEntity staff = retrieveStaffById(id);
+            em.remove(staff);
+        } catch (StaffNotFoundException ex) {
+            throw new StaffNotFoundException(ex.getMessage());
         }
     }
 
