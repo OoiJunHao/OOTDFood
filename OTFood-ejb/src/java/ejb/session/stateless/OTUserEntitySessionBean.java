@@ -139,7 +139,7 @@ public class OTUserEntitySessionBean implements OTUserEntitySessionBeanLocal {
                     OTUserEntity userToUpdate = retrieveUserById(user.getUserId());
 
                     if (userToUpdate.getEmail().equals(user.getEmail())) {
-                        userToUpdate.setFirstname(user.getFirstname());
+                        userToUpdate.setFirstName(user.getFirstName());
                         userToUpdate.setLastName(user.getLastName());
                         userToUpdate.setContactNum(user.getContactNum());
                         userToUpdate.setDob(user.getDob());
