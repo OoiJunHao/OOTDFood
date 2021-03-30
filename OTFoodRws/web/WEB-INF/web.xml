@@ -21,4 +21,16 @@
         <local>ejb.session.stateless.StaffEntitySessionBeanLocal</local>
         <ejb-link>OTFood-ejb.jar#StaffEntitySessionBean</ejb-link>
     </ejb-local-ref> -->
+    <ejb-local-ref>
+        <ejb-ref-name>ReviewEntitySessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.ReviewEntitySessionBeanLocal</local>
+        <ejb-link>OTFood-ejb.jar#ReviewEntitySessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>ReviewEntitySessionBean1</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.ReviewEntitySessionBeanLocal</local>
+        <ejb-link>OTFood-ejb.jar#ReviewEntitySessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>
