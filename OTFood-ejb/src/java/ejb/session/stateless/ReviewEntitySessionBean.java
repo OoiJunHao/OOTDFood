@@ -48,20 +48,18 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
 
     @EJB(name = "OTUserEntitySessionBeanLocal")
     private OTUserEntitySessionBeanLocal oTUserEntitySessionBeanLocal;
-    
-    
 
     @PersistenceContext(unitName = "OTFood-ejbPU")
     private EntityManager em;
-    
+
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
-    
+
     public ReviewEntitySessionBean() {
         this.validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
     }
-    
+
     @Override
     public Long addReview(ReviewEntity review, Long userId, Long mealId) throws ReviewExistException, UnknownPersistenceException, UserNotFoundException, InputDataValidationException {
         Set<ConstraintViolation<ReviewEntity>> constraintViolations = validator.validate(review);
@@ -95,7 +93,7 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-    
+
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<ReviewEntity>> constraintViolations) {
         String msg = "Input data validation error!:";
 
@@ -105,7 +103,13 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
 
         return msg;
     }
-    
+
+    @Override
+    public List<ReviewEntity> retrieveAllReviews() {
+        Query query = em.createQuery("SELECT r FROM ReviewEntity r");
+        return query.getResultList();
+    }
+
     @Override
     public List<ReviewEntity> retrieveReviewsByUserId(Long userId) throws NoReviewFoundException {
         try {
@@ -117,7 +121,7 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
             throw new NoReviewFoundException("No Reviews are associcated with this userId: " + userId);
         }
     }
-    
+
     @Override
     public List<ReviewEntity> retrieveReviewsByMealId(Long mealId) throws NoReviewFoundException {
         try {
@@ -129,7 +133,7 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
             throw new NoReviewFoundException("No Reviews are associated with this mealId: " + mealId);
         }
     }
-    
+
     @Override
     public ReviewEntity retrieveReviewByUserId(Long userId, Long reviewId) throws NoReviewFoundException {
         try {
@@ -142,7 +146,7 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
             throw new NoReviewFoundException("The reviewId: " + reviewId + " associcated with this userId: " + userId + " cannot be found!");
         }
     }
-    
+
     @Override
     public ReviewEntity retrieveReviewByMealId(Long mealId, Long reviewId) throws NoReviewFoundException {
         try {
@@ -155,7 +159,7 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
             throw new NoReviewFoundException("The reviewId: " + reviewId + " associcated with this userId: " + mealId + " cannot be found!");
         }
     }
-    
+
     @Override
     public void deleteReviewByUserId(Long userId, Long reviewId) throws UserNotFoundException, NoReviewFoundException, DeleteReviewException {
         OTUserEntity user = oTUserEntitySessionBeanLocal.retrieveUserById(userId);
@@ -169,7 +173,7 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
             throw new DeleteReviewException("either user or review cannot be detected!");
         }
     }
-    
+
     @Override
     public void editReviewByUserId(Long userId, ReviewEntity review) throws NoReviewFoundException, UserNotFoundException, UpdateReviewException {
         OTUserEntity user = oTUserEntitySessionBeanLocal.retrieveUserById(userId);
@@ -181,23 +185,23 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
             throw new UpdateReviewException("No review detected!");
         }
     }
-    
+
     public List<ReviewEntity> top2ReviewsForTop5Meals() {
         List<ReviewEntity> listOfReviews = new ArrayList<>();
         List<MealEntity> top5Meals = mealEntitySessionBeanLocal.retrieveTop5MealEntityByRating();
-        for (MealEntity meal: top5Meals) {
+        for (MealEntity meal : top5Meals) {
             List<ReviewEntity> top2 = retrieveTop2ReviewsOfMeal(meal.getMealId());
             listOfReviews.addAll(top2);
         }
         return listOfReviews;
-        
+
     }
-    
+
     private List<ReviewEntity> retrieveTop2ReviewsOfMeal(long mealId) {
         Query query = em.createQuery("SELECT review FROM MealEntity meal JOIN meal.reviews review WHERE meal.mealId = :mealId ORDER BY review.rating DESC");
         query.setParameter("mealId", mealId);
         query.setMaxResults(2);
         return query.getResultList();
     }
-    
+
 }
