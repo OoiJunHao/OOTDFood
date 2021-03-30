@@ -49,7 +49,7 @@ public class OTUserResource {
         try {
             List<OTUserEntity> allUsers = oTUserEntitySessionBean.retrieveAllUser();
             for (OTUserEntity user: allUsers) {
-                System.out.println(user.getFirstName());
+                System.out.println(user.getFirstname());
                 user.getAddress().clear();
                 user.getCreditCard().clear();
                 user.getSaleTransaction().clear();
