@@ -71,7 +71,7 @@ public class BentoResource {
                                         @QueryParam("password") String password) {
         try {
             StaffEntity staffEntity = staffEntitySessionBeanLocal.staffLogin(username, password);
-            List<MealEntity> allMeals = mealEntitySessionBeanLocal.retrieveAllMeals();
+            List<MealEntity> allMeals = mealEntitySessionBeanLocal.retrieveAllMealsSortedByAvailability();
             
             for (MealEntity meal : allMeals) {
                 for (ReviewEntity review : meal.getReviews()) {

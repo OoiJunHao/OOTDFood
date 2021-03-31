@@ -62,7 +62,10 @@ public class MealEntity implements Serializable {
     @Size(min = 0)
     @NotNull
     private String image;
-    
+    @Column(nullable = false)
+    @NotNull
+    private boolean isAvailable;
+ 
     @Column(nullable = false)
     @NotNull
     List<CategoryEnum> categories;
@@ -77,6 +80,7 @@ public class MealEntity implements Serializable {
         categories = new ArrayList<>();
         reviews = new ArrayList<>();
         ingredients = new ArrayList<>();
+        isAvailable = true;
     }
 
     public MealEntity(String name, BigDecimal price, String description, Integer calorie, String image, List<CategoryEnum> inputCategories) {
@@ -207,5 +211,15 @@ public class MealEntity implements Serializable {
         }
         
     }
+
+    public boolean isIsAvailable() {
+        return isAvailable;
+    }
+
+    public void setIsAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
+    }
+    
+    
 
 }
