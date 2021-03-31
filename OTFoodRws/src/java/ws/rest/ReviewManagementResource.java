@@ -7,22 +7,14 @@ package ws.rest;
 
 import ejb.session.stateless.ReviewEntitySessionBeanLocal;
 import ejb.session.stateless.StaffEntitySessionBeanLocal;
-import entity.MealEntity;
-import entity.OTUserEntity;
 import entity.ReviewEntity;
 import entity.StaffEntity;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PUT;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -37,7 +29,7 @@ import util.exception.InvalidLoginCredentialException;
 @Path("reviewManagement")
 public class ReviewManagementResource {
 
-    ReviewEntitySessionBeanLocal reviewEntitySessionBean;
+    private final ReviewEntitySessionBeanLocal reviewEntitySessionBean;
     private final StaffEntitySessionBeanLocal staffEntitySessionBeanLocal;
     private final SessionBeanLookup sessionBeanLookUp;
 
