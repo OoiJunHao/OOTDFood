@@ -55,7 +55,7 @@ public class StaffManagementResource {
      */
     public StaffManagementResource() {
         sessionBeanLookUp = new SessionBeanLookup();
-        staffEntitySessionBean = sessionBeanLookUp.lookupStaffEntitySessionBeanLocal();
+        staffEntitySessionBean = sessionBeanLookUp.staffEntitySessionBean;
     }
 
     @PUT
@@ -64,14 +64,14 @@ public class StaffManagementResource {
     public Response createStaff(CreateStaffReq createStaffReq) {
         if (createStaffReq != null) {
             try {
-//                StaffEntity staff = staffEntitySessionBean.staffLogin(createStaffReq.getUsername(), createStaffReq.getPassword());
-//                System.out.println("********** StaffManagement.retrieveAllStaff(): Staff " + staff.getUsername() + " login remotely via web service");
+                StaffEntity staff = staffEntitySessionBean.staffLogin(createStaffReq.getUsername(), createStaffReq.getPassword());
+                System.out.println("********** StaffManagement.retrieveAllStaff(): Staff " + staff.getUsername() + " login remotely via web service");
 
                 Long staffId = staffEntitySessionBean.createNewStaff(createStaffReq.getStaff());
 
                 return Response.status(Response.Status.OK).entity(staffId).build();
-//            } catch (InvalidLoginCredentialException ex) {
-//                return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+            } catch (InvalidLoginCredentialException ex) {
+                return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
             } catch (StaffUsernameExistException ex) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
             } catch (UnknownPersistenceException ex) {
@@ -90,16 +90,16 @@ public class StaffManagementResource {
     public Response retrieveAllStaffs(@QueryParam("username") String username,
             @QueryParam("password") String password) {
         try {
-//            StaffEntity staff = staffEntitySessionBean.staffLogin(username, password);
-//            System.out.println("********** StaffManagement.retrieveAllStaff(): Staff " + staff.getUsername() + " login remotely via web service");
+            StaffEntity staff = staffEntitySessionBean.staffLogin(username, password);
+            System.out.println("********** StaffManagement.retrieveAllStaff(): Staff " + staff.getUsername() + " login remotely via web service");
 
             List<StaffEntity> staffs = staffEntitySessionBean.retrieveAllStaff();
             GenericEntity<List<StaffEntity>> genericStaff = new GenericEntity<List<StaffEntity>>(staffs) {
 
             };
             return Response.status(Status.OK).entity(genericStaff).build();
-//        } catch (InvalidLoginCredentialException ex) {
-//            return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+        } catch (InvalidLoginCredentialException ex) {
+            return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
         } catch (Exception ex) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
@@ -138,14 +138,14 @@ public class StaffManagementResource {
         System.out.println(updateStaffReq.getStaff());
         if (updateStaffReq != null) {
             try {
-//                StaffEntity staff = staffEntitySessionBean.staffLogin(updateStaffReq.getUsername(), updateStaffReq.getPassword());
-//                System.out.println("********** StaffManagementResource.updateStaff(): Staff " + staff.getUsername() + " login remotely via web service");
+                StaffEntity staff = staffEntitySessionBean.staffLogin(updateStaffReq.getUsername(), updateStaffReq.getPassword());
+                System.out.println("********** StaffManagementResource.updateStaff(): Staff " + staff.getUsername() + " login remotely via web service");
 
                 staffEntitySessionBean.updateStaff(updateStaffReq.getStaff());
 
                 return Response.status(Response.Status.OK).build();
-//            } catch (InvalidLoginCredentialException ex) {
-//                return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+            } catch (InvalidLoginCredentialException ex) {
+                return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
             } catch (StaffNotFoundException | UpdateStaffException ex) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
             } catch (Exception ex) {
@@ -165,15 +165,15 @@ public class StaffManagementResource {
             @QueryParam("password") String password,
             @PathParam("staffId") Long staffId) {
         try {
-//            StaffEntity staffEntity = staffEntitySessionBean.staffLogin(username, password);
-//            System.out.println("********** StaffResource.deleteStaff(): Staff " + staffEntity.getUsername() + " login remotely via web service");
+            StaffEntity staffEntity = staffEntitySessionBean.staffLogin(username, password);
+            System.out.println("********** StaffResource.deleteStaff(): Staff " + staffEntity.getUsername() + " login remotely via web service");
 
             staffEntitySessionBean.deleteStaff(staffId);
             return Response.status(Status.OK).build();
         } catch (StaffNotFoundException ex) {
             return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
-//        } catch (InvalidLoginCredentialException ex) {
-//            return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+        } catch (InvalidLoginCredentialException ex) {
+            return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
         } catch (Exception ex) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
