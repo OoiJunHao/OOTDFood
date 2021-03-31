@@ -6,6 +6,7 @@
 package ws.rest;
 
 import ejb.session.stateless.OTUserEntitySessionBeanLocal;
+import ejb.session.stateless.StaffEntitySessionBeanLocal;
 import entity.OTUserEntity;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,17 +31,20 @@ import javax.ws.rs.core.Response.Status;
 @Path("OTUser")
 public class OTUserResource {
 
-    OTUserEntitySessionBeanLocal oTUserEntitySessionBean = lookupOTUserEntitySessionBeanLocal();
+    private final OTUserEntitySessionBeanLocal oTUserEntitySessionBean;
+    private final SessionBeanLookup sessionBeanLookUp;
+    private final StaffEntitySessionBeanLocal staffEntitySessionBeanLocal;
 
     @Context
     private UriInfo context;
 
-    /**
-     * Creates a new instance of OTUserResource
-     */
     public OTUserResource() {
+        sessionBeanLookUp = new SessionBeanLookup();
+        oTUserEntitySessionBean = sessionBeanLookUp.oTUserEntitySessionBean;
+        staffEntitySessionBeanLocal = sessionBeanLookUp.staffEntitySessionBean;
     }
 
+    // TO ADD: STAFF AUTHENTICATION
     @Path("retrieveAllOTUsers")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -64,15 +68,4 @@ public class OTUserResource {
         }
     }
     
-    
-
-    private OTUserEntitySessionBeanLocal lookupOTUserEntitySessionBeanLocal() {
-        try {
-            javax.naming.Context c = new InitialContext();
-            return (OTUserEntitySessionBeanLocal) c.lookup("java:global/OTFood/OTFood-ejb/OTUserEntitySessionBean!ejb.session.stateless.OTUserEntitySessionBeanLocal");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
-    }
 }

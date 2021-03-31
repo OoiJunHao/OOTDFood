@@ -12,5 +12,5 @@ package util.enumeration;
 public enum DeliveryStatusEnum {
     DELIVERED,
     INDELIVERY,
-    ORDER_RECIEVED,
+    ORDER_RECEIVED,
 }

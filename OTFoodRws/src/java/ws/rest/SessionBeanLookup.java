@@ -7,7 +7,9 @@ package ws.rest;
 
 import ejb.session.stateless.IngredientEntitySessionBeanLocal;
 import ejb.session.stateless.MealEntitySessionBeanLocal;
+import ejb.session.stateless.OTUserEntitySessionBeanLocal;
 import ejb.session.stateless.ReviewEntitySessionBeanLocal;
+import ejb.session.stateless.SaleTransactionEntitySessionBeanLocal;
 import ejb.session.stateless.StaffEntitySessionBeanLocal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,8 +23,9 @@ import javax.naming.NamingException;
  */
 public class SessionBeanLookup {
 
+    OTUserEntitySessionBeanLocal oTUserEntitySessionBean = lookupOTUserEntitySessionBeanLocal();
+    SaleTransactionEntitySessionBeanLocal saleTransactionEntitySessionBean = lookupSaleTransactionEntitySessionBeanLocal();
     ReviewEntitySessionBeanLocal reviewEntitySessionBean = lookupReviewEntitySessionBeanLocal();
-
     IngredientEntitySessionBeanLocal ingredientEntitySessionBean = lookupIngredientEntitySessionBeanLocal();
     StaffEntitySessionBeanLocal staffEntitySessionBean = lookupStaffEntitySessionBeanLocal();
     MealEntitySessionBeanLocal mealEntitySessionBean = lookupMealEntitySessionBeanLocal();
@@ -67,6 +70,26 @@ public class SessionBeanLookup {
         try {
             Context c = new InitialContext();
             return (ReviewEntitySessionBeanLocal) c.lookup("java:global/OTFood/OTFood-ejb/ReviewEntitySessionBean!ejb.session.stateless.ReviewEntitySessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private SaleTransactionEntitySessionBeanLocal lookupSaleTransactionEntitySessionBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (SaleTransactionEntitySessionBeanLocal) c.lookup("java:global/OTFood/OTFood-ejb/SaleTransactionEntitySessionBean!ejb.session.stateless.SaleTransactionEntitySessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private OTUserEntitySessionBeanLocal lookupOTUserEntitySessionBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (OTUserEntitySessionBeanLocal) c.lookup("java:global/OTFood/OTFood-ejb/OTUserEntitySessionBean!ejb.session.stateless.OTUserEntitySessionBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

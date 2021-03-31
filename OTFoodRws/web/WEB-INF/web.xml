@@ -33,4 +33,16 @@
         <local>ejb.session.stateless.ReviewEntitySessionBeanLocal</local>
         <ejb-link>OTFood-ejb.jar#ReviewEntitySessionBean</ejb-link>
     </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>SaleTransactionEntitySessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.SaleTransactionEntitySessionBeanLocal</local>
+        <ejb-link>OTFood-ejb.jar#SaleTransactionEntitySessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>OTUserEntitySessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.OTUserEntitySessionBeanLocal</local>
+        <ejb-link>OTFood-ejb.jar#OTUserEntitySessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>
