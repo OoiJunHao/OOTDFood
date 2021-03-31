@@ -450,7 +450,7 @@ public class DataInitializationSessionBean {
 
             // Create SaleTransactions
             List<BentoEntity> allBentos = mealEntitySessionBeanLocal.retriveAllBentos();
-            List<SaleTransactionLineEntity> saleTransactionLines = new ArrayList<>();
+            //List<SaleTransactionLineEntity> saleTransactionLines = new ArrayList<>();
             OTUserEntity currentUser;
             int bento_size = allBentos.size();
             int max, min; //(int)(Math.random() * (max - min + 1) + min)  //inclusive of bounds
@@ -480,6 +480,7 @@ public class DataInitializationSessionBean {
                         min = 1;
                         max = 4;
                         int no_of_lines = (int) (Math.random() * (max - min + 1) + min);
+                        List<SaleTransactionLineEntity> saleTransactionLines = new ArrayList<>();
                         for (int j = 0; j < no_of_lines; j++) {
                             int bento_choice = (int) (Math.random() * (bento_size-1 - 0 + 1) + 0);
                             int quantity = (int) (Math.random() * (max - min + 1) + min);
@@ -514,7 +515,6 @@ public class DataInitializationSessionBean {
 
                         saleTransactionEntitySessionBeanLocal.createNewSaleTransaction(new Long(i), selected_cc, selected_add, saleTransaction);
 
-                        saleTransactionLines.clear();
                     }
                 }
                 
@@ -540,6 +540,7 @@ public class DataInitializationSessionBean {
                         min = 1;
                         max = 4;
                         int no_of_lines = (int) (Math.random() * (max - min + 1) + min);
+                        List<SaleTransactionLineEntity> saleTransactionLines = new ArrayList<>();
                         for (int j = 0; j < no_of_lines; j++) {
                             int bento_choice = (int) (Math.random() * (bento_size-1 - 0 + 1) + 0);
                             int quantity = (int) (Math.random() * (max - min + 1) + min);
@@ -574,7 +575,7 @@ public class DataInitializationSessionBean {
 
                         saleTransactionEntitySessionBeanLocal.createNewSaleTransaction(new Long(i), selected_cc, selected_add, saleTransaction);
 
-                        saleTransactionLines.clear();
+      
                     }
                 }
 
