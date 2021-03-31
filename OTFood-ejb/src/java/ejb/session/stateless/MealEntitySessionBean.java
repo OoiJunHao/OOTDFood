@@ -5,12 +5,14 @@
  */
 package ejb.session.stateless;
 
+import HelperClasses.SortByAvailability;
 import entity.BentoEntity;
 import entity.MealEntity;
 import entity.OTUserEntity;
 import entity.ReviewEntity;
 import entity.SaleTransactionLineEntity;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
@@ -95,6 +97,15 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
         Query query = em.createQuery("SELECT m FROM MealEntity m");
         return query.getResultList();
     }
+    
+    
+    @Override        
+    public List<MealEntity> retrieveAllMealsSortedByAvailability() {
+        Query query = em.createQuery("SELECT m FROM MealEntity m");
+        List<MealEntity> mealEntities = query.getResultList();
+        Collections.sort(mealEntities, new SortByAvailability());
+        return mealEntities;
+    }
 
     
     @Override
@@ -173,6 +184,7 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
             currentMealEntity.setAverageRating(meal.getAverageRating());
             currentMealEntity.setCategories(meal.getCategories());
             currentMealEntity.setImage(meal.getImage());
+            currentMealEntity.setIsAvailable(meal.isIsAvailable());
             currentMealEntity.setIngredients(meal.getIngredients());
         } else {
             throw new MealNotFoundException("The meal entered is null!");
