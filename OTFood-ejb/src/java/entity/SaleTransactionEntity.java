@@ -61,7 +61,7 @@ public class SaleTransactionEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     @NotNull
-    @Future
+    //@Future //removed to be able to dataInit those 'Past transactions'
     private Date deliveryDateTime;
     @Column(nullable = false)
     @NotNull

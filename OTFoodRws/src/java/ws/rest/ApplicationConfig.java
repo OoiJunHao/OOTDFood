@@ -22,6 +22,7 @@ public class ApplicationConfig extends Application {
         resources.add(ws.rest.CorsFilter.class);
         resources.add(ws.rest.OTUserResource.class);
         resources.add(ws.rest.ReviewManagementResource.class);
+        resources.add(ws.rest.SaleTransactionManagementResource.class);
         resources.add(ws.rest.StaffManagementResource.class);
         resources.add(ws.rest.StaffResource.class);
     }
