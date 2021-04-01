@@ -8,6 +8,8 @@ package ejb.session.stateless;
 import entity.DriverEntity;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,6 +23,7 @@ import util.exception.DriverExistsException;
 import util.exception.DriverNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
+import util.exception.UpdateDriverException;
 
 /**
  *
@@ -65,13 +68,13 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-    
+
     @Override
     public List<DriverEntity> retrieveAllDrivers() {
         Query query = em.createQuery("SELECT d FROM DriverEntity d");
         return query.getResultList();
     }
-    
+
     @Override
     public DriverEntity retrieveDriverById(Long driverId) throws DriverNotFoundException {
         DriverEntity driver = em.find(DriverEntity.class, driverId);
@@ -81,26 +84,54 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
             throw new DriverNotFoundException("Driver ID " + driverId + " does not exists!");
         }
     }
-    
-    @Override 
+
+    @Override
     public List<DriverEntity> retrieveDriverByName(String driverName) {
         Query query = em.createQuery("SELECT d FROM DriverEntity d WHERE (d.firstname LIKE '%:driverName%') OR (d.lastName LIKE '%:driverName%')");
         query.setParameter("driverName", driverName);
         return query.getResultList();
     }
-    
+
+    @Override
+    public void updateDriver(DriverEntity driver) throws UpdateDriverException, InputDataValidationException, DriverNotFoundException {
+        if (driver != null & driver.getDriverId() != null) {
+            System.out.println(driver);
+            Set<ConstraintViolation<DriverEntity>> constraintViolations = validator.validate(driver);
+
+            if (constraintViolations.isEmpty()) {
+
+                DriverEntity driverToUpdate = retrieveDriverById(driver.getDriverId());
+
+                if (driverToUpdate.getUsername().equals(driver.getUsername())) {
+                    driverToUpdate.setFirstname(driver.getFirstname());
+                    driverToUpdate.setLastName(driver.getLastName());
+                    driverToUpdate.setProfilePicture(driver.getProfilePicture());
+                    driverToUpdate.setAge(driver.getAge());
+                    driverToUpdate.setActive(driver.isActive());
+                } else {
+                    throw new UpdateDriverException("Username of driver to be updated does not exist");
+                }
+            } else {
+                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+
+            }
+        } else {
+            throw new DriverNotFoundException("DriverID not provided");
+        }
+    }
+
     @Override
     public boolean setDriverActiveToFalse(Long driverId) throws DriverNotFoundException {
-        DriverEntity driverToFire = em.find(DriverEntity.class, driverId);
+        DriverEntity driverToFire = em.find(DriverEntity.class,
+                driverId);
         if (driverToFire != null) {
             driverToFire.setActive(false);
             em.flush();
             return driverToFire.isActive();
         }
         throw new DriverNotFoundException("Driver ID: " + driverId + " does not exist!");
-    
+
     }
-    
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<DriverEntity>> constraintViolations) {
         String msg = "Input data validation error!:";
