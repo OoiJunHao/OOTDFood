@@ -12,6 +12,7 @@ import util.exception.DriverExistsException;
 import util.exception.DriverNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
+import util.exception.UpdateDriverException;
 
 /**
  *
@@ -29,5 +30,7 @@ public interface DriverEntitySessionBeanLocal {
     public Long createNewDriver(DriverEntity driver) throws UnknownPersistenceException, InputDataValidationException, DriverExistsException;
 
     public boolean setDriverActiveToFalse(Long driverId) throws DriverNotFoundException;
-    
+
+    public void updateDriver(DriverEntity driver) throws UpdateDriverException, InputDataValidationException, DriverNotFoundException;
+
 }

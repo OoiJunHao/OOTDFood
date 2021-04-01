@@ -5,6 +5,7 @@
  */
 package ws.rest;
 
+import ejb.session.stateless.DriverEntitySessionBeanLocal;
 import ejb.session.stateless.IngredientEntitySessionBeanLocal;
 import ejb.session.stateless.MealEntitySessionBeanLocal;
 import ejb.session.stateless.OTUserEntitySessionBeanLocal;
@@ -22,6 +23,8 @@ import javax.naming.NamingException;
  * @author benny
  */
 public class SessionBeanLookup {
+
+    DriverEntitySessionBeanLocal driverEntitySessionBean = lookupDriverEntitySessionBeanLocal();
 
     OTUserEntitySessionBeanLocal oTUserEntitySessionBean = lookupOTUserEntitySessionBeanLocal();
     SaleTransactionEntitySessionBeanLocal saleTransactionEntitySessionBean = lookupSaleTransactionEntitySessionBeanLocal();
@@ -90,6 +93,16 @@ public class SessionBeanLookup {
         try {
             Context c = new InitialContext();
             return (OTUserEntitySessionBeanLocal) c.lookup("java:global/OTFood/OTFood-ejb/OTUserEntitySessionBean!ejb.session.stateless.OTUserEntitySessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private DriverEntitySessionBeanLocal lookupDriverEntitySessionBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (DriverEntitySessionBeanLocal) c.lookup("java:global/OTFood/OTFood-ejb/DriverEntitySessionBean!ejb.session.stateless.DriverEntitySessionBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

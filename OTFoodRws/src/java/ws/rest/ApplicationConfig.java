@@ -20,6 +20,7 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(ws.rest.BentoResource.class);
         resources.add(ws.rest.CorsFilter.class);
+        resources.add(ws.rest.DriverManagementResource.class);
         resources.add(ws.rest.OTUserResource.class);
         resources.add(ws.rest.ReviewManagementResource.class);
         resources.add(ws.rest.SaleTransactionManagementResource.class);

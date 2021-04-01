@@ -91,7 +91,7 @@ public class SaleTransactionEntity implements Serializable {
 
     public SaleTransactionEntity() {
         saleTransactionLineItemEntities = new ArrayList<>();
-        this.deliveryStatus = DeliveryStatusEnum.ORDER_RECIEVED;
+        this.deliveryStatus = DeliveryStatusEnum.ORDER_RECEIVED;
         this.voidRefund = false;
     }
 
