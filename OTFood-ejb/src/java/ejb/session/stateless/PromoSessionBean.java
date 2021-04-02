@@ -65,7 +65,7 @@ public class PromoSessionBean implements PromoSessionBeanLocal {
         } catch (PersistenceException ex) {
             if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                 if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                    throw new PromoCodeExistException();
+                    throw new PromoCodeExistException(ex.getMessage());
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
@@ -90,6 +90,19 @@ public class PromoSessionBean implements PromoSessionBeanLocal {
             throw new PromotionNotFoundException("Promotion Code ID " + promoCodeId + " does not exist!");
         }
     }
+    
+    public void updateCode(PromoCodeEntity promoCode) throws PromotionNotFoundException {
+        PromoCodeEntity currentCode = retrieveCodeById(promoCode.getPromoCodeId());
+        if (currentCode != null) {
+            currentCode.setStartDate(promoCode.getStartDate());
+            currentCode.setEndDate(promoCode.getEndDate());
+            currentCode.setDiscountCode(promoCode.getDiscountCode());
+            currentCode.setDiscountRate(promoCode.getDiscountRate());
+            currentCode.setDiscountCodeTypeEnum(promoCode.getDiscountCodeTypeEnum());
+            currentCode.setIsAvailable(promoCode.getIsAvailable());
+        }
+        
+    }
 
     @Override
     public PromoCodeEntity retrieveCodeByDiscountCode(String code) throws PromotionNotFoundException {
@@ -106,22 +119,18 @@ public class PromoSessionBean implements PromoSessionBeanLocal {
 
     @Override
     public Boolean checkPromoCode(String code) {
-        Boolean valid = false;
         try {
-
             PromoCodeEntity promo = retrieveCodeByDiscountCode(code);
-
             Date date = new Date();
-
-            if (promo.getStartDate().compareTo(date) < 0 && promo.getEndDate().compareTo(date) > 0) {
-                if (promo.getSaleTransaction().size() < promo.getNumAvailable()) {
-                    valid = true;
-                }
+            if (promo.getStartDate().compareTo(date) <= 0 && promo.getEndDate().compareTo(date) >= 0) {
+                return true;
+            } else {
+                return false;
             }
         } catch (PromotionNotFoundException ex) {
             Logger.getLogger(PromoSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return valid;
+        return null;
     }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<PromoCodeEntity>> constraintViolations) {

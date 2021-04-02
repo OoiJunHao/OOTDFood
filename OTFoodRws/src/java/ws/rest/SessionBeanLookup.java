@@ -8,6 +8,7 @@ package ws.rest;
 import ejb.session.stateless.IngredientEntitySessionBeanLocal;
 import ejb.session.stateless.MealEntitySessionBeanLocal;
 import ejb.session.stateless.OTUserEntitySessionBeanLocal;
+import ejb.session.stateless.PromoSessionBeanLocal;
 import ejb.session.stateless.ReviewEntitySessionBeanLocal;
 import ejb.session.stateless.SaleTransactionEntitySessionBeanLocal;
 import ejb.session.stateless.StaffEntitySessionBeanLocal;
@@ -22,6 +23,8 @@ import javax.naming.NamingException;
  * @author benny
  */
 public class SessionBeanLookup {
+
+    PromoSessionBeanLocal promoSessionBean = lookupPromoSessionBeanLocal();
 
     OTUserEntitySessionBeanLocal oTUserEntitySessionBean = lookupOTUserEntitySessionBeanLocal();
     SaleTransactionEntitySessionBeanLocal saleTransactionEntitySessionBean = lookupSaleTransactionEntitySessionBeanLocal();
@@ -95,5 +98,17 @@ public class SessionBeanLookup {
             throw new RuntimeException(ne);
         }
     }
+
+    private PromoSessionBeanLocal lookupPromoSessionBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (PromoSessionBeanLocal) c.lookup("java:global/OTFood/OTFood-ejb/PromoSessionBean!ejb.session.stateless.PromoSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+    
+    
 
 }
