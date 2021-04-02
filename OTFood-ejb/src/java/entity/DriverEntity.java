@@ -222,7 +222,7 @@ public class DriverEntity implements Serializable {
      * @param active the active to set
      */
     public void setActive(boolean active) {
-        this.setActive(active);
+        this.active = active;
     }
 
 

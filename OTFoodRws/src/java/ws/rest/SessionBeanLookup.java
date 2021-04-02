@@ -5,6 +5,7 @@
  */
 package ws.rest;
 
+import ejb.session.stateless.DriverEntitySessionBeanLocal;
 import ejb.session.stateless.IngredientEntitySessionBeanLocal;
 import ejb.session.stateless.MealEntitySessionBeanLocal;
 import ejb.session.stateless.OTUserEntitySessionBeanLocal;
@@ -24,8 +25,9 @@ import javax.naming.NamingException;
  */
 public class SessionBeanLookup {
 
-    PromoSessionBeanLocal promoSessionBean = lookupPromoSessionBeanLocal();
 
+    PromoSessionBeanLocal promoSessionBean = lookupPromoSessionBeanLocal();
+    DriverEntitySessionBeanLocal driverEntitySessionBean = lookupDriverEntitySessionBeanLocal();
     OTUserEntitySessionBeanLocal oTUserEntitySessionBean = lookupOTUserEntitySessionBeanLocal();
     SaleTransactionEntitySessionBeanLocal saleTransactionEntitySessionBean = lookupSaleTransactionEntitySessionBeanLocal();
     ReviewEntitySessionBeanLocal reviewEntitySessionBean = lookupReviewEntitySessionBeanLocal();
@@ -99,6 +101,7 @@ public class SessionBeanLookup {
         }
     }
 
+
     private PromoSessionBeanLocal lookupPromoSessionBeanLocal() {
         try {
             Context c = new InitialContext();
@@ -108,7 +111,17 @@ public class SessionBeanLookup {
             throw new RuntimeException(ne);
         }
     }
-    
-    
+
+    private DriverEntitySessionBeanLocal lookupDriverEntitySessionBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (DriverEntitySessionBeanLocal) c.lookup("java:global/OTFood/OTFood-ejb/DriverEntitySessionBean!ejb.session.stateless.DriverEntitySessionBeanLocal");
+
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
 
 }
