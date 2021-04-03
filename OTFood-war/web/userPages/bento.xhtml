@@ -15,20 +15,20 @@
 
         <h:outputScript library="js" name="ifSpinnerQuantityZero.js" />
         <h:form>
-            
+
             <p:dialog header="Enter Bento Quantiy" widgetVar="enterQtyDlg" >
                 <p:outputLabel for="bentoQty" value="Quantity"/>
                 <p:spinner id="bentoQty" value="#{viewBentoManagedBean.selectedBentoQuantity}" min="0"/>
                 <p:commandButton title="Add To Cart" actionListener="#{viewBentoManagedBean.addBentoToCart}" onclick="PF('enterQtyDlg').hide();"/>
             </p:dialog>
-            
+
             <p:dialog id="bentoReviewDlg" widgetVar="bentoReviewDlg" header="#{viewBentoManagedBean.selectedBento.name}'s Reviews" closable="true">
                 <p:repeat value="#{viewBentoManagedBean.currentBentoReviews}" var="review">
                     <p:outputLabel value="#{review.description}"/><br/>
                 </p:repeat>
             </p:dialog>
-            
-            
+
+
 
             <p:tabView value="#{viewBentoManagedBean.listOfCategories}" var="bentoCategory" cache="false">
 
@@ -40,11 +40,11 @@
                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                                 gridIcon="pi pi-th-large" listIcon="pi pi-bars"
                                 layout="grid">
-                        
+
 
                         <p:dataViewGridItem>
 
-                            <p:graphicImage url="./../resources/images/mealImages/bento5.jpg" styleClass="viewBentoSingleImage"/>
+                            <p:graphicImage url="/uploadedFiles/bentos/#{bentoEntity.image}.jpg" styleClass="viewBentoSingleImage"/>
                             <div><span>#{bentoEntity.name}</span></div>
 
                             <h:outputText value="#{bentoEntity.description}"/><br/>
@@ -63,7 +63,7 @@
 
 
                         <p:dataViewListItem>
-                            <p:graphicImage url="./../resources/images/mealImages/bento5.jpg" styleClass="viewBentoSingleImage"/>
+                            <p:graphicImage url="/uploadedFiles/bentos/#{bentoEntity.image}.jpg" styleClass="viewBentoSingleImage"/>
                             <div><span>#{bentoEntity.name}</span></div>
 
                             <h:outputText value="#{bentoEntity.description}"/><br/>
