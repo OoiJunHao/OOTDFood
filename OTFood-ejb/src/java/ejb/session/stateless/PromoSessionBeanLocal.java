@@ -30,4 +30,6 @@ public interface PromoSessionBeanLocal {
 
     public PromoCodeEntity retrieveCodeById(Long promoCodeId) throws PromotionNotFoundException;
 
+    public void updateCode(PromoCodeEntity promoCode) throws PromotionNotFoundException;
+
 }
