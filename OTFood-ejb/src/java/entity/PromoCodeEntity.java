@@ -45,17 +45,14 @@ public class PromoCodeEntity implements Serializable {
     @Column(nullable = false)
     @NotNull
     private Date endDate;
-    @Min(0)
-    @NotNull
-    private Integer numAvailable;
-    @Column(unique = true, nullable = false, length = 6)
-    @Size(max = 6)
+    @Column(unique = true, nullable = false)
     private String discountCode;
     @DecimalMin("0.00")
     private BigDecimal discountRate;
     @Enumerated(EnumType.STRING)
     private PromoCodeTypeEnum discountCodeTypeEnum;
-
+    @Column(nullable = false)
+    private Boolean isAvailable;
     @OneToMany(mappedBy = "promoCode")
     private List<SaleTransactionEntity> saleTransaction;
 
@@ -63,14 +60,14 @@ public class PromoCodeEntity implements Serializable {
         saleTransaction = new ArrayList<>();
     }
 
-    public PromoCodeEntity(Date startDate, Date endDate, Integer numAvailable, String discountCode, BigDecimal discountRate, PromoCodeTypeEnum discountCodeTypeEnum) {
+    public PromoCodeEntity(Date startDate, Date endDate, String discountCode, BigDecimal discountRate, PromoCodeTypeEnum discountCodeTypeEnum) {
         this();
         this.startDate = startDate;
         this.endDate = endDate;
-        this.numAvailable = numAvailable;
         this.discountCode = discountCode;
         this.discountRate = discountRate;
         this.discountCodeTypeEnum = discountCodeTypeEnum;
+        this.isAvailable = true;
     }
 
     public Date getStartDate() {
@@ -87,14 +84,6 @@ public class PromoCodeEntity implements Serializable {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
-    }
-
-    public Integer getNumAvailable() {
-        return numAvailable;
-    }
-
-    public void setNumAvailable(Integer numAvailable) {
-        this.numAvailable = numAvailable;
     }
 
     public String getDiscountCode() {
@@ -137,6 +126,15 @@ public class PromoCodeEntity implements Serializable {
         this.promoCodeId = promoCodeId;
     }
 
+    public Boolean getIsAvailable() {
+        return isAvailable;
+    }
+
+    public void setIsAvailable(Boolean isAvailable) {
+        this.isAvailable = isAvailable;
+    }
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;

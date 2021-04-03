@@ -439,11 +439,11 @@ public class DataInitializationSessionBean {
 
             // Create Promo Code
             List<PromoCodeEntity> promoCodes = new ArrayList<>();
-            promoCodes.add(new PromoCodeEntity(new Date(), formatter.parse("31-12-2021 23:59:00"), 100, "AAAAAA", new BigDecimal(10.0), PromoCodeTypeEnum.PERCENTAGE));
-            promoCodes.add(new PromoCodeEntity(new Date(), formatter.parse("30-06-2021 23:59:00"), 100, "BBBBBB", new BigDecimal(10.0), PromoCodeTypeEnum.FLAT));
-            promoCodes.add(new PromoCodeEntity(new Date(), formatter.parse("31-12-2022 23:59:00"), 100, "CCCCCC", new BigDecimal(5.0), PromoCodeTypeEnum.PERCENTAGE));
-            promoCodes.add(new PromoCodeEntity(new Date(), formatter.parse("30-06-2022 23:59:00"), 100, "DDDDDD", new BigDecimal(20.0), PromoCodeTypeEnum.FLAT));
-            promoCodes.add(new PromoCodeEntity(new Date(), formatter.parse("16-10-2025 23:59:00"), 100, "JUNHAO", new BigDecimal(100.0), PromoCodeTypeEnum.PERCENTAGE));
+            promoCodes.add(new PromoCodeEntity(new Date(), formatter.parse("31-12-2021 23:59:00"), "10PercentOff", new BigDecimal(10.0), PromoCodeTypeEnum.PERCENTAGE));
+            promoCodes.add(new PromoCodeEntity(new Date(), formatter.parse("30-06-2021 23:59:00"), "10DollarsOff", new BigDecimal(10.0), PromoCodeTypeEnum.FLAT));
+            promoCodes.add(new PromoCodeEntity(new Date(), formatter.parse("31-12-2022 23:59:00"), "5PercentOff", new BigDecimal(5.0), PromoCodeTypeEnum.PERCENTAGE));
+            promoCodes.add(new PromoCodeEntity(new Date(), formatter.parse("30-06-2022 23:59:00"), "20DollarOff", new BigDecimal(20.0), PromoCodeTypeEnum.FLAT));
+            promoCodes.add(new PromoCodeEntity(new Date(), formatter.parse("16-10-2025 23:59:00"), "100PercentOff", new BigDecimal(100.0), PromoCodeTypeEnum.PERCENTAGE));
             for (PromoCodeEntity promoCode : promoCodes) {
                 promoSessionBeanLocal.createNewPromoCode(promoCode);
             }

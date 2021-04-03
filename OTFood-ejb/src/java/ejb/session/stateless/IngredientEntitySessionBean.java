@@ -21,6 +21,7 @@ import util.exception.IngredientEntityExistsException;
 import util.exception.IngredientEntityNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
+import util.exception.UpdateIngredientException;
 
 /**
  *
@@ -74,8 +75,8 @@ public class IngredientEntitySessionBean implements IngredientEntitySessionBeanL
         return query.getResultList();
     }
 
-    @Override 
-    public List<IngredientEntity> retrieveIngredientsWithMatchingName (String inputName) {
+    @Override
+    public List<IngredientEntity> retrieveIngredientsWithMatchingName(String inputName) {
         Query query = em.createQuery("SELECT i FROM IngredientEntity i WHERE i.name LIKE '%:inputName%'");
         query.setParameter("inputName", inputName);
         return query.getResultList();
@@ -91,6 +92,31 @@ public class IngredientEntitySessionBean implements IngredientEntitySessionBeanL
         }
     }
 
+    @Override
+    public void updateIngredient(IngredientEntity ingred) throws InputDataValidationException, IngredientEntityNotFoundException, UpdateIngredientException {
+        if (ingred != null && ingred.getIngredientId() != null) {
+            Set<ConstraintViolation<IngredientEntity>> constraintViolations = validator.validate(ingred);
+            if (constraintViolations.isEmpty()) {
+                IngredientEntity updatedIngred = retrieveIngredientById(ingred.getIngredientId());
+                System.out.println(updatedIngred.getIngredientId().compareTo(ingred.getIngredientId()));
+                if (updatedIngred.getIngredientId().compareTo(ingred.getIngredientId()) == 0) {
+                    updatedIngred.setName(ingred.getName());
+                    updatedIngred.setCalorie(ingred.getCalorie());
+                    updatedIngred.setPrice(ingred.getPrice());
+                    updatedIngred.setType(ingred.getType());
+                    em.flush();
+                } else {
+                    throw new UpdateIngredientException("Id of ingredient to update does not exist");
+                }
+            } else {
+                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+
+            }
+
+        } else {
+            throw new IngredientEntityNotFoundException("Ingredient ID not provided");
+        }
+    }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<IngredientEntity>> constraintViolations) {
         String msg = "Input data validation error!:";
@@ -101,28 +127,30 @@ public class IngredientEntitySessionBean implements IngredientEntitySessionBeanL
 
         return msg;
     }
-    
+
     public List<IngredientEntity> retrieveListOfBases() {
         Query query = em.createQuery("SELECT ingredients FROM IngredientEntity ingredients WHERE ingredients.type = util.enumeration.IngredientTypeEnum.BASE");
         return query.getResultList();
     }
-    
+
     public List<IngredientEntity> retrieveListOfMeats() {
         Query query = em.createQuery("SELECT ingredients FROM IngredientEntity ingredients WHERE ingredients.type = util.enumeration.IngredientTypeEnum.MEAT");
         return query.getResultList();
     }
+
     public List<IngredientEntity> retrieveListOfVegetables() {
         Query query = em.createQuery("SELECT ingredients FROM IngredientEntity ingredients WHERE ingredients.type = util.enumeration.IngredientTypeEnum.VEGE");
         return query.getResultList();
     }
+
     public List<IngredientEntity> retrieveListOfAddons() {
         Query query = em.createQuery("SELECT ingredients FROM IngredientEntity ingredients WHERE ingredients.type = util.enumeration.IngredientTypeEnum.ADDON");
         return query.getResultList();
     }
+
     public List<IngredientEntity> retrieveListOfSauces() {
         Query query = em.createQuery("SELECT ingredients FROM IngredientEntity ingredients WHERE ingredients.type = util.enumeration.IngredientTypeEnum.SAUCE");
         return query.getResultList();
     }
 
 }
-
