@@ -25,7 +25,6 @@ import javax.naming.NamingException;
  */
 public class SessionBeanLookup {
 
-
     PromoSessionBeanLocal promoSessionBean = lookupPromoSessionBeanLocal();
     DriverEntitySessionBeanLocal driverEntitySessionBean = lookupDriverEntitySessionBeanLocal();
     OTUserEntitySessionBeanLocal oTUserEntitySessionBean = lookupOTUserEntitySessionBeanLocal();
@@ -101,7 +100,6 @@ public class SessionBeanLookup {
         }
     }
 
-
     private PromoSessionBeanLocal lookupPromoSessionBeanLocal() {
         try {
             Context c = new InitialContext();
@@ -122,6 +120,5 @@ public class SessionBeanLookup {
             throw new RuntimeException(ne);
         }
     }
-
 
 }
