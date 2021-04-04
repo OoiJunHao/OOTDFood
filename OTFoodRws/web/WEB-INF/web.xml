@@ -87,4 +87,16 @@
         <local>ejb.session.stateless.IngredientEntitySessionBeanLocal</local>
         <ejb-link>OTFood-ejb.jar#IngredientEntitySessionBean</ejb-link>
     </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>DriverEntitySessionBean2</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.DriverEntitySessionBeanLocal</local>
+        <ejb-link>OTFood-ejb.jar#DriverEntitySessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>DriverEntitySessionBean3</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.DriverEntitySessionBeanLocal</local>
+        <ejb-link>OTFood-ejb.jar#DriverEntitySessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>
