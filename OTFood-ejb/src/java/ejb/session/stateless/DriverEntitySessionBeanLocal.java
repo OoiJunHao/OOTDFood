@@ -38,4 +38,6 @@ public interface DriverEntitySessionBeanLocal {
 
     public DriverEntity driverLogin(String username, String password) throws InvalidLoginCredentialException;
 
+    public DriverEntity updateDriverIonic(DriverEntity driver) throws UpdateDriverException, InputDataValidationException, DriverNotFoundException;
+
 }

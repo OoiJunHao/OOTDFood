@@ -137,6 +137,35 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
     }
 
     @Override
+    public DriverEntity updateDriverIonic(DriverEntity driver) throws UpdateDriverException, InputDataValidationException, DriverNotFoundException {
+        if (driver != null & driver.getDriverId() != null) {
+            System.out.println(driver);
+            Set<ConstraintViolation<DriverEntity>> constraintViolations = validator.validate(driver);
+
+            if (constraintViolations.isEmpty()) {
+
+                DriverEntity driverToUpdate = retrieveDriverById(driver.getDriverId());
+
+                if (driverToUpdate.getUsername().equals(driver.getUsername())) {
+                    driverToUpdate.setFirstname(driver.getFirstname());
+                    driverToUpdate.setLastName(driver.getLastName());
+                    driverToUpdate.setProfilePicture(driver.getProfilePicture());
+                    driverToUpdate.setAge(driver.getAge());
+                    driverToUpdate.setActive(driver.isActive());
+                    return driverToUpdate;
+                } else {
+                    throw new UpdateDriverException("Username of driver to be updated does not exist");
+                }
+            } else {
+                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+
+            }
+        } else {
+            throw new DriverNotFoundException("DriverID not provided");
+        }
+    }
+
+    @Override
     public DriverEntity driverLogin(String username, String password) throws InvalidLoginCredentialException {
 
         try {
