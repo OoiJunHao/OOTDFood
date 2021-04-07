@@ -1,102 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="4.0" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Production</param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
-    <!--    <ejb-local-ref>
-        <ejb-ref-name>IngredientEntitySessionBeanLocal</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.IngredientEntitySessionBeanLocal</local>
-        <ejb-link>OTFood-ejb.jar#IngredientEntitySessionBean</ejb-link>
-        <ejb-ref-name>StaffEntitySessionBean</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.StaffEntitySessionBeanLocal</local>
-        <ejb-link>OTFood-ejb.jar#StaffEntitySessionBean</ejb-link>
-    </ejb-local-ref>-->
-    <!-- <ejb-local-ref>
-        <ejb-ref-name>StaffEntitySessionBeanLocal</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.StaffEntitySessionBeanLocal</local>
-        <ejb-link>OTFood-ejb.jar#StaffEntitySessionBean</ejb-link>
-    </ejb-local-ref> -->
-    <ejb-local-ref>
-        <ejb-ref-name>ReviewEntitySessionBean</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.ReviewEntitySessionBeanLocal</local>
-        <ejb-link>OTFood-ejb.jar#ReviewEntitySessionBean</ejb-link>
-    </ejb-local-ref>
-    <ejb-local-ref>
-        <ejb-ref-name>ReviewEntitySessionBean1</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.ReviewEntitySessionBeanLocal</local>
-        <ejb-link>OTFood-ejb.jar#ReviewEntitySessionBean</ejb-link>
-    </ejb-local-ref>
-    <ejb-local-ref>
-        <ejb-ref-name>SaleTransactionEntitySessionBean</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.SaleTransactionEntitySessionBeanLocal</local>
-        <ejb-link>OTFood-ejb.jar#SaleTransactionEntitySessionBean</ejb-link>
-    </ejb-local-ref>
-    <ejb-local-ref>
-        <ejb-ref-name>OTUserEntitySessionBean</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.OTUserEntitySessionBeanLocal</local>
-        <ejb-link>OTFood-ejb.jar#OTUserEntitySessionBean</ejb-link>
-    </ejb-local-ref>
-    <ejb-local-ref>
-        <ejb-ref-name>PromoSessionBeanLocal</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.PromoSessionBeanLocal</local>
-        <ejb-link>OTFood-ejb.jar#PromoSessionBean</ejb-link>
-    </ejb-local-ref>
-    <ejb-local-ref>
-        <ejb-ref-name>DriverEntitySessionBean</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.DriverEntitySessionBeanLocal</local>
-        <ejb-link>OTFood-ejb.jar#DriverEntitySessionBean</ejb-link>
-    </ejb-local-ref>
-    <ejb-local-ref>
-        <ejb-ref-name>StaffEntitySessionBean</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.StaffEntitySessionBeanLocal</local>
-        <ejb-link>OTFood-ejb.jar#StaffEntitySessionBean</ejb-link>
-    </ejb-local-ref>
-    <ejb-local-ref>
-        <ejb-ref-name>DriverEntitySessionBean1</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.DriverEntitySessionBeanLocal</local>
-        <ejb-link>OTFood-ejb.jar#DriverEntitySessionBean</ejb-link>
-    </ejb-local-ref>
-    <ejb-local-ref>
-        <ejb-ref-name>IngredientEntitySessionBean</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.IngredientEntitySessionBeanLocal</local>
-        <ejb-link>OTFood-ejb.jar#IngredientEntitySessionBean</ejb-link>
-    </ejb-local-ref>
-    <ejb-local-ref>
-        <ejb-ref-name>StaffEntitySessionBean1</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.StaffEntitySessionBeanLocal</local>
-        <ejb-link>OTFood-ejb.jar#StaffEntitySessionBean</ejb-link>
-    </ejb-local-ref>
-    <ejb-local-ref>
-        <ejb-ref-name>IngredientEntitySessionBean1</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.IngredientEntitySessionBeanLocal</local>
-        <ejb-link>OTFood-ejb.jar#IngredientEntitySessionBean</ejb-link>
-    </ejb-local-ref>
-    <ejb-local-ref>
-        <ejb-ref-name>DriverEntitySessionBean2</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.DriverEntitySessionBeanLocal</local>
-        <ejb-link>OTFood-ejb.jar#DriverEntitySessionBean</ejb-link>
-    </ejb-local-ref>
-    <ejb-local-ref>
-        <ejb-ref-name>DriverEntitySessionBean3</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.DriverEntitySessionBeanLocal</local>
-        <ejb-link>OTFood-ejb.jar#DriverEntitySessionBean</ejb-link>
-    </ejb-local-ref>
+    <welcome-file-list>
+        <welcome-file>index.xhtml</welcome-file>
+    </welcome-file-list>
+    <resource-ref>
+        <description>jdbc:mysql://localhost:3306/otfood?zeroDateTimeBehavior=CONVERT_TO_NULL</description>
+        <res-ref-name>OTFoodDataSource</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+        <res-sharing-scope>Shareable</res-sharing-scope>
+    </resource-ref>
 </web-app>
