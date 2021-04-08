@@ -71,9 +71,9 @@ public class MealEntity implements Serializable {
     List<CategoryEnum> categories;
     
     
-    @OneToMany(mappedBy = "meal")
+    @OneToMany(mappedBy = "meal", fetch = FetchType.EAGER)
     private List<ReviewEntity> reviews;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<IngredientEntity> ingredients;
 
     public MealEntity() {

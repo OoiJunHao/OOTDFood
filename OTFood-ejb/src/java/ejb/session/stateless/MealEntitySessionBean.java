@@ -30,7 +30,6 @@ import util.exception.InputDataValidationException;
 import util.exception.MealExistsException;
 import util.exception.MealNotFoundException;
 import util.exception.UnknownPersistenceException;
-import util.exception.UserNotFoundException;
 
 /**
  *

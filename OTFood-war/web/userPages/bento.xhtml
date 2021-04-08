@@ -7,25 +7,108 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="css">
-        <h:outputStylesheet name="css/viewBentos.css"/>
+        <h:outputStylesheet library="css" name="viewBentos.css"/>
         <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
     </ui:define>
 
-    <ui:define name="content">
+    <ui:define name="content" id="content">
 
         <h:outputScript library="js" name="ifSpinnerQuantityZero.js" />
-        <h:form>
+        <h:form id="form">
+            <p:growl>
+                <p:autoUpdate/>
+            </p:growl>
 
-            <p:dialog header="Enter Bento Quantiy" widgetVar="enterQtyDlg" >
-                <p:outputLabel for="bentoQty" value="Quantity"/>
-                <p:spinner id="bentoQty" value="#{viewBentoManagedBean.selectedBentoQuantity}" min="0"/>
-                <p:commandButton title="Add To Cart" actionListener="#{viewBentoManagedBean.addBentoToCart}" onclick="PF('enterQtyDlg').hide();"/>
-            </p:dialog>
+            <p:dialog id="bentoReviewDlg" widgetVar="bentoReviewDlg" header="#{viewBentoManagedBean.selectedBento.name}" closable="true" width="35%" height="40rem">
 
-            <p:dialog id="bentoReviewDlg" widgetVar="bentoReviewDlg" header="#{viewBentoManagedBean.selectedBento.name}'s Reviews" closable="true">
-                <p:repeat value="#{viewBentoManagedBean.currentBentoReviews}" var="review">
-                    <p:outputLabel value="#{review.description}"/><br/>
-                </p:repeat>
+                <div style="text-align: center">
+                    <p:graphicImage url="/uploadedFiles/bentos/#{viewBentoManagedBean.selectedBento.image}.jpg" styleClass="viewBentoSingleImage"/>
+                    <br/>
+                    <br/>
+                    <div style="font-size: 18pt"><span><b>#{viewBentoManagedBean.selectedBento.name}</b></span></div>
+                    <br/>
+
+                    <h:outputText value="#{viewBentoManagedBean.selectedBento.description}"/><br/><br/>
+                    <h:outputText value="Calories: #{viewBentoManagedBean.selectedBento.calorie} kCal"/><br/><br/>
+                    <p:outputLabel value="$#{viewBentoManagedBean.selectedBento.price}"/><br/><br/>
+
+
+
+
+                </div>
+
+                <p:fieldset legend="Ingredients" toggleable="true" toggleSpeed="500">
+                    <ul>
+                        <ui:repeat var="ingredients" value="#{viewBentoManagedBean.selectedBento.ingredients}" varStatus="status">
+                            <li>#{ingredients.name}</li>
+                        </ui:repeat>
+                    </ul>
+                </p:fieldset>
+                <br/>
+
+                <p:dataScroller  id="reviewTable" value="#{viewBentoManagedBean.currentBentoReviews}" var="review" chunkSize="5" mode="inline"
+                                 scrollHeight="300">
+
+                    <f:facet name="header">
+                        All Reviews
+                    </f:facet>
+
+                    <div class="product" id="data">
+                        <p:outputLabel value="#{review.user.firstname} #{review.user.lastName}" style="font-style: italic; font-size: 15pt; display:inline-block;"/>
+                        <p:outputLabel value="#{review.reviewDate}" style="float:right; display:inline-block; font-style: italic; font-size: 10pt; "/>
+                        <p:rating readonly="true" value="#{review.rating}"/><br/>
+                        <p:outputLabel value="#{review.description}"/><br/>
+                        <p:separator/>
+                    </div>
+
+                </p:dataScroller>
+                <br/>
+
+                <p:accordionPanel widgetVar="basic" rendered="#{sessionScope.isLogin == true}"  activeIndex="null">
+                    <p:tab title="Add a Review">
+                        <h:outputText value="Select Rating"/>
+                        <br/>
+                        <p:rating value="#{viewBentoManagedBean.rating}" requiredMessage="Please select a rating" >
+                            <p:ajax event="rate" update="@this"/>                      
+                        </p:rating>
+                        <br/>
+
+                        <p:inputTextarea rows="5" cols="30" counter="display" maxlength="128"
+                                         counterTemplate="{0} characters remaining." autoResize="false" placeholder="Enter review here"
+                                         value="#{viewBentoManagedBean.review}" /><br/>
+                        <h:outputText id="display" class="p-d-block" /><br/><br/>
+                        <p:commandButton value="Submit Review" process="@form" update="@form :form:reviewTable" actionListener="#{viewBentoManagedBean.addReview}" onclick="PF('bentoReviewDlg').hide();"/>
+                        <p style="color: #999999"><small><i>Please refresh the page after submitting to see your review added in to the list</i></small></p>
+                    </p:tab>
+                </p:accordionPanel>
+
+                <!--
+                @All
+                
+                    Because of the limitations of <p:dataScroller>, where it will only render initial values of the passed variable to value property, I am unable to dynamically
+                    load the new review data into the component via AJAX whenever there is a new Review being made. A possibility is to force load the data in the scroller with 
+                    the new data when there is a change, however due to the way the component is structured, it will only be pushed to the bottom.
+                    
+                    As such, I have decided to just leave a small note below asking users to force reload the page in order to reconstruct the DOM and get the appropriate data shown.
+                
+                    - Jun Hao
+                -->
+
+                <br/>
+                <br/>
+                <p:outputLabel for="@next" value="Select Quantity: "/>
+
+                <p:spinner id="rotate" value="#{viewBentoManagedBean.selectedBentoQuantity}" min="1" max="10" rotate="true" requiredMessage="Please select a valid quantity">
+                    <p:ajax event="change" process="@this" />
+                </p:spinner>
+
+                &nbsp;
+                <p:commandButton value="Add to Cart" actionListener="#{viewBentoManagedBean.addBentoToCart}" icon="fa fa-shopping-cart" update="@form" onclick="PF('bentoReviewDlg').hide();"/>
+
+                <br/>
+                <br/>
+
+
             </p:dialog>
 
 
@@ -44,40 +127,57 @@
 
                         <p:dataViewGridItem>
 
-                            <p:graphicImage url="/uploadedFiles/bentos/#{bentoEntity.image}.jpg" styleClass="viewBentoSingleImage"/>
-                            <div><span>#{bentoEntity.name}</span></div>
+                            <div class="card">
 
-                            <h:outputText value="#{bentoEntity.description}"/><br/>
-                            <h:outputText value="Calories: #{bentoEntity.calorie} kCal"/><br/>
-                            <p:outputLabel value="$#{bentoEntity.price}"/><br/>
+                                <div style="text-align: center">
+                                    <p:graphicImage url="/uploadedFiles/bentos/#{bentoEntity.image}.jpg" styleClass="viewBentoSingleImage"/>
+                                    <br/>
+                                    <br/>
+                                    <div style="font-size: 18pt"><span><b>#{bentoEntity.name}</b></span></div>
+                                    <br/>
 
-                            <p:commandButton title="Order" onclick="PF('enterQtyDlg').show();">
-                                <f:setPropertyActionListener value="#{bentoEntity}" target="#{viewBentoManagedBean.selectedBento}" />
-                            </p:commandButton>
+                                    <h:outputText value="#{bentoEntity.description}"/><br/><br/>
+                                    <h:outputText value="Calories: #{bentoEntity.calorie} kCal"/><br/><br/>
+                                    <p:outputLabel value="$#{bentoEntity.price}"/><br/><br/>
 
-                            <p:commandButton title="Review" action="#{viewBentoManagedBean.loadBentoReviews()}" update="@form" oncomplete="PF('bentoReviewDlg').show();">
-                                <f:setPropertyActionListener value="#{bentoEntity}" target="#{viewBentoManagedBean.selectedBento}"/>
-                            </p:commandButton>
+                                    <p:commandButton value="Add to Cart" actionListener="#{viewBentoManagedBean.addSingleBentoToCart}" icon="fa fa-shopping-cart">                     
+                                        <f:attribute value="#{bentoEntity}" name="selected"/>
+                                    </p:commandButton>
+                                    &nbsp;
+                                    <p:commandButton value="More Info" icon="fa fa-info-circle" action="#{viewBentoManagedBean.loadBentoReviews()}" update="@form" oncomplete="PF('bentoReviewDlg').show();">
+                                        <f:setPropertyActionListener value="#{bentoEntity}" target="#{viewBentoManagedBean.selectedBento}"/>
+                                    </p:commandButton>
+                                </div>
+
+                            </div>
 
                         </p:dataViewGridItem>
 
 
                         <p:dataViewListItem>
-                            <p:graphicImage url="/uploadedFiles/bentos/#{bentoEntity.image}.jpg" styleClass="viewBentoSingleImage"/>
-                            <div><span>#{bentoEntity.name}</span></div>
+                            <div style=" overflow:auto;">
+                                <p:graphicImage url="/uploadedFiles/bentos/#{bentoEntity.image}.jpg" height="150rem" width="200rem" styleClass="viewBentoSingleImageList" style="display:inline-block; margin: 5px"/>
+                                <div style="display:inline-block; width:50rem">
 
-                            <h:outputText value="#{bentoEntity.description}"/><br/>
-                            <h:outputText value="Calories: #{bentoEntity.calorie} kCal"/><br/>
-                            <p:outputLabel value="$#{bentoEntity.price}"/><br/>
+                                    <div style="font-size: 18pt"><span><b>#{bentoEntity.name}</b></span></div><br/>
 
-                            <p:commandButton title="Order" onclick="PF('enterQtyDlg').show();">
-                                <f:setPropertyActionListener value="#{bentoEntity}" target="#{viewBentoManagedBean.selectedBento}" />
-                            </p:commandButton>
+                                    <h:outputText value="#{bentoEntity.description}"/><br/><br/>
+                                    <h:outputText value="Calories: #{bentoEntity.calorie} kCal"/><br/><br/>
+                                    <p:outputLabel value="$#{bentoEntity.price}"/><br/><br/>
+                                </div>
+                                <div style="display:inline-block; float:right;">
 
-                            <p:commandButton title="Review" action="#{viewBentoManagedBean.loadBentoReviews()}" update="@form" oncomplete="PF('bentoReviewDlg').show();">
-                                <f:setPropertyActionListener value="#{bentoEntity}" target="#{viewBentoManagedBean.selectedBento}"/>
-                            </p:commandButton>
+                                    <p:commandButton value="Add to Cart" actionListener="#{viewBentoManagedBean.addSingleBentoToCart}" icon="fa fa-shopping-cart">                     
+                                        <f:attribute value="#{bentoEntity}" name="selected"/>
+                                    </p:commandButton>
 
+                                    <p:commandButton value="More Info" icon="fa fa-info-circle" action="#{viewBentoManagedBean.loadBentoReviews()}" update="@form" oncomplete="PF('bentoReviewDlg').show();">
+                                        <f:setPropertyActionListener value="#{bentoEntity}" target="#{viewBentoManagedBean.selectedBento}"/>
+                                    </p:commandButton>
+                                </div>
+                                </div>
+                                <p:separator/>
+                            
                         </p:dataViewListItem>
 
                     </p:dataView>
