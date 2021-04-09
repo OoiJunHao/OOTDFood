@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.DriverEntity;
+import entity.SaleTransactionEntity;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -132,6 +133,16 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
         throw new DriverNotFoundException("Driver ID: " + driverId + " does not exist!");
 
     }
+    
+    @Override
+    public SaleTransactionEntity retrieveOneSaleTransaction() {
+        Query query = em.createQuery("SELECT st FROM SaleTransactionEntity st WHERE st.driver IS NULL");
+        List<SaleTransactionEntity> saleTransactions = query.getResultList();
+        int randomSaleTransaction = (int)(Math.random() * (saleTransactions.size()- 0));
+        SaleTransactionEntity selected = saleTransactions.get(randomSaleTransaction);
+        return selected;
+        
+    } 
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<DriverEntity>> constraintViolations) {
         String msg = "Input data validation error!:";
@@ -142,5 +153,7 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
 
         return msg;
     }
+    
+    
 
 }

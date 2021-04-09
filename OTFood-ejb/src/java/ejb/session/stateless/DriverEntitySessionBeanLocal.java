@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.DriverEntity;
+import entity.SaleTransactionEntity;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.DriverExistsException;
@@ -32,5 +33,7 @@ public interface DriverEntitySessionBeanLocal {
     public boolean setDriverActiveToFalse(Long driverId) throws DriverNotFoundException;
 
     public void updateDriver(DriverEntity driver) throws UpdateDriverException, InputDataValidationException, DriverNotFoundException;
+
+    public SaleTransactionEntity retrieveOneSaleTransaction();
 
 }

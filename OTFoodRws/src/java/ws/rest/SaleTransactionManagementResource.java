@@ -5,6 +5,7 @@
  */
 package ws.rest;
 
+import ejb.session.stateless.DriverEntitySessionBeanLocal;
 import ejb.session.stateless.SaleTransactionEntitySessionBeanLocal;
 import ejb.session.stateless.StaffEntitySessionBeanLocal;
 import entity.ReviewEntity;
@@ -12,6 +13,8 @@ import entity.SaleTransactionEntity;
 import entity.SaleTransactionLineEntity;
 import entity.StaffEntity;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -36,6 +39,7 @@ public class SaleTransactionManagementResource {
     private final SaleTransactionEntitySessionBeanLocal saleTransactionEntitySessionBean;
     private final SessionBeanLookup sessionBeanLookUp;
     private final StaffEntitySessionBeanLocal staffEntitySessionBeanLocal;
+    private final DriverEntitySessionBeanLocal driverEntitySessionBeanLocal;
     
     @Context
     private UriInfo context;
@@ -44,6 +48,7 @@ public class SaleTransactionManagementResource {
         sessionBeanLookUp = new SessionBeanLookup();
         saleTransactionEntitySessionBean = sessionBeanLookUp.saleTransactionEntitySessionBean;
         staffEntitySessionBeanLocal = sessionBeanLookUp.staffEntitySessionBean;
+        driverEntitySessionBeanLocal = sessionBeanLookUp.driverEntitySessionBean;
     }
 
     @Path("retrieveAllSaleTransactions")
@@ -75,6 +80,26 @@ public class SaleTransactionManagementResource {
         } catch (Exception ex) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
+    }
+    
+    @Path("retrieveOneSaleTransaction")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retreiveSaleTransaction() {
+        //try {
+            //StaffEntity staff = staffEntitySessionBeanLocal.staffLogin(username, password);
+            SaleTransactionEntity retrievedSaleTransaction = driverEntitySessionBeanLocal.retrieveOneSaleTransaction();
+            retrievedSaleTransaction.getUser().getSaleTransaction().clear();
+            retrievedSaleTransaction.getUser().getReviews().clear();
+            retrievedSaleTransaction.getUser().getAddress().clear();
+            retrievedSaleTransaction.getUser().getCreditCard().clear();
+            for (SaleTransactionLineEntity stle: retrievedSaleTransaction.getSaleTransactionLineItemEntities()) {
+                stle.getMeal().getReviews().clear();
+            }
+            return Response.status(Response.Status.OK).entity(retrievedSaleTransaction).build();
+        //} catch (InvalidLoginCredentialException ex) {
+            //return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+        //}
     }
     
 }
