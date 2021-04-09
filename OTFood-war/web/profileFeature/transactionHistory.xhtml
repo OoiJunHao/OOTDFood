@@ -21,7 +21,7 @@
             <div class="sidebar-menu">
                 <div class="user-side-brief">
                     <div id="avatar-placeholder">
-                        <p:graphicImage class="user-side-brief-avatar" url="/uploadedFiles/#{profileManagedBean.profile.profilePic}.jpg" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
+                        <p:graphicImage class="user-side-brief-avatar" url="/uploadedFiles/avatars/#{profileManagedBean.profile.profilePic}" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
                         <p:graphicImage style="height: auto; width: 50;" library="images" name="userDefault.png" rendered="#{profileManagedBean.profile.profilePic.length() == 0}"/>
                     </div>
 
@@ -121,7 +121,7 @@
 
                     <div class="product">
                         <div class="product-list-item p-p-5">
-                            <p:graphicImage url="/uploadedFiles/#{lineItem.meal.image}.jpg" style="width: 70px; height: 70px; float:left; margin-right: 10px"/>
+                            <p:graphicImage url="/uploadedFiles/bentos/#{lineItem.meal.image}.jpg" style="width: 70px; height: 70px; float:left; margin-right: 10px"/>
                             <div class="product-list-detail" >
                                 <div class="product-name"><b>#{lineItem.meal.name}</b></div>
                                 <div class="product-description">Quantity: #{lineItem.quantity}</div>

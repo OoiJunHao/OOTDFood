@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SaleTransactionReport" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7a5c9b49-9dc5-422a-ac69-e92cf61ef530">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="OOTDFood"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="STARTDATE" class="java.sql.Date"/>
+	<parameter name="ENDDATE" class="java.sql.Date"/>
+	<queryString>
+		<![CDATA[SELECT *
+FROM saletransactionentity 
+	INNER JOIN otuserentity ON 
+	 saletransactionentity.USER_USERID = otuserentity.USERID
+	 WHERE 
+	 saletransactionentity.TRANSACTIONDATETIME >= $P{STARTDATE}
+	 AND saletransactionentity.TRANSACTIONDATETIME <= $P{ENDDATE} 
+	ORDER BY saletransactionentity. TRANSACTIONDATETIME]]>
+	</queryString>
+	<field name="SALETRANSACTIONID" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="SALETRANSACTIONID"/>
+		<property name="com.jaspersoft.studio.field.label" value="SALETRANSACTIONID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="saletransactionentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DELIVERYDATETIME" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="DELIVERYDATETIME"/>
+		<property name="com.jaspersoft.studio.field.label" value="DELIVERYDATETIME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="saletransactionentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DELIVERYSTATUS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DELIVERYSTATUS"/>
+		<property name="com.jaspersoft.studio.field.label" value="DELIVERYSTATUS"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="saletransactionentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TOTALAMOUNT" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TOTALAMOUNT"/>
+		<property name="com.jaspersoft.studio.field.label" value="TOTALAMOUNT"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="saletransactionentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TOTALLINEITEM" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="TOTALLINEITEM"/>
+		<property name="com.jaspersoft.studio.field.label" value="TOTALLINEITEM"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="saletransactionentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TOTALQUANTITY" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="TOTALQUANTITY"/>
+		<property name="com.jaspersoft.studio.field.label" value="TOTALQUANTITY"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="saletransactionentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRANSACTIONDATETIME" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="TRANSACTIONDATETIME"/>
+		<property name="com.jaspersoft.studio.field.label" value="TRANSACTIONDATETIME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="saletransactionentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="VOIDREFUND" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="VOIDREFUND"/>
+		<property name="com.jaspersoft.studio.field.label" value="VOIDREFUND"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="saletransactionentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ADDRESS_ADDRESSID" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="ADDRESS_ADDRESSID"/>
+		<property name="com.jaspersoft.studio.field.label" value="ADDRESS_ADDRESSID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="saletransactionentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CREDITCARDENTITY_CREDITCARDID" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="CREDITCARDENTITY_CREDITCARDID"/>
+		<property name="com.jaspersoft.studio.field.label" value="CREDITCARDENTITY_CREDITCARDID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="saletransactionentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DRIVER_DRIVERID" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="DRIVER_DRIVERID"/>
+		<property name="com.jaspersoft.studio.field.label" value="DRIVER_DRIVERID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="saletransactionentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PROMOCODE_PROMOCODEID" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="PROMOCODE_PROMOCODEID"/>
+		<property name="com.jaspersoft.studio.field.label" value="PROMOCODE_PROMOCODEID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="saletransactionentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="USER_USERID" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="USER_USERID"/>
+		<property name="com.jaspersoft.studio.field.label" value="USER_USERID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="saletransactionentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="USERID" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="USERID"/>
+		<property name="com.jaspersoft.studio.field.label" value="USERID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="otuserentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CONTACTNUM" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="CONTACTNUM"/>
+		<property name="com.jaspersoft.studio.field.label" value="CONTACTNUM"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="otuserentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DOB" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="DOB"/>
+		<property name="com.jaspersoft.studio.field.label" value="DOB"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="otuserentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="EMAIL" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="EMAIL"/>
+		<property name="com.jaspersoft.studio.field.label" value="EMAIL"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="otuserentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FIRSTNAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FIRSTNAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="FIRSTNAME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="otuserentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="LASTNAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LASTNAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="LASTNAME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="otuserentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PASSWORD" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PASSWORD"/>
+		<property name="com.jaspersoft.studio.field.label" value="PASSWORD"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="otuserentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PROFILEPIC" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PROFILEPIC"/>
+		<property name="com.jaspersoft.studio.field.label" value="PROFILEPIC"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="otuserentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="SALT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SALT"/>
+		<property name="com.jaspersoft.studio.field.label" value="SALT"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="otuserentity"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="102" splitType="Stretch">
+			<image>
+				<reportElement x="691" y="0" width="105" height="102" uuid="651ccc4b-e999-40fe-bcbf-1f25bcfc98af"/>
+				<imageExpression><![CDATA["C:/glassfish-5.1.0-uploadedfiles/uploadedFiles/logos/ootd_logo.png"]]></imageExpression>
+			</image>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="680" height="66" forecolor="#8C8C8C" backcolor="#4A4A4A" uuid="d8d9e644-3a32-491d-97cb-a277aff17133"/>
+				<staticText>
+					<reportElement style="Title" x="0" y="0" width="530" height="66" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="27d8f6ee-f0a9-44f6-a160-1763c3b00f30"/>
+					<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Times New Roman" isBold="false"/>
+					</textElement>
+					<text><![CDATA[OOTDFood Sales Report]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="70" width="679" height="32" forecolor="#000000" backcolor="#FFAA00" uuid="b0c895f6-6dbd-477d-9858-9ad66af087e1"/>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="5" width="100" height="30" uuid="2a52ac84-68dc-4bb0-8d15-9e3d4c0f16da"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sale Transaction ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="5" width="100" height="30" uuid="7466b7f6-ec56-4c66-9b22-ffeb138d707a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Delivery Date Time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="5" width="100" height="30" uuid="968b2415-d3f5-4017-a2f3-31c9826c8ddc"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Transaction Date Time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="5" width="70" height="30" uuid="97cbf4a9-97a3-4779-883f-d9b509253a90"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Quantity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="5" width="70" height="30" uuid="1e38e36a-9cd1-4051-b1d8-600f802c7b43"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Line Items]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="5" width="70" height="30" uuid="1867105e-b3d5-4748-9e78-dd45f38bd1e0"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Amount]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="510" y="5" width="70" height="30" uuid="d95b9c2e-f23f-4b7c-8915-fc061ea2c30e"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Void Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="580" y="5" width="216" height="30" uuid="b51340e0-1987-4237-ba33-610b7e5eedb9"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[OTUser Email]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<frame>
+				<reportElement style="Row" mode="Opaque" x="0" y="0" width="797" height="30" uuid="34a2ae4b-4055-476b-8676-d499f6af510b"/>
+				<textField>
+					<reportElement x="0" y="0" width="100" height="30" uuid="851fb16f-bf3d-4a1e-81c9-db8642071d21"/>
+					<textFieldExpression><![CDATA[$F{SALETRANSACTIONID}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="200" y="0" width="100" height="30" uuid="0e423f82-f9c9-45a5-ac87-d564e3325467"/>
+					<textFieldExpression><![CDATA[$F{DELIVERYDATETIME}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="100" y="0" width="100" height="30" uuid="a8c54825-93d7-437d-83c6-bb6f72b24e8a"/>
+					<textFieldExpression><![CDATA[$F{TRANSACTIONDATETIME}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="300" y="0" width="70" height="30" uuid="22ef59ff-3b92-4998-9e4f-26dbd31d6410"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{TOTALQUANTITY}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="370" y="0" width="70" height="30" uuid="cc3e0516-4b64-43fa-b99b-868e6a420d19"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{TOTALLINEITEM}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="440" y="0" width="70" height="30" uuid="da886983-f61c-45b8-9a90-a66a2d32fcbf"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA["$"+$F{TOTALAMOUNT}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="510" y="0" width="70" height="30" uuid="575f85ab-93a1-4132-8c21-f5ebfad43f95"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{VOIDREFUND} ==  true? "Voided" : "NA"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="580" y="0" width="216" height="30" uuid="c72b0a70-7989-4bcd-a8cb-db6c789f1e00"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{EMAIL}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="7" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="501ac6c4-e9d4-43cb-ba6b-7f2f44394cf3"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="802" height="25" forecolor="#D0B48E" backcolor="#4A4A4A" uuid="ffb10ec8-0371-4545-8eaa-96d62ad3cec0"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="757" y="3" width="40" height="20" forecolor="#FFFFFF" uuid="b5521ea6-5f36-4864-856f-58d0bcd011f2"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="677" y="3" width="80" height="20" forecolor="#FFFFFF" uuid="e625ea3c-1741-4cfe-81cf-fbbdd00162c8"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="0" width="298" height="25" forecolor="#FFFFFF" uuid="48d551e4-e804-4d09-848f-417128979062"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman"/>
+					</textElement>
+					<text><![CDATA[ © 2021 IS3106 OOTDAdmin. All rights reserved.]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+	<noData>
+		<band height="202">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="10" width="680" height="66" forecolor="#8C8C8C" backcolor="#4A4A4A" uuid="fbbea1ba-6df9-49b9-9493-353d823720f8"/>
+				<staticText>
+					<reportElement style="Title" x="0" y="0" width="530" height="66" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="53dbad7a-c2e0-4625-8559-67877cf7e25c"/>
+					<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Times New Roman" isBold="false"/>
+					</textElement>
+					<text><![CDATA[OOTDFood Sales Report]]></text>
+				</staticText>
+			</frame>
+			<image>
+				<reportElement x="691" y="10" width="105" height="102" uuid="5e9f6c60-d507-4402-82ec-a8ff318739b5"/>
+				<imageExpression><![CDATA["C:/glassfish-5.1.0-uploadedfiles/uploadedFiles/logos/ootd_logo.png"]]></imageExpression>
+			</image>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="80" width="679" height="32" forecolor="#000000" backcolor="#FFAA00" uuid="1d60d7b5-fff7-4857-ab03-89ba45e103fa"/>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="176" width="802" height="25" forecolor="#D0B48E" backcolor="#4A4A4A" uuid="69b18521-6a81-4896-b1b5-8f74d94e329b"/>
+				<staticText>
+					<reportElement x="0" y="0" width="298" height="25" forecolor="#FFFFFF" uuid="fbb9fbf5-ff6a-4225-9587-d8ca8b8c4d15"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman"/>
+					</textElement>
+					<text><![CDATA[ © 2021 IS3106 OOTDAdmin. All rights reserved.]]></text>
+				</staticText>
+			</frame>
+			<staticText>
+				<reportElement x="0" y="142" width="796" height="30" uuid="be3e3480-e482-4b52-b0f5-fc092dd21e92"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[There are no sales transactions for the selected time period]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

@@ -7,23 +7,32 @@ package ws.rest;
 
 import ejb.session.stateless.SaleTransactionEntitySessionBeanLocal;
 import ejb.session.stateless.StaffEntitySessionBeanLocal;
-import entity.ReviewEntity;
 import entity.SaleTransactionEntity;
 import entity.SaleTransactionLineEntity;
 import entity.StaffEntity;
+    import java.sql.SQLException;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PUT;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperRunManager;
 import util.exception.InvalidLoginCredentialException;
+import ws.datamodel.ReportReq;
 
 /**
  * REST Web Service
@@ -76,5 +85,41 @@ public class SaleTransactionManagementResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
+    
+    @Path("generateReport")
+    @POST
+    @Produces(MediaType.MULTIPART_FORM_DATA)
+    public Response generateReport(ReportReq reportReq) {
+           try {
+
+            System.out.println("PRINTING REPORT------------------------->   ");
+            HashMap parameters = new HashMap();
+            /*
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            Date date = formatter.parse("01-12-2020 23:59:00");
+            Date date2 = formatter.parse("31-12-2020 23:59:00");
+            Timestamp ts =new Timestamp(date.getTime());  */
+            parameters.put("STARTDATE", reportReq.getStart());
+            parameters.put("ENDDATE", reportReq.getEnd());
+
+            JasperRunManager.runReportToPdfFile("C:/glassfish-5.1.0-uploadedfiles/uploadedFiles/report/SaleTransactionReport.jasper","C:/glassfish-5.1.0-uploadedfiles/uploadedFiles/report/report.pdf", parameters, getOTFoodDataSource().getConnection());
+            return Response.status(Response.Status.OK).build();
+        } catch (JRException ex) {
+            ex.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        } catch (NamingException ex) {
+            Logger.getLogger(SaleTransactionManagementResource.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
+    private DataSource getOTFoodDataSource() throws NamingException {
+        javax.naming.Context c = new InitialContext();
+        return (DataSource) c.lookup("java:comp/env/OTFoodDataSource");
+    }
+
     
 }
