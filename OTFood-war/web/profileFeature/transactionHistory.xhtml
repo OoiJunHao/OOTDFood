@@ -20,13 +20,20 @@
 
             <div class="sidebar-menu">
                 <div class="user-side-brief">
-                    <div id="avatar-placeholder">
-                        <p:graphicImage class="user-side-brief-avatar" url="/uploadedFiles/avatars/#{profileManagedBean.profile.profilePic}" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
-                        <p:graphicImage style="height: auto; width: 50;" library="images" name="userDefault.png" rendered="#{profileManagedBean.profile.profilePic.length() == 0}"/>
+                    <div class="user-side-brief-avatar">
+                        <div class="my-avatar">
+                            <div class="my-avatar-placeholder">
+                                <p:graphicImage class="my-img" url="/uploadedFiles/avatars/#{profileManagedBean.profile.profilePic}" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
+                                <p:graphicImage style="my-img" library="images" name="userDefault.png" rendered="#{profileManagedBean.profile.profilePic.length() == 0}"/>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="user-side-description">
-                        <h:outputText value="#{profileManagedBean.profile.firstname} #{profileManagedBean.profile.lastName}"/>
+                        <div class="user-side-name">
+                            <h:outputText value="#{profileManagedBean.profile.firstname} #{profileManagedBean.profile.lastName}"/>
+                        </div>
                     </div>
                 </div>
 
@@ -197,10 +204,10 @@
                         </p:column>
                     </p:row>
                 </p:panelGrid>
-                <p:commandButton value="Generate Receipt" style="margin-top: 10px; width: 40%; margin-left: 30%; margin-right: 30%" 
-                                 action="#{transactionInvoiceManagedBean.generateReport()}" ajax="false" 
+                <p:commandButton value="Generate Receipt" style="margin-top: 10px; width: 40%; margin-left: 30%; margin-right: 30%"
+                                 action="#{transactionInvoiceManagedBean.generateReport()}" ajax="false"
                                  >
-                    <f:setPropertyActionListener value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.saleTransactionId}" target="#{transactionInvoiceManagedBean.selectedTransactionID}"/> 
+                    <f:setPropertyActionListener value="#{viewTransactionDetailManagedBean.selectedSaleTransaction.saleTransactionId}" target="#{transactionInvoiceManagedBean.selectedTransactionID}"/>
                 </p:commandButton>
             </p:dialog>
         </h:form>
