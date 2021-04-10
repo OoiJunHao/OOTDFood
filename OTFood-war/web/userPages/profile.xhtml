@@ -22,7 +22,7 @@
             <div class="sidebar-menu">
                 <div class="user-side-brief">
                     <div id="avatar-placeholder">
-                        <p:graphicImage class="user-side-brief-avatar" url="/uploadedFiles/#{profileManagedBean.profile.profilePic}.jpg" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
+                        <p:graphicImage class="user-side-brief-avatar" url="/uploadedFiles/avatars/#{profileManagedBean.profile.profilePic}" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
                         <p:graphicImage style="height: auto; width: 50;" library="images" name="userDefault.png" rendered="#{profileManagedBean.profile.profilePic.length() == 0}"/>
                     </div>
 
@@ -110,7 +110,7 @@
                                 <div class="profile-pic-uploader">
                                     <div class="profile-pic-uploader-avatar">
                                         <div class="profile-pic-uploader-placeholder">
-                                            <p:graphicImage url="/uploadedFiles/#{profileManagedBean.profile.profilePic}.jpg" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
+                                            <p:graphicImage class="profile-pic-uploader-placeholder" url="/uploadedFiles/avatars/#{profileManagedBean.profile.profilePic}" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
                                             <p:graphicImage style="height: auto; width: 90;" library="images" name="userDefault.png" rendered="#{profileManagedBean.profile.profilePic.length() == 0}"/>
 
                                         </div>
@@ -118,7 +118,7 @@
                                     </div>
 
                                     <div class="profile-pic-uploader-button">
-                                        <p:fileUpload listener="#{profileManagedBean.handleFileUpload}" mode="advanced" auto="true" sizeLimit="100000" update="formFileUpload" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/><br/>
+                                        <p:fileUpload listener="#{profileManagedBean.handleFileUpload}" mode="advanced" auto="true" sizeLimit="1000000" update="formFileUpload" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/><br/>
                                     </div>
 
                                     <div class="profile-pic-uploader-description">

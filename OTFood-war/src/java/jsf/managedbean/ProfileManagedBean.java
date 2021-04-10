@@ -109,7 +109,7 @@ public class ProfileManagedBean implements Serializable {
     public void handleFileUpload(FileUploadEvent event) throws InputDataValidationException, UpdateUserException, UserNotFoundException {
 
         try {
-            String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") + event.getFile().getFileName();
+            String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") +"avatars"  + System.getProperty("file.separator") + event.getFile().getFileName();
 
             System.err.println("********** Demo03ManagedBean.handleFileUpload(): File name: " + event.getFile().getFileName());
             System.err.println("********** Demo03ManagedBean.handleFileUpload(): newFilePath: " + newFilePath);
@@ -137,7 +137,7 @@ public class ProfileManagedBean implements Serializable {
             fileOutputStream.close();
             inputStream.close();
             String newFile = event.getFile().getFileName();
-            profile.setProfilePic(event.getFile().getFileName().substring(0, newFile.length() - 4));
+            profile.setProfilePic(event.getFile().getFileName());
             oTUserEntitySessionBeanLocal.updateUserDetails(profile);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "File uploaded successfully", ""));
         } catch (IOException ex) {

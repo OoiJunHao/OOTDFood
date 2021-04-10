@@ -12,6 +12,7 @@ import util.exception.IngredientEntityExistsException;
 import util.exception.IngredientEntityNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
+import util.exception.UpdateIngredientException;
 
 @Local
 public interface IngredientEntitySessionBeanLocal {
@@ -33,5 +34,7 @@ public interface IngredientEntitySessionBeanLocal {
     public List<IngredientEntity> retrieveListOfAddons();
 
     public List<IngredientEntity> retrieveListOfSauces();
+
+    public void updateIngredient(IngredientEntity ingred) throws InputDataValidationException, IngredientEntityNotFoundException, UpdateIngredientException;
 
 }

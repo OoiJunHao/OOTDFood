@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
@@ -26,8 +28,10 @@ import util.exception.DriverExistsException;
 import util.exception.DriverNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.NoSaleTransactionFoundException;
+import util.exception.InvalidLoginCredentialException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateDriverException;
+import util.security.CryptographicHelper;
 
 /**
  *
@@ -95,6 +99,18 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
     }
 
     @Override
+    public DriverEntity retrieveDriverByUsername(String username) throws DriverNotFoundException {
+        Query query = em.createQuery("SELECT d FROM DriverEntity d WHERE d.username = :username");
+        query.setParameter("username", username);
+
+        try {
+            return (DriverEntity) query.getSingleResult();
+        } catch (NoResultException | NonUniqueResultException ex) {
+            throw new DriverNotFoundException("Driver Username" + username + " does not exist");
+        }
+    }
+
+    @Override
     public List<DriverEntity> retrieveDriverByName(String driverName) {
         Query query = em.createQuery("SELECT d FROM DriverEntity d WHERE (d.firstname LIKE '%:driverName%') OR (d.lastName LIKE '%:driverName%')");
         query.setParameter("driverName", driverName);
@@ -126,6 +142,51 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
             }
         } else {
             throw new DriverNotFoundException("DriverID not provided");
+        }
+    }
+
+    @Override
+    public DriverEntity updateDriverIonic(DriverEntity driver) throws UpdateDriverException, InputDataValidationException, DriverNotFoundException {
+        if (driver != null & driver.getDriverId() != null) {
+            System.out.println(driver);
+            Set<ConstraintViolation<DriverEntity>> constraintViolations = validator.validate(driver);
+
+            if (constraintViolations.isEmpty()) {
+
+                DriverEntity driverToUpdate = retrieveDriverById(driver.getDriverId());
+
+                if (driverToUpdate.getUsername().equals(driver.getUsername())) {
+                    driverToUpdate.setFirstname(driver.getFirstname());
+                    driverToUpdate.setLastName(driver.getLastName());
+                    driverToUpdate.setProfilePicture(driver.getProfilePicture());
+                    driverToUpdate.setAge(driver.getAge());
+                    driverToUpdate.setActive(driver.isActive());
+                    return driverToUpdate;
+                } else {
+                    throw new UpdateDriverException("Username of driver to be updated does not exist");
+                }
+            } else {
+                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+
+            }
+        } else {
+            throw new DriverNotFoundException("DriverID not provided");
+        }
+    }
+
+    @Override
+    public DriverEntity driverLogin(String username, String password) throws InvalidLoginCredentialException {
+
+        try {
+            DriverEntity driver = retrieveDriverByUsername(username);
+            String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + driver.getSalt()));
+            if (driver.getPassword().equals(passwordHash)) {
+                return driver;
+            } else {
+                throw new InvalidLoginCredentialException("Username does not exist or invalid password");
+            }
+        } catch (DriverNotFoundException ex) {
+            throw new InvalidLoginCredentialException("Username does not exist or invalid password");
         }
     }
 

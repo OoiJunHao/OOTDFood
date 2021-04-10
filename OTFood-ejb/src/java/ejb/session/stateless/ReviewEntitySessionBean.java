@@ -5,15 +5,12 @@
  */
 package ejb.session.stateless;
 
-import entity.AddressEntity;
 import entity.MealEntity;
 import entity.OTUserEntity;
 import entity.ReviewEntity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -33,7 +30,6 @@ import util.exception.NoReviewFoundException;
 import util.exception.ReviewExistException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateReviewException;
-import util.exception.UserExistException;
 import util.exception.UserNotFoundException;
 
 /**

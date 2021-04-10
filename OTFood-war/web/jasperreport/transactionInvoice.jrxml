@@ -457,7 +457,7 @@ WHERE
 			</textField>
 			<image>
 				<reportElement x="0" y="0" width="77" height="70" uuid="0890ef8c-fa80-45a0-93e1-6adda14eec2d"/>
-				<imageExpression><![CDATA["C:/Users/ooike/Documents/NUS/Y2S2/IS3106/Project/ootdLogo7.png"]]></imageExpression>
+				<imageExpression><![CDATA["C:/glassfish-5.1.0-uploadedfiles/uploadedFiles/logos/ootd_logo.png"]]></imageExpression>
 			</image>
 		</band>
 	</title>
