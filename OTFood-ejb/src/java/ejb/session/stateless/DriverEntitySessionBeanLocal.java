@@ -9,9 +9,11 @@ import entity.DriverEntity;
 import entity.SaleTransactionEntity;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.DriverAlreadyFoundException;
 import util.exception.DriverExistsException;
 import util.exception.DriverNotFoundException;
 import util.exception.InputDataValidationException;
+import util.exception.NoSaleTransactionFoundException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateDriverException;
 
@@ -35,5 +37,7 @@ public interface DriverEntitySessionBeanLocal {
     public void updateDriver(DriverEntity driver) throws UpdateDriverException, InputDataValidationException, DriverNotFoundException;
 
     public SaleTransactionEntity retrieveOneSaleTransaction();
+
+    public void setDriverToSaleTransaction(long driverId, long saleTransactionId, long customerId) throws DriverNotFoundException, NoSaleTransactionFoundException, DriverAlreadyFoundException;
 
 }

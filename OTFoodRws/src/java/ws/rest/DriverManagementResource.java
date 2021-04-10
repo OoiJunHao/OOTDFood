@@ -28,9 +28,11 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import util.exception.DriverAlreadyFoundException;
 import util.exception.DriverNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.NoSaleTransactionFoundException;
 import util.exception.UpdateDriverException;
 import ws.datamodel.UpdateDriverReq;
 
@@ -129,6 +131,23 @@ public class DriverManagementResource {
         } catch (DriverNotFoundException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
         } catch (Exception ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+    
+    
+    @Path("setSaleToDriver/{driverId}/{customerId}/{saleTransactionId}")
+    @GET
+    public Response updateDriverAndSale(@PathParam("driverId") long driverId, @PathParam("customerId")
+            long customerId, @PathParam("saleTransactionId") long saleTransactionId) {
+        try {
+            driverEntitySessionBean.setDriverToSaleTransaction(driverId, customerId, saleTransactionId);
+            return Response.status(Response.Status.OK).build();
+        } catch (DriverNotFoundException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+        } catch (NoSaleTransactionFoundException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+        } catch (DriverAlreadyFoundException ex) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
