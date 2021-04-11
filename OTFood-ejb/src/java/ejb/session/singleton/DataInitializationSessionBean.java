@@ -673,13 +673,11 @@ public class DataInitializationSessionBean {
             faqSessionBean.createNewFaq(new FaqEntity("Can I visit your shop?", "Currently we are a home grown business, hence we do not have an outlet store. We do appreciate your continuous support to allow us to achieve the dream of opening our own store", "Product"));
 
             //Create Staff
-            staffEntitySessionBean.createNewStaff(new StaffEntity("Ong", "Bik Jeun", "Boss", "password", "", StaffTypeEnum.ADMIN));
-            staffEntitySessionBean.createNewStaff(new StaffEntity("Benny", "Phoe", "Employee", "password", "", StaffTypeEnum.EMPLOYEE));
+            staffEntitySessionBean.createNewStaff(new StaffEntity("Ong", "Bik Jeun", "Boss", "password", StaffTypeEnum.ADMIN));
+            staffEntitySessionBean.createNewStaff(new StaffEntity("Benny", "Phoe", "Employee", "password", StaffTypeEnum.EMPLOYEE));
 
             System.out.println("Data Init done!");
-        } catch (UserExistException | UnknownPersistenceException | InputDataValidationException | ReviewExistException | UserNotFoundException | FaqExistException | CreateNewSaleTransactionException | DriverExistsException | IngredientEntityExistsException | AddressExistException | CreditCardExistException | PromoCodeExistException | MealExistsException | StaffUsernameExistException | IngredientEntityNotFoundException | ParseException ex) {
-            Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DriverNotFoundException ex) {
+        } catch (UserExistException | UnknownPersistenceException | InputDataValidationException | ReviewExistException | UserNotFoundException | FaqExistException | CreateNewSaleTransactionException | DriverExistsException | IngredientEntityExistsException | AddressExistException | CreditCardExistException | PromoCodeExistException | MealExistsException | StaffUsernameExistException | IngredientEntityNotFoundException | ParseException | DriverNotFoundException ex) {
             Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
