@@ -30,11 +30,24 @@
     display: flex;
     padding: 15px 0;
     border-bottom: 1px solid #efefef;
-    width: 100%;
+}
+
+.user-side-brief .user-side-brief-avatar .my-avatar  {
+    width: 50px;
     height: 50px;
 }
 
-.user-side-brief-avatar #avatar-placeholder {
+.my-avatar {
+    display: inline-block;
+    /*    width: 1.875rem;
+        height: 1.875rem;*/
+    position: relative;
+    border-radius: 50%;
+    border: .0625rem solid rgba(0,0,0,.09);
+    box-sizing: border-box;
+}
+
+.my-avatar-placeholder {
     width: 100%;
     position: relative;
     padding-top: 100%;
@@ -44,18 +57,35 @@
 }
 
 .user-side-description {
+    -webkit-box-flex: 1;
+    flex: 1;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    justify-content: center;
+    padding-left: 15px;
+    overflow: hidden;
+}
+
+.user-side-name {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
     min-height: 1rem;
     font-weight: 600;
     margin-bottom: 5px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-left: 15px;
-    overflow: hidden;
+}
+
+.my-img {
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
 .user-side-menu {

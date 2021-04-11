@@ -21,13 +21,20 @@
 
             <div class="sidebar-menu">
                 <div class="user-side-brief">
-                    <div id="avatar-placeholder">
-                        <p:graphicImage class="user-side-brief-avatar" url="/uploadedFiles/avatars/#{profileManagedBean.profile.profilePic}" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
-                        <p:graphicImage style="height: auto; width: 50;" library="images" name="userDefault.png" rendered="#{profileManagedBean.profile.profilePic.length() == 0}"/>
+                    <div class="user-side-brief-avatar">
+                        <div class="my-avatar">
+                            <div class="my-avatar-placeholder">
+                                <p:graphicImage class="my-img" url="/uploadedFiles/avatars/#{profileManagedBean.profile.profilePic}" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
+                                <p:graphicImage style="my-img" library="images" name="userDefault.png" rendered="#{profileManagedBean.profile.profilePic.length() == 0}"/>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="user-side-description">
-                        <h:outputText value="#{profileManagedBean.profile.firstname} #{profileManagedBean.profile.lastName}"/>
+                        <div class="user-side-name">
+                            <h:outputText value="#{profileManagedBean.profile.firstname} #{profileManagedBean.profile.lastName}"/>
+                        </div>
                     </div>
                 </div>
 
