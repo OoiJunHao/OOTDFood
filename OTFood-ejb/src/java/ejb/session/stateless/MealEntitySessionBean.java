@@ -100,11 +100,11 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
     
     // TO include those that are not available as this is used by RESTFul for the admin side
     @Override        
-    public List<MealEntity> retrieveAllMealsSortedByAvailability() {
-        Query query = em.createQuery("SELECT m FROM MealEntity m");
-        List<MealEntity> mealEntities = query.getResultList();
-        Collections.sort(mealEntities, new SortByAvailability());
-        return mealEntities;
+    public List<BentoEntity> retrieveAllBentosSortedByAvailability() {
+        Query query = em.createQuery("SELECT b FROM BentoEntity b");
+        List<BentoEntity> bentoEntities = query.getResultList();
+        Collections.sort(bentoEntities, new SortByAvailability());
+        return bentoEntities;
     }
 
     
@@ -170,7 +170,7 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
             }
             em.remove(mealToBeDeleted);
         } else {
-            throw new MealNotFoundException("the meal to be deleted contains sale transaction line items associated with it!");
+            throw new MealNotFoundException("You are unable to delete this meal as it contains sale transaction line items that are associated with it!");
         }
     }
     @Override

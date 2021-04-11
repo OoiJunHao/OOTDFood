@@ -75,7 +75,7 @@ public class BentoResource {
             @QueryParam("password") String password) {
         try {
             StaffEntity staffEntity = staffEntitySessionBeanLocal.staffLogin(username, password);
-            List<MealEntity> allMeals = mealEntitySessionBeanLocal.retrieveAllMealsSortedByAvailability();
+            List<BentoEntity> allMeals = mealEntitySessionBeanLocal.retrieveAllBentosSortedByAvailability();
 
             for (MealEntity meal : allMeals) {
                 for (ReviewEntity review : meal.getReviews()) {
@@ -84,7 +84,7 @@ public class BentoResource {
                 }
             }
 
-            GenericEntity<List<MealEntity>> genericEntity = new GenericEntity<List<MealEntity>>(allMeals) {
+            GenericEntity<List<BentoEntity>> genericEntity = new GenericEntity<List<BentoEntity>>(allMeals) {
             };
 
             return Response.status(Status.OK).entity(genericEntity).build();
