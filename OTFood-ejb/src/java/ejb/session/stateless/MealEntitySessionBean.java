@@ -148,10 +148,10 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
     }
 
     @Override
-    public List<MealEntity> retrieveTop5MealEntityByRating() {
+    public List<MealEntity> retrieveTop5MealEntityByRating() { // will just give 6 because of the layout of index.html
         List<MealEntity> sortedList = sortMealEntityByRating();
         List<MealEntity> top5Meals = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             top5Meals.add(sortedList.get(i));
         }
         return top5Meals;

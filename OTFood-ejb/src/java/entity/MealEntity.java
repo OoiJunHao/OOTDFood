@@ -20,6 +20,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -49,10 +50,11 @@ public class MealEntity implements Serializable {
     @NotNull
     @Min(0)
     private Integer calorie;
-    @Min(0)
-    @Max(5)
     @NotNull
-    private Integer averageRating;
+    @Column(nullable = false, precision = 11, scale = 2)
+    @DecimalMin("0.00")
+    @DecimalMax("5.00")
+    private BigDecimal averageRating;
     @Lob
     @Column(nullable = false)
     @Size(min = 0)
@@ -88,7 +90,7 @@ public class MealEntity implements Serializable {
         this.price = price;
         this.description = description;
         this.calorie = calorie;
-        this.averageRating = 5;
+        this.averageRating = BigDecimal.valueOf(0);
         this.name = name;
         this.image = image;
         this.categories = inputCategories;
@@ -158,11 +160,11 @@ public class MealEntity implements Serializable {
         this.mealId = mealId;
     }
 
-    public Integer getAverageRating() {
+    public BigDecimal getAverageRating() {
         return averageRating;
     }
 
-    public void setAverageRating(Integer averageRating) {
+    public void setAverageRating(BigDecimal averageRating) {
         this.averageRating = averageRating;
     }
 

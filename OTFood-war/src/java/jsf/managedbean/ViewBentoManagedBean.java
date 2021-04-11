@@ -3,10 +3,12 @@ package jsf.managedbean;
 import ejb.session.stateless.MealEntitySessionBeanLocal;
 import ejb.session.stateless.ReviewEntitySessionBeanLocal;
 import entity.BentoEntity;
+import entity.MealEntity;
 import entity.OTUserEntity;
 import entity.ReviewEntity;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -43,7 +45,7 @@ public class ViewBentoManagedBean implements Serializable {
 
     @EJB
     private MealEntitySessionBeanLocal mealEntitySessionBeanLocal;
-    
+
     @Inject
     private cartManagedBean cartManagedBean;
 
@@ -53,9 +55,9 @@ public class ViewBentoManagedBean implements Serializable {
     private String selectedCategory;
     private BentoEntity selectedBento;
     private int selectedBentoQuantity;
-    
+
     private List<ReviewEntity> currentBentoReviews;
-    
+
     private int rating;
     private String review;
 
@@ -89,36 +91,48 @@ public class ViewBentoManagedBean implements Serializable {
         setSelectedCategory(event.getTab().getTitle());
         System.out.println("current category " + getSelectedCategory());
         setListOfBentos(mealEntitySessionBeanLocal.retrieveBentosByCategory(currentTabId));
-        System.out.println("No of Bentos: " + this.listOfBentos.toString());   
+        System.out.println("No of Bentos: " + this.listOfBentos.toString());
     }
-    
-  
 
     public void getListOfBentosByCategory(AjaxBehaviorEvent event) {
         this.setListOfBentos(mealEntitySessionBeanLocal.retrieveBentosByCategory(getSelectedCategory()));
     }
-    
+
     public void addBentoToCart(ActionEvent event) {
         cartManagedBean.setAmtToCart(selectedBentoQuantity);
         cartManagedBean.addToCart(selectedBento);
         selectedBentoQuantity = 1;
         PrimeFaces.current().ajax().update("cartForm");
     }
-    
+
     public void addSingleBentoToCart(ActionEvent event) {
         BentoEntity selectedBento = (BentoEntity) event.getComponent().getAttributes().get("selected");
         cartManagedBean.setAmtToCart(1);
         cartManagedBean.addToCart(selectedBento);
         PrimeFaces.current().ajax().update("cartForm");
     }
-    
+
     public void loadBentoReviews() {
         currentBentoReviews = new ArrayList<>();
         selectedBento.getReviews().size();
         currentBentoReviews = selectedBento.getReviews();
+
+        class comp implements Comparator<ReviewEntity> {
+            @Override
+            public int compare(ReviewEntity o1, ReviewEntity o2) {
+                if (o1.getReviewDate().after(o2.getReviewDate())) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        }
+
+        this.currentBentoReviews.sort(new comp());
+
         System.out.println("reviews: " + currentBentoReviews);
     }
-    
+
     public void addReview(ActionEvent event) {
         try {
             ReviewEntity reviewToAdd = new ReviewEntity(this.rating, this.review, new Date());
@@ -131,8 +145,7 @@ public class ViewBentoManagedBean implements Serializable {
             System.out.println("CURRENTLTY ON ---> " + this.selectedBento.getName());
             System.out.println("HOW MANY REVIEWSS WTFF ---------> " + this.selectedBento.getReviews().size());
             System.out.println("HOW MANY REVIEWSS ---------> " + this.currentBentoReviews.size());
-            
-            
+
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Review successfully added!", null));
         } catch (ReviewExistException | UnknownPersistenceException | UserNotFoundException | InputDataValidationException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error has occured: " + ex.getMessage(), null));
@@ -140,6 +153,7 @@ public class ViewBentoManagedBean implements Serializable {
             Logger.getLogger(ViewBentoManagedBean.class.getName()).log(Level.SEVERE, null, ex);//will never hit this
         }
     }
+
     /**
      * @return the listOfBentos
      */

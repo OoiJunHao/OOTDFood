@@ -46,15 +46,16 @@ import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.enumeration.CategoryEnum;
+import util.enumeration.DeliveryStatusEnum;
 import util.enumeration.IngredientTypeEnum;
 import util.enumeration.PromoCodeTypeEnum;
 import util.enumeration.RegionEnum;
 import util.enumeration.StaffTypeEnum;
 import util.exception.AddressExistException;
-import util.exception.CardCreationException;
 import util.exception.CreateNewSaleTransactionException;
 import util.exception.CreditCardExistException;
 import util.exception.DriverExistsException;
+import util.exception.DriverNotFoundException;
 import util.exception.FaqExistException;
 import util.exception.IngredientEntityExistsException;
 import util.exception.IngredientEntityNotFoundException;
@@ -165,7 +166,7 @@ public class DataInitializationSessionBean {
             addresses.add(new AddressEntity(RegionEnum.NORTH, "32 Yishun Ave 6 #06-12", "758406"));
             addresses.add(new AddressEntity(RegionEnum.NORTH, "12 Sembawang St 12 #05-12", "680213"));
             for (int i = 0; i < addresses.size(); i++) {
-                addressEntitySessionBeanLocal.addAddressWithUserId(addresses.get(i), new Long((i%6)  + 1));
+                addressEntitySessionBeanLocal.addAddressWithUserId(addresses.get(i), new Long((i % 6) + 1));
             }
 
             // Create Credit Card
@@ -186,17 +187,17 @@ public class DataInitializationSessionBean {
             creditCards.add(new CreditCardEntity("MASTERCARD", "Jiyuu No Tsubasa", "5564270581725633", "01/22"));
             creditCards.add(new CreditCardEntity("MASTERCARD", "Lee Min Ho", "5169746527778249", "06/21"));
             for (int i = 0; i < creditCards.size(); i++) {
-                creditCardEntitySessionBeanLocal.createNewCreditCardForUser(creditCards.get(i), new Long((i%6)  + 1));
+                creditCardEntitySessionBeanLocal.createNewCreditCardForUser(creditCards.get(i), new Long((i % 6) + 1));
             }
 
             // Create Driver
             List<DriverEntity> drivers = new ArrayList<>();
-            drivers.add(new DriverEntity("Pieck", "Finger", 24, "aliabdal1999", "password", ""));
-            drivers.add(new DriverEntity("Eren", "Yaeger", 26, "attacktitan", "password", ""));
-            drivers.add(new DriverEntity("Mikasa", "Ackermann", 30, "mikasa", "password", ""));
-            drivers.add(new DriverEntity("Levi", "Ackermann", 41, "levistrauss", "password", ""));
-            drivers.add(new DriverEntity("Armin", "Arlet", 21, "armin", "password", ""));
-            drivers.add(new DriverEntity("Hannge", "Zoe", 26, "hannge", "password", ""));
+            drivers.add(new DriverEntity("Pieck", "Finger", 24, "aliabdal1999", "password", "")); //1
+            drivers.add(new DriverEntity("Eren", "Yaeger", 26, "attacktitan", "password", "")); //2
+            drivers.add(new DriverEntity("Mikasa", "Ackermann", 30, "mikasa", "password", "")); //3
+            drivers.add(new DriverEntity("Levi", "Ackermann", 41, "levistrauss", "password", "")); //4
+            drivers.add(new DriverEntity("Armin", "Arlet", 21, "armin", "password", "")); //5
+            drivers.add(new DriverEntity("Hannge", "Zoe", 26, "hannge", "password", "")); //6
             for (DriverEntity driver : drivers) {
                 driverEntitySessionBeanLocal.createNewDriver(driver);
             }
@@ -244,7 +245,7 @@ public class DataInitializationSessionBean {
             allIngredients.add(new IngredientEntity("Soft Boiled Egg", BigDecimal.valueOf(0.80), 45, IngredientTypeEnum.ADDON)); // 22
             allIngredients.add(new IngredientEntity("Sausage", BigDecimal.valueOf(1.00), 50, IngredientTypeEnum.ADDON)); // 23
             allIngredients.add(new IngredientEntity("Mushroom", BigDecimal.valueOf(1.00), 30, IngredientTypeEnum.ADDON)); //24
-            
+
             allIngredients.add(new IngredientEntity("Soy Sauce", BigDecimal.valueOf(0.20), 30, IngredientTypeEnum.SAUCE)); //25
             allIngredients.add(new IngredientEntity("Salmon", BigDecimal.valueOf(4.00), 270, IngredientTypeEnum.MEAT)); //26
             allIngredients.add(new IngredientEntity("Tuna", BigDecimal.valueOf(4.00), 270, IngredientTypeEnum.MEAT)); //27
@@ -257,7 +258,7 @@ public class DataInitializationSessionBean {
 
             // Create Meals
             List<MealEntity> bentoSets = new ArrayList<>();
-                 
+
             List<CategoryEnum> cat01 = new ArrayList<>();
             List<IngredientEntity> ing01 = new ArrayList<>();
             BentoEntity teriChickenBento = new BentoEntity("Teriyaki Chicken Bento with Home-Style Greens", BigDecimal.valueOf(8.00), "The timeless healthy classic that we all know and love", 450, "bento1", chickenList);
@@ -272,7 +273,7 @@ public class DataInitializationSessionBean {
             teriChickenBento.setCategories(cat01);
             teriChickenBento.setIngredients(ing01);
             bentoSets.add(teriChickenBento);
-            
+
             List<CategoryEnum> cat02 = new ArrayList<>();
             List<IngredientEntity> ing02 = new ArrayList<>();
             BentoEntity spicyChickenBento = new BentoEntity("Spicy Chicken Bento with Omelette and Brocolli", BigDecimal.valueOf(8.00), "Our widely acclaimed Spicy Chicken Bento! Soft Eggs and Crisp Asparagus!", 450, "bento2", chickenList);
@@ -287,7 +288,7 @@ public class DataInitializationSessionBean {
             spicyChickenBento.setCategories(cat02);
             spicyChickenBento.setIngredients(ing02);
             bentoSets.add(spicyChickenBento);
-            
+
             List<CategoryEnum> cat03 = new ArrayList<>();
             List<IngredientEntity> ing03 = new ArrayList<>();
             BentoEntity grillSalmonBento = new BentoEntity("Grilled Smoked Salmon Bento with Onsen Egg, Sauté Mushrooms", BigDecimal.valueOf(8.50), "Indulge in the umami of our 24hour Smoked Salmon, shipped directly from Hokkaido", 500, "bento3", fishList);
@@ -302,7 +303,7 @@ public class DataInitializationSessionBean {
             grillSalmonBento.setCategories(cat03);
             grillSalmonBento.setIngredients(ing03);
             bentoSets.add(grillSalmonBento);
-            
+
             List<CategoryEnum> cat04 = new ArrayList<>();
             List<IngredientEntity> ing04 = new ArrayList<>();
             BentoEntity chirashiDon = new BentoEntity("Chirashi Don", BigDecimal.valueOf(12.50), "Bless your soul after a long day of 'pls fix thx' with our soul-warming Chirashi Don. Generously topped with diced Fatty Tuna, Salmon, Tako(Octopus)) and Fish Roe", 500, "bento4", fishList);
@@ -318,7 +319,7 @@ public class DataInitializationSessionBean {
             chirashiDon.setCategories(cat04);
             chirashiDon.setIngredients(ing04);
             bentoSets.add(chirashiDon);
-            
+
             List<CategoryEnum> cat05 = new ArrayList<>();
             List<IngredientEntity> ing05 = new ArrayList<>();
             BentoEntity gingerPorkBento = new BentoEntity("Pork Shōgayaki (Ginger Pork) Bento with Soft-Boiled Egg, Pickled Lotus Root", BigDecimal.valueOf(9.00), "Seek Comfort in our Mirin-Glazed, Ginger Pork slices accompanied with cozy, warm rice.", 550, "bento5", pigList);
@@ -332,7 +333,7 @@ public class DataInitializationSessionBean {
             gingerPorkBento.setCategories(cat05);
             gingerPorkBento.setIngredients(ing05);
             bentoSets.add(gingerPorkBento);
-            
+
             List<CategoryEnum> cat06 = new ArrayList<>();
             List<IngredientEntity> ing06 = new ArrayList<>();
             BentoEntity saladBento = new BentoEntity("Japanese Style Salad", BigDecimal.valueOf(9.50), "Our Delicious yet Healthy, salad", 600, "bento1", sadList);
@@ -348,7 +349,7 @@ public class DataInitializationSessionBean {
             saladBento.setCategories(cat06);
             saladBento.setIngredients(ing06);
             bentoSets.add(saladBento);
-            
+
             List<CategoryEnum> cat07 = new ArrayList<>();
             List<IngredientEntity> ing07 = new ArrayList<>();
             BentoEntity spicyWagBento = new BentoEntity("Spicy Wagyu Beef Bento with Tamagoyaki and Avocado Salad", BigDecimal.valueOf(19.00), "Tatalise your tastebuds with our Melty Wagyu Beef, paired with a refreshing Avocado Salad, Topped with a soft, ASMR-esque Japanese style Omelette. Mmmmm...", 650, "bento5", cowList);
@@ -364,8 +365,7 @@ public class DataInitializationSessionBean {
             spicyWagBento.setCategories(cat07);
             spicyWagBento.setIngredients(ing07);
             bentoSets.add(spicyWagBento);
-            
-            
+
             List<CategoryEnum> cat08 = new ArrayList<>();
             List<IngredientEntity> ing08 = new ArrayList<>();
             BentoEntity surfAndTurfBento = new BentoEntity("Surf and Turf Bento", BigDecimal.valueOf(15.00), "Best of BOTH Land AND Sea! Juicy Teriyaki Chicken and Salmon!", 650, "bento5", cowList);
@@ -381,7 +381,7 @@ public class DataInitializationSessionBean {
             surfAndTurfBento.setCategories(cat08);
             surfAndTurfBento.setIngredients(ing08);
             bentoSets.add(surfAndTurfBento);
-            
+
             List<CategoryEnum> cat09 = new ArrayList<>();
             List<IngredientEntity> ing09 = new ArrayList<>();
             BentoEntity porkAndChickenBento = new BentoEntity("Oink n' Cuckoo Bento", BigDecimal.valueOf(15.00), "If Old MacDonald had a Bento~ Indulge in Succulent Marinated Pork and Juicy Teriyaki Chicken. A Truly Divine Pairing!", 700, "bento5", cowList);
@@ -397,7 +397,7 @@ public class DataInitializationSessionBean {
             porkAndChickenBento.setCategories(cat09);
             porkAndChickenBento.setIngredients(ing09);
             bentoSets.add(porkAndChickenBento);
-            
+
             List<CategoryEnum> cat10 = new ArrayList<>();
             List<IngredientEntity> ing10 = new ArrayList<>();
             BentoEntity yakiSobaWithChickenBento = new BentoEntity("Chicken YakiSoba", BigDecimal.valueOf(15.00), "Savoury Japansese Style Fried Soba Noodles with Succulent Teriyaki Chicken, topped with Japanese Mayo", 700, "bento5", cowList);
@@ -412,7 +412,7 @@ public class DataInitializationSessionBean {
             yakiSobaWithChickenBento.setCategories(cat10);
             yakiSobaWithChickenBento.setIngredients(ing10);
             bentoSets.add(yakiSobaWithChickenBento);
-            
+
             List<CategoryEnum> cat11 = new ArrayList<>();
             List<IngredientEntity> ing11 = new ArrayList<>();
             BentoEntity beastTitanBento = new BentoEntity("Beast Titan Bento", BigDecimal.valueOf(29.90), "Edamame, Salad, Teriyaki Chicken, Ginger Braised Pork, Smoked Salmon, Sausage, Mushroom, Wagyu Beef, Avocado. BEAST TITAN BALANCED BENTO", 1200, "bento5", cowList);
@@ -430,11 +430,11 @@ public class DataInitializationSessionBean {
             beastTitanBento.setCategories(cat11);
             beastTitanBento.setIngredients(ing11);
             bentoSets.add(beastTitanBento);
-                               
+
             for (MealEntity mealEntity : bentoSets) {
-                mealEntitySessionBeanLocal.createNewMeal(mealEntity); 
+                mealEntitySessionBeanLocal.createNewMeal(mealEntity);
             }
-            
+
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
             // Create Promo Code
@@ -482,7 +482,7 @@ public class DataInitializationSessionBean {
                         int no_of_lines = (int) (Math.random() * (max - min + 1) + min);
                         List<SaleTransactionLineEntity> saleTransactionLines = new ArrayList<>();
                         for (int j = 0; j < no_of_lines; j++) {
-                            int bento_choice = (int) (Math.random() * (bento_size-1 - 0 + 1) + 0);
+                            int bento_choice = (int) (Math.random() * (bento_size - 1 - 0 + 1) + 0);
                             int quantity = (int) (Math.random() * (max - min + 1) + min);
                             total_line += 1;
                             total_quantity += quantity;
@@ -512,12 +512,14 @@ public class DataInitializationSessionBean {
 
                         SaleTransactionEntity saleTransaction = new SaleTransactionEntity(total_line, total_quantity, total_cost, formatter.parse(transactionDateTime), deliveryDateTime);
                         saleTransaction.setSaleTransactionLineItemEntities(saleTransactionLines);
+                        saleTransaction.setDeliveryStatus(DeliveryStatusEnum.DELIVERED);
+                        saleTransaction.setDriver(driverEntitySessionBeanLocal.retrieveDriverById(Long.valueOf((int) (Math.random() * (6 - 1 + 1) + 1))));
 
                         saleTransactionEntitySessionBeanLocal.createNewSaleTransaction(new Long(i), selected_cc, selected_add, saleTransaction);
 
                     }
                 }
-                
+
                 for (int month = 1; month <= 3; month++) {
                     min = 3;
                     max = 9;
@@ -542,7 +544,7 @@ public class DataInitializationSessionBean {
                         int no_of_lines = (int) (Math.random() * (max - min + 1) + min);
                         List<SaleTransactionLineEntity> saleTransactionLines = new ArrayList<>();
                         for (int j = 0; j < no_of_lines; j++) {
-                            int bento_choice = (int) (Math.random() * (bento_size-1 - 0 + 1) + 0);
+                            int bento_choice = (int) (Math.random() * (bento_size - 1 - 0 + 1) + 0);
                             int quantity = (int) (Math.random() * (max - min + 1) + min);
                             total_line += 1;
                             total_quantity += quantity;
@@ -572,26 +574,88 @@ public class DataInitializationSessionBean {
 
                         SaleTransactionEntity saleTransaction = new SaleTransactionEntity(total_line, total_quantity, total_cost, formatter.parse(transactionDateTime), deliveryDateTime);
                         saleTransaction.setSaleTransactionLineItemEntities(saleTransactionLines);
-
+                        saleTransaction.setDeliveryStatus(DeliveryStatusEnum.DELIVERED);
+                        saleTransaction.setDriver(driverEntitySessionBeanLocal.retrieveDriverById(Long.valueOf((int) (Math.random() * (6 - 1 + 1) + 1))));
+                        
                         saleTransactionEntitySessionBeanLocal.createNewSaleTransaction(new Long(i), selected_cc, selected_add, saleTransaction);
 
-      
                     }
                 }
 
             }
 
             // Create user reviews
-            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "This is amazing!", new Date()), 1l, 1l);
-            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "This is amazing!", new Date()), 2l, 1l);
-            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "This is amazing!", new Date()), 3l, 2l);
-            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "This is amazing!", new Date()), 4l, 2l);
-            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "This is amazing!", new Date()), 5l, 3l);
-            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "This is amazing!", new Date()), 2l, 3l);
-            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "This is amazing!", new Date()), 1l, 4l);
-            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "This is amazing!", new Date()), 4l, 4l);
-            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "This is amazing!", new Date()), 2l, 5l);
-            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "This is amazing!", new Date()), 5l, 5l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "This is so delicious! I have never had something like this before.", formatter.parse("16-10-2020 12:49:00")), 1l, 1l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(1, "Really horrible, I rather do IS3106 forever than to order something like this.", formatter.parse("04-08-2020 09:13:00")), 1l, 2l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(3, "The photos of the food were appetizing and palpable, but didn't live up to the hype.", formatter.parse("28-11-2020 13:05:00")), 1l, 3l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "I would eat this every day if I could afford it!", formatter.parse("12-01-2021 11:35:00")), 1l, 4l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(1, "Good option for dog food", formatter.parse("22-06-2020 16:36:00")), 1l, 5l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(4, "It was much better than I expected.", formatter.parse("24-02-2021 03:31:00")), 1l, 6l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(4, "I would have rated this higher, but I dropped the food in the bathtub.", formatter.parse("12-11-2020 12:11:00")), 1l, 7l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(2, "Overhyped.", formatter.parse("04-07-2020 19:53:00")), 1l, 8l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(4, "Great food! But had to give 1 less star because the delivery driver was...", formatter.parse("19-08-202 15:49:00")), 1l, 9l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "I'm definitely ordering this again!", formatter.parse("12-03-2021 23:35:00")), 1l, 10l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "Flavorful, savory, and succulent!", formatter.parse("04-02-2021 13:39:00")), 1l, 11l);
+
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "Gordon Ramsey cannot even make something this good..", formatter.parse("02-05-2020 17:21:00")), 2l, 1l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(4, "Eating this helps me forget about IS3106!", formatter.parse("16-10-2020 21:32:00")), 2l, 2l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(1, "Food came so cold and hard... Never again", formatter.parse("11-05-2020 17:37:00")), 2l, 3l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(1, "Good alternative to my own excrement!", formatter.parse("05-09-2020 13:49:00")), 2l, 4l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "OOTD Food you have out classed me again.. too good..", formatter.parse("16-11-2020 03:24:00")), 2l, 5l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(2, "My school teacher enjoyed it but I did not..", formatter.parse("25-11-2020 22:13:00")), 2l, 6l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(4, "Would be better if the serving was bigger", formatter.parse("27-06-2020 15:09:00")), 2l, 7l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(3, "Would get again if I have no other choice", formatter.parse("27-05-2020 23:25:00")), 2l, 8l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(4, "Good food with good taste! Servings could be larger", formatter.parse("13-09-2020 20:13:00")), 2l, 9l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(2, "Taste like Kleenex", formatter.parse("16-11-2020 03:33:00")), 2l, 10l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(3, "Better than the food I cook", formatter.parse("26-12-2020 04:29:00")), 2l, 11l);
+
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(2, "Taste pretty good in the toilet", formatter.parse("02-09-2020 19:41:00")), 3l, 1l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(3, "I would not shinzou wo sasageru for this", formatter.parse("02-12-2020 15:49:00")), 3l, 2l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "After eating this, I got A+ for IS3106! Bless", formatter.parse("02-05-2020 12:42:00")), 3l, 3l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(1, "After eating this, I failed IS2103... scamm", formatter.parse("28-05-2020 03:25:00")), 3l, 4l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "I feel like I am floating in heaven when I eat this", formatter.parse("12-07-2020 17:22:00")), 3l, 5l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(3, "Comparable to what I can get at 7-11", formatter.parse("01-12-2020 06:54:00")), 3l, 6l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(4, "4 stars because its good but not as good as AoT", formatter.parse("02-12-2020 19:20:00")), 3l, 7l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "I actually striked TOTO after ordering this! Would reccomend!", formatter.parse("15-02-2021 16:29:00")), 3l, 8l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(2, "How do I eat this when they do not give utensils??", formatter.parse("21-11-2020 11:51:00")), 3l, 9l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(3, "Will definately eat again if I am feeling happy", formatter.parse("27-07-2020 17:07:00")), 3l, 10l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(1, "I think they mislabeled this, its actually just plastic", formatter.parse("26-01-2021 20:01:00")), 3l, 11l);
+
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(3, "Better than what I ate in Liberio", formatter.parse("02-10-2020 12:21:00")), 4l, 1l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(1, "Combat Ration duplicate", formatter.parse("11-06-2020 10:53:00")), 4l, 2l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "Taste really good and fresh! Much loves OOTDFood", formatter.parse("02-01-2021 04:56:00")), 4l, 3l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "Food taste like 4 stars. +1 for the pretty delivery driver", formatter.parse("22-12-2020 12:53:00")), 4l, 4l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(4, "Better than what I can make but abit pricey", formatter.parse("25-08-2020 12:59:00")), 4l, 5l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(3, "Good alternative to macdonalds", formatter.parse("26-07-2020 14:26:00")), 4l, 6l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(1, "Tastes like UTown sewer water", formatter.parse("29-10-2020 23:11:00")), 4l, 7l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(4, "I ate this and I dreamt that I completed IS3106 PE!", formatter.parse("13-11-2020 14:11:00")), 4l, 8l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(3, "Pretty decent and substantial. Whew..", formatter.parse("06-11-2020 11:11:00")), 4l, 9l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "Ate this and I started to fly! BEST BOWL EVER", formatter.parse("02-06-2020 07:26:00")), 4l, 10l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(2, "Comparable to what I can find in my storeroom", formatter.parse("22-07-2020 14:15:00")), 4l, 11l);
+
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "Gives me the energy to answer all my student's questions at once!", formatter.parse("02-10-2020 12:21:00")), 5l, 1l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(2, "The WIFI in NUS is horrible, cannot enjoy my food", formatter.parse("12-12-2020 14:03:00")), 5l, 2l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(4, "Better than MALA at the deck", formatter.parse("04-11-2020 10:06:00")), 5l, 3l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(1, "Really horrible, makes me feel like a duck", formatter.parse("14-11-2020 05:18:00")), 5l, 4l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(3, "Comparable to eating grass at the field behind SOC", formatter.parse("19-07-2020 13:33:00")), 5l, 5l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "Very delicious and worth every penny!", formatter.parse("29-01-2021 19:26:00")), 5l, 6l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(4, "Taste like what it taste in my dream.. decent", formatter.parse("02-10-2020 12:21:00")), 5l, 7l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(2, "Its like comparing JSF to Angular, meh..", formatter.parse("19-06-2020 15:08:00")), 5l, 8l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(4, "If you like to code, you will like this!", formatter.parse("17-02-2021 23:53:00")), 5l, 9l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "Taste better than Java Coffee Bean!", formatter.parse("19-09-2020 14:49:00")), 5l, 10l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(3, "Does taste abit like Java Mocha Chip..", formatter.parse("22-07-2020 23:47:00")), 5l, 11l);
+
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(1, "Almost as bad as seeing photos of my ex..", formatter.parse("11-11-2020 09:52:00")), 6l, 1l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "So good it gives me goosebumps!", formatter.parse("25-10-2020 14:29:00")), 6l, 2l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(4, "Gives me the energy to make america great again", formatter.parse("05-07-2020 07:54:00")), 6l, 3l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(2, "Taste almost like what I used to cook as a kid, nothing..", formatter.parse("19-09-2020 16:42:00")), 6l, 4l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(4, "This is for all the POKEBowl lovers!", formatter.parse("17-08-2020 13:35:00")), 6l, 5l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(4, "Loving the crisp and crunch, could be bigger", formatter.parse("01-12-2020 11:48:00")), 6l, 6l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(5, "As good as Isayama's work!", formatter.parse("17-01-2021 12:21:00")), 6l, 7l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(4, "Savoury and delicious, but could be more generous with servings", formatter.parse("26-06-2020 19:21:00")), 6l, 8l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(3, "Average average joe", formatter.parse("01-11-2020 11:23:00")), 6l, 9l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(2, "I do not know why I got it oily?? What??", formatter.parse("25-07-2020 03:47:00")), 6l, 10l);
+            reviewEntitySessionBeanLocal.addReview(new ReviewEntity(1, "Received it already half eaten...", formatter.parse("15-09-2020 21:51:00")), 6l, 11l);
 
             // Create FAQ Entries
             faqSessionBean.createNewFaq(new FaqEntity("How can I track my order?", "You can track your order by viewing your sales transaction status. When being delivered a status marked 'DELIVERING' will appear.", "Orders"));
@@ -613,11 +677,9 @@ public class DataInitializationSessionBean {
             staffEntitySessionBean.createNewStaff(new StaffEntity("Benny", "Phoe", "Employee", "password", "", StaffTypeEnum.EMPLOYEE));
 
             System.out.println("Data Init done!");
-        } catch (UserExistException | UnknownPersistenceException | InputDataValidationException | ReviewExistException | UserNotFoundException | FaqExistException | CreateNewSaleTransactionException | DriverExistsException | IngredientEntityExistsException | AddressExistException | CreditCardExistException | PromoCodeExistException | MealExistsException | StaffUsernameExistException ex) {
+        } catch (UserExistException | UnknownPersistenceException | InputDataValidationException | ReviewExistException | UserNotFoundException | FaqExistException | CreateNewSaleTransactionException | DriverExistsException | IngredientEntityExistsException | AddressExistException | CreditCardExistException | PromoCodeExistException | MealExistsException | StaffUsernameExistException | IngredientEntityNotFoundException | ParseException ex) {
             Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IngredientEntityNotFoundException ex) {
-            Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
+        } catch (DriverNotFoundException ex) {
             Logger.getLogger(DataInitializationSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 

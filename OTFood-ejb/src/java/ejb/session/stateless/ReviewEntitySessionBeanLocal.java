@@ -37,8 +37,8 @@ public interface ReviewEntitySessionBeanLocal {
 
     public void editReviewByUserId(Long userId, ReviewEntity review) throws NoReviewFoundException, UserNotFoundException, UpdateReviewException;
 
-    public List<ReviewEntity> top2ReviewsForTop5Meals();
-
     public List<ReviewEntity> retrieveAllReviews();
+
+    public List<ReviewEntity> retrieveLatestReviews();
 
 }

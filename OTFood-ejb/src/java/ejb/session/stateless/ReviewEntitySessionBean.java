@@ -8,7 +8,8 @@ package ejb.session.stateless;
 import entity.MealEntity;
 import entity.OTUserEntity;
 import entity.ReviewEntity;
-import java.util.ArrayList;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
@@ -67,6 +68,10 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
                 meal.getReviews().add(review);
                 review.setUser(user);
                 review.setMeal(meal);
+
+                // refresh the average rating for the meal
+                meal.setAverageRating(calculateAverageRating(meal)); // there seems to be a problem here haha
+
                 em.persist(review);
                 em.flush();
                 return review.getReviewId();
@@ -88,6 +93,17 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
+    }
+
+    private BigDecimal calculateAverageRating(MealEntity meal) {
+        if (meal.getReviews().isEmpty()) {
+            return BigDecimal.valueOf(0);
+        }
+        BigDecimal sum = BigDecimal.valueOf(0);
+        for (ReviewEntity review : meal.getReviews()) {
+            sum = sum.add(BigDecimal.valueOf(review.getRating()));
+        }
+        return sum.divide(BigDecimal.valueOf(meal.getReviews().size()), 2, RoundingMode.HALF_UP);
     }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<ReviewEntity>> constraintViolations) {
@@ -167,9 +183,12 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
             MealEntity meal = reviewToBeDeleted.getMeal();
             meal.getReviews().remove(reviewToBeDeleted);
             em.remove(reviewToBeDeleted);
+            // refresh the average rating for the meal
+            meal.setAverageRating(calculateAverageRating(meal));
         } else {
             throw new DeleteReviewException("either user or review cannot be detected!");
         }
+
     }
 
     @Override
@@ -183,22 +202,11 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
             throw new UpdateReviewException("No review detected!");
         }
     }
-
-    public List<ReviewEntity> top2ReviewsForTop5Meals() {
-        List<ReviewEntity> listOfReviews = new ArrayList<>();
-        List<MealEntity> top5Meals = mealEntitySessionBeanLocal.retrieveTop5MealEntityByRating();
-        for (MealEntity meal : top5Meals) {
-            List<ReviewEntity> top2 = retrieveTop2ReviewsOfMeal(meal.getMealId());
-            listOfReviews.addAll(top2);
-        }
-        return listOfReviews;
-
-    }
-
-    private List<ReviewEntity> retrieveTop2ReviewsOfMeal(long mealId) {
-        Query query = em.createQuery("SELECT review FROM MealEntity meal JOIN meal.reviews review WHERE meal.mealId = :mealId ORDER BY review.rating DESC");
-        query.setParameter("mealId", mealId);
-        query.setMaxResults(2);
+    
+    @Override
+    public List<ReviewEntity> retrieveLatestReviews() {
+        Query query = em.createQuery("SELECT r FROM ReviewEntity r ORDER BY r.reviewDate DESC");
+        query.setMaxResults(12);
         return query.getResultList();
     }
 

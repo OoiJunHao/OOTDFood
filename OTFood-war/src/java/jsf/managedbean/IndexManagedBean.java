@@ -30,26 +30,21 @@ public class IndexManagedBean {
 
     @EJB(name = "MealEntitySessionBeanLocal")
     private MealEntitySessionBeanLocal mealEntitySessionBeanLocal;
-    
-    
-    
+      
     private List<MealEntity> top5Meals;
-    private List<ReviewEntity> top2ReviewsForTop5Meals;
+    private List<ReviewEntity> latestReviews;
     private List<RankingMeal> mealsWithRank;
    
-    
-    
-    /**
-     * Creates a new instance of IndexManagedBean
-     */
     public IndexManagedBean() {
+        mealsWithRank = new ArrayList<>();
+        top5Meals = new ArrayList<>();
         mealsWithRank = new ArrayList<>();
     }
     
     @PostConstruct
     public void postConstruct() {
         top5Meals = mealEntitySessionBeanLocal.retrieveTop5MealEntityByRating();
-        top2ReviewsForTop5Meals = reviewEntitySessionBeanLocal.top2ReviewsForTop5Meals();
+        latestReviews = reviewEntitySessionBeanLocal.retrieveLatestReviews();
         for (int i = 0; i < top5Meals.size(); i++) {
             mealsWithRank.add(new RankingMeal(top5Meals.get(i), i+1));
         }
@@ -64,14 +59,6 @@ public class IndexManagedBean {
         this.top5Meals = top5Meals;
     }
 
-    public List<ReviewEntity> getTop2ReviewsForTop5Meals() {
-        return top2ReviewsForTop5Meals;
-    }
-
-    public void setTop2ReviewsForTop5Meals(List<ReviewEntity> top2ReviewsForTop5Meals) {
-        this.top2ReviewsForTop5Meals = top2ReviewsForTop5Meals;
-    }
-
     public List<RankingMeal> getMealsWithRank() {
         return mealsWithRank;
     }
@@ -80,10 +67,12 @@ public class IndexManagedBean {
         this.mealsWithRank = mealsWithRank;
     }
 
-    
-    
-    
-    
-    
-    
+    public List<ReviewEntity> getLatestReviews() {
+        return latestReviews;
+    }
+
+    public void setLatestReviews(List<ReviewEntity> latestReviews) {
+        this.latestReviews = latestReviews;
+    }  
+        
 }
