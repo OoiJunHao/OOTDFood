@@ -8,6 +8,7 @@ package ws.rest;
 import ejb.session.stateless.IngredientEntitySessionBeanLocal;
 import ejb.session.stateless.MealEntitySessionBeanLocal;
 import ejb.session.stateless.StaffEntitySessionBeanLocal;
+import entity.BentoEntity;
 import entity.IngredientEntity;
 import entity.MealEntity;
 import entity.ReviewEntity;
@@ -117,10 +118,10 @@ public class BentoResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createMeal(CreateMealReq wrapper) {
-        if (wrapper.getMealEntity() != null) {
+        if (wrapper.getBentoEntity() != null) {
             try {
                 StaffEntity staffEntity = staffEntitySessionBeanLocal.staffLogin(wrapper.getUsername(), wrapper.getPassword());
-                Long newMealId = mealEntitySessionBeanLocal.createNewMeal(wrapper.getMealEntity());
+                Long newMealId = mealEntitySessionBeanLocal.createNewMeal(wrapper.getBentoEntity());
                 return Response.status(Status.OK).entity(newMealId).build();
             } catch (InputDataValidationException | UnknownPersistenceException | MealExistsException ex) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();

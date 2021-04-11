@@ -8,13 +8,13 @@ package ws.rest;
 import ejb.session.stateless.IngredientEntitySessionBeanLocal;
 import ejb.session.stateless.StaffEntitySessionBeanLocal;
 import entity.IngredientEntity;
-import entity.PromoCodeEntity;
 import entity.StaffEntity;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -27,6 +27,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import util.exception.IngredientEntityExistsException;
 import util.exception.IngredientEntityNotFoundException;
 import util.exception.InputDataValidationException;
@@ -115,6 +117,44 @@ public class IngredientManagementResource {
             return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
         }
 
+    }
+    
+    @Path("uploadImage")
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadImage(
+            @FormDataParam("image") InputStream uploadedInputStream,
+            @FormDataParam("image") FormDataContentDisposition fileDetail,
+            @QueryParam("name") String name) {
+
+        System.out.println("************* Image being uploaded ******************");
+
+        //String uploadedFileLocation = "C:/glassfish-5.1.0-uploadedFiles/" + fileDetail.getFileName();
+        String uploadedFileLocation = "C:/glassfish-5.1.0-uploadedFiles/uploadedFiles/ingredients/" + name + ".jpg";
+        // save it
+        saveToFile(uploadedInputStream, uploadedFileLocation);
+
+        String output = "File uploaded via Jersey based RESTFul Webservice to: " + uploadedFileLocation;
+
+        return Response.status(Response.Status.OK).build();
+
+    }
+
+    private void saveToFile(InputStream uploadedInputStream, String uploadedFileLocation) {
+        try {
+            OutputStream out = null;
+            int read = 0;
+            byte[] bytes = new byte[1024];
+
+            out = new FileOutputStream(new File(uploadedFileLocation));
+            while ((read = uploadedInputStream.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
