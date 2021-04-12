@@ -205,14 +205,13 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
     
     @Override
     public SaleTransactionEntity retrieveOneSaleTransaction() {
-        Query query = em.createQuery("SELECT st FROM SaleTransactionEntity st WHERE st.driver IS NULL");
+        Query query = em.createQuery("SELECT st FROM SaleTransactionEntity st WHERE st.driver IS NULL ORDER BY st.deliveryDateTime ASC");
         List<SaleTransactionEntity> saleTransactions = query.getResultList();
-        int randomSaleTransaction = (int)(Math.random() * (saleTransactions.size()- 0));
-        SaleTransactionEntity selected = saleTransactions.get(randomSaleTransaction);
-        return selected;
-        
+        SaleTransactionEntity selected = saleTransactions.get(0); //getting the latest transaction with no driver
+        return selected;      
     } 
     
+    @Override
     public void setDriverToSaleTransaction(long driverId, long customerId, long saleTransactionId) throws DriverNotFoundException, NoSaleTransactionFoundException, DriverAlreadyFoundException {
         DriverEntity driver = retrieveDriverById(driverId);
         SaleTransactionEntity saleTransaction = saleTransactionEntitySessionBeanLocal.retrieveSaleTransactionByUserId(customerId, saleTransactionId);

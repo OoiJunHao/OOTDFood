@@ -158,7 +158,7 @@
         </p:dialog>
 
         <h:form id="mealDetails">
-            <p:dialog  header="Edit Purchase Details (#{cartManagedBean.selectedItem.meal.name})" showEffect="fade" closable="true" resizable="false" widgetVar="editItemsDialog" modal="true" closeOnEscape="true" draggable="false">
+            <p:dialog  header="Edit Purchase Details (#{cartManagedBean.selectedItem.meal.name})" showEffect="fade" closable="true" resizable="false" widgetVar="editItemsDialog" closeOnEscape="true" draggable="false">
                 <p:outputPanel class="ui-fluid">
                     <p:outputPanel rendered="#{not empty cartManagedBean.selectedItem}">              
                         <br/>

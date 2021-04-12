@@ -73,6 +73,9 @@ public class DriverManagementResource {
             System.out.println("********** DriverManagement.retrieveAllDrivers(): Staff " + staff.getUsername() + " login remotely via web service");
 
             List<DriverEntity> drivers = driverEntitySessionBean.retrieveAllDrivers();
+            for (DriverEntity driver: drivers) {
+                driver.getSaleTransaction().clear();
+            }
 
             GenericEntity<List<DriverEntity>> genericDriver = new GenericEntity<List<DriverEntity>>(drivers) {
 

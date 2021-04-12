@@ -30,7 +30,7 @@
                         <div>
 
 
-                            <p:panel header="Rank #{meal.rank}" style="text-align: center; font-size: 50px; width: 90%;background-size: 100%; font-family: Camphor,Open Sans,Segoe UI,sans-serif;">
+                            <p:panel header="Rank ##{meal.rank}" style="text-align: center; font-size: 50px; width: 90%;background-size: 100%; font-family: Camphor,Open Sans,Segoe UI,sans-serif;">
                                 <h:panelGrid class="gridItems">
                                     <f:facet name='header'>
                                         <p:graphicImage url="/uploadedFiles/bentos/#{meal.meal.image}.jpg" style="text-align: center; height: auto; width:60%;"/>
@@ -48,8 +48,9 @@
                 </p:dataView>
             </h:form>
             <p:separator/>
+             <h1 style="text-align: center; font-size: 40px; color: white; font-family: Camphor,Open Sans,Segoe UI,sans-serif;">LATEST REVIEWS</h1>
             <div id="reviews" class="ui-g-12">
-                <p:carousel value="#{indexManagedBean.top2ReviewsForTop5Meals}" var="product" responsive="true">
+                <p:carousel value="#{indexManagedBean.latestReviews}" var="product" responsive="true">
                     <div class="product">
                         <div class="product-grid-item p-p-5">
                             <div class="product-grid-item-top">

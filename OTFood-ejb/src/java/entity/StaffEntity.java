@@ -13,7 +13,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import util.enumeration.StaffTypeEnum;
@@ -47,8 +46,6 @@ public class StaffEntity implements Serializable {
     private String password;
     @Column(columnDefinition = "CHAR(32) NOT NULL")
     private String salt;
-    @Column(nullable = true)
-    private String profilePicture;
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private StaffTypeEnum type;
@@ -57,12 +54,11 @@ public class StaffEntity implements Serializable {
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
     }
 
-    public StaffEntity(String firstname, String lastName, String username, String password, String profilePicture, StaffTypeEnum type) {
+    public StaffEntity(String firstname, String lastName, String username, String password, StaffTypeEnum type) {
         this();
         this.firstname = firstname;
         this.lastName = lastName;
         this.username = username;
-        this.profilePicture = profilePicture;
         this.type = type;
 
         setPassword(password);
@@ -110,15 +106,7 @@ public class StaffEntity implements Serializable {
 
     public void setSalt(String salt) {
         this.salt = salt;
-    }
-
-    public String getProfilePicture() {
-        return profilePicture;
-    }
-
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
-    }
+    } 
 
     public StaffTypeEnum getType() {
         return type;
