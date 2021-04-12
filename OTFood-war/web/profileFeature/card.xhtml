@@ -119,7 +119,10 @@
             <p:dialog id="dialogAddCreditCard" widgetVar="dialogAddCreditCard" header="Add Credit Card" closable="true" resizable="false">
 
                 <h:outputText class="label-holder" value="Type: "/>
-                <p:inputText class="label-holder" value="#{profileManagedBean.newCreditCard.type}"/>
+                <p:selectOneButton value="#{profileManagedBean.newCreditCard.type}" required="true" requiredMessage="Please select a credit card type">
+                    <f:selectItem itemLabel="Visa" itemValue="VISA"/>
+                    <f:selectItem itemLabel="Mastercard" itemValue="MASTERCARD"/>
+                </p:selectOneButton>
                 <br/>
                 <br/>
                 <h:outputText class="label-holder" value="Card Name: "/>
