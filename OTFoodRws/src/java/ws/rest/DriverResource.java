@@ -122,6 +122,7 @@ public class DriverResource {
             for (SaleTransactionEntity st : driverTransactions) {
                 st.setSaleTransactionLineItemEntities(null);
             }
+            driverTransactions.sort((x,y) -> x.getDeliveryDateTime().compareTo(y.getDeliveryDateTime()));
             GenericEntity<List<SaleTransactionEntity>> genericDriverTransactions = new GenericEntity<List<SaleTransactionEntity>>(driverTransactions){};
             return Response.status(Response.Status.OK).entity(genericDriverTransactions).build();
         } catch (DriverNotFoundException ex) {
