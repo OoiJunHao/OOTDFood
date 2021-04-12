@@ -115,9 +115,9 @@ public class DriverResource {
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getDriverTransactionDeliveries(@QueryParam("drvierId") Long driverId) {
+    public Response getDriverTransactionDeliveries(@QueryParam("driverId") String driverId) {
         try {
-            DriverEntity queryDriver = driverEntitySessionBean.retrieveDriverById(driverId);
+            DriverEntity queryDriver = driverEntitySessionBean.retrieveDriverById(Long.valueOf(driverId));
             List<SaleTransactionEntity> driverTransactions = queryDriver.getSaleTransaction();
             for (SaleTransactionEntity st : driverTransactions) {
                 st.setSaleTransactionLineItemEntities(null);
