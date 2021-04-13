@@ -63,7 +63,7 @@ public class SaleTransactionManagementResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveAllReviews(@QueryParam("username") String username,
             @QueryParam("password") String password) {
-        
+
         try {
             StaffEntity staff = staffEntitySessionBeanLocal.staffLogin(username, password);
             System.out.println("********** ReviewManagent.retrieveAllReviews(): Staff " + staff.getUsername() + " login remotely via web service");
@@ -75,6 +75,16 @@ public class SaleTransactionManagementResource {
                 st.getUser().getReviews().clear();
                 st.getUser().getCreditCard().clear();
                 st.getUser().getAddress().clear();
+                if (st.getPromoCode() != null) {
+                    st.getPromoCode().getSaleTransaction().clear();
+                }
+                if (st.getDriver() != null) {
+                    st.getDriver().getSaleTransaction().clear();
+                }
+                
+                st.getAddress().setUser(null);
+                st.getCreditCardEntity().setUser(null);
+                
                 
                 for (SaleTransactionLineEntity stle: st.getSaleTransactionLineItemEntities()) {
                     stle.getMeal().getReviews().clear();
@@ -85,6 +95,7 @@ public class SaleTransactionManagementResource {
         } catch (InvalidLoginCredentialException ex) {
             return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
         } catch (Exception ex) {
+            ex.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }

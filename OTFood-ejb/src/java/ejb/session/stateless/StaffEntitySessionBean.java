@@ -8,8 +8,6 @@ package ejb.session.stateless;
 import entity.StaffEntity;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -132,8 +130,7 @@ public class StaffEntitySessionBean implements StaffEntitySessionBeanLocal {
                 if (staffToUpdate.getUsername().equals(staff.getUsername())) {
                     staffToUpdate.setFirstname(staff.getFirstname());
                     staffToUpdate.setLastName(staff.getLastName());
-                    staffToUpdate.setType(staff.getType());
-                    staffToUpdate.setProfilePicture(staff.getProfilePicture());
+                    staffToUpdate.setType(staff.getType());                
                 } else {
                     throw new UpdateStaffException("Username of staff to be updated does not match exiting records");
                 }

@@ -22,7 +22,7 @@
                         <div class="my-avatar">
                             <div class="my-avatar-placeholder">
                                 <p:graphicImage class="my-img" url="/uploadedFiles/avatars/#{profileManagedBean.profile.profilePic}" rendered="#{profileManagedBean.profile.profilePic.length() != 0}"/>
-                                <p:graphicImage style="my-img" library="images" name="userDefault.png" rendered="#{profileManagedBean.profile.profilePic.length() == 0}"/>
+                                <p:graphicImage class="my-img" library="images" name="userDefault.png" rendered="#{profileManagedBean.profile.profilePic.length() == 0}"/>
                             </div>
                         </div>
 
@@ -119,7 +119,10 @@
             <p:dialog id="dialogAddCreditCard" widgetVar="dialogAddCreditCard" header="Add Credit Card" closable="true" resizable="false">
 
                 <h:outputText class="label-holder" value="Type: "/>
-                <p:inputText class="label-holder" value="#{profileManagedBean.newCreditCard.type}"/>
+                <p:selectOneButton value="#{profileManagedBean.newCreditCard.type}" required="true" requiredMessage="Please select a credit card type">
+                    <f:selectItem itemLabel="Visa" itemValue="VISA"/>
+                    <f:selectItem itemLabel="Mastercard" itemValue="MASTERCARD"/>
+                </p:selectOneButton>
                 <br/>
                 <br/>
                 <h:outputText class="label-holder" value="Card Name: "/>
