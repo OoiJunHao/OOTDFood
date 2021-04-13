@@ -7,10 +7,8 @@ package ws.rest;
 
 import ejb.session.stateless.DriverEntitySessionBeanLocal;
 import entity.DriverEntity;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import entity.SaleTransactionEntity;
+import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -20,6 +18,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import util.exception.DriverExistsException;
@@ -29,7 +28,6 @@ import util.exception.InvalidLoginCredentialException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateDriverException;
 import ws.datamodel.CreateDriverReq;
-import ws.datamodel.UpdateDriverReq;
 import ws.datamodel.UpdateDriverReqIonic;
 
 /**
@@ -110,6 +108,25 @@ public class DriverResource {
             }
         } else {
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid request").build();
+        }
+    }
+    
+    @Path("getDriverTransactionDeliveries")
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getDriverTransactionDeliveries(@QueryParam("driverId") String driverId) {
+        try {
+            DriverEntity queryDriver = driverEntitySessionBean.retrieveDriverById(Long.valueOf(driverId));
+            List<SaleTransactionEntity> driverTransactions = queryDriver.getSaleTransaction();
+            for (SaleTransactionEntity st : driverTransactions) {
+                st.setSaleTransactionLineItemEntities(null);
+            }
+            driverTransactions.sort((x,y) -> x.getDeliveryDateTime().compareTo(y.getDeliveryDateTime()));
+            GenericEntity<List<SaleTransactionEntity>> genericDriverTransactions = new GenericEntity<List<SaleTransactionEntity>>(driverTransactions){};
+            return Response.status(Response.Status.OK).entity(genericDriverTransactions).build();
+        } catch (DriverNotFoundException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
         }
     }
 }
