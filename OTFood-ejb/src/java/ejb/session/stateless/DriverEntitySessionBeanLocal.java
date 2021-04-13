@@ -15,6 +15,7 @@ import util.exception.DriverNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.NoSaleTransactionFoundException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.NoSaleTransactionException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateDriverException;
 
@@ -37,8 +38,7 @@ public interface DriverEntitySessionBeanLocal {
 
     public void updateDriver(DriverEntity driver) throws UpdateDriverException, InputDataValidationException, DriverNotFoundException;
 
-
-    public SaleTransactionEntity retrieveOneSaleTransaction();
+    public SaleTransactionEntity retrieveOneSaleTransaction() throws NoSaleTransactionException ;
 
     public void setDriverToSaleTransaction(long driverId, long saleTransactionId, long customerId) throws DriverNotFoundException, NoSaleTransactionFoundException, DriverAlreadyFoundException;
 

@@ -17,14 +17,17 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import util.exception.DriverAlreadyFoundException;
 import util.exception.DriverExistsException;
 import util.exception.DriverNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.NoSaleTransactionFoundException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateDriverException;
 import ws.datamodel.CreateDriverReq;
@@ -60,7 +63,7 @@ public class DriverResource {
             @QueryParam("password") String password) {
         try {
             DriverEntity driver = driverEntitySessionBean.driverLogin(username, password);
-
+            driver.getSaleTransaction().clear();
 //            driver.setPassword(null);
 //            driver.setSalt(null);
             return Response.status(Response.Status.OK).entity(driver).build();
@@ -101,9 +104,7 @@ public class DriverResource {
             try {
                 DriverEntity updatedDriver = driverEntitySessionBean.updateDriverIonic(updateDriverReq.getToUpdateDriver());
                 return Response.status(Response.Status.OK).entity(updatedDriver).build();
-            } catch (UpdateDriverException | DriverNotFoundException ex) {
-                return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
-            } catch (InputDataValidationException ex) {
+            } catch (UpdateDriverException | DriverNotFoundException | InputDataValidationException ex) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
             }
         } else {
@@ -120,13 +121,34 @@ public class DriverResource {
             DriverEntity queryDriver = driverEntitySessionBean.retrieveDriverById(Long.valueOf(driverId));
             List<SaleTransactionEntity> driverTransactions = queryDriver.getSaleTransaction();
             for (SaleTransactionEntity st : driverTransactions) {
-                st.setSaleTransactionLineItemEntities(null);
+                st.getSaleTransactionLineItemEntities().clear();
+                st.getAddress().setUser(null);
+                st.setCreditCardEntity(null);
+                st.setPromoCode(null);
+                st.setDriver(null);
+                st.setUser(null);
             }
-            driverTransactions.sort((x,y) -> x.getDeliveryDateTime().compareTo(y.getDeliveryDateTime()));
+            driverTransactions.sort((y,x) -> x.getDeliveryDateTime().compareTo(y.getDeliveryDateTime()));
             GenericEntity<List<SaleTransactionEntity>> genericDriverTransactions = new GenericEntity<List<SaleTransactionEntity>>(driverTransactions){};
             return Response.status(Response.Status.OK).entity(genericDriverTransactions).build();
         } catch (DriverNotFoundException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+        }
+    }
+    
+    @Path("setSaleToDriver/{driverId}/{customerId}/{saleTransactionId}")
+    @GET
+    public Response updateDriverAndSale(@PathParam("driverId") long driverId, @PathParam("customerId")
+            long customerId, @PathParam("saleTransactionId") long saleTransactionId) {
+        try {
+            driverEntitySessionBean.setDriverToSaleTransaction(driverId, customerId, saleTransactionId);
+            return Response.status(Response.Status.OK).build();
+        } catch (DriverNotFoundException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+        } catch (NoSaleTransactionFoundException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+        } catch (DriverAlreadyFoundException ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
 }
