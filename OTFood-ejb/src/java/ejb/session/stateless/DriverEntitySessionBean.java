@@ -23,12 +23,14 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import util.enumeration.DeliveryStatusEnum;
 import util.exception.DriverAlreadyFoundException;
 import util.exception.DriverExistsException;
 import util.exception.DriverNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.NoSaleTransactionFoundException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.NoSaleTransactionException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateDriverException;
 import util.security.CryptographicHelper;
@@ -204,9 +206,12 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
     }
     
     @Override
-    public SaleTransactionEntity retrieveOneSaleTransaction() {
+    public SaleTransactionEntity retrieveOneSaleTransaction() throws NoSaleTransactionException {
         Query query = em.createQuery("SELECT st FROM SaleTransactionEntity st WHERE st.driver IS NULL ORDER BY st.deliveryDateTime ASC");
         List<SaleTransactionEntity> saleTransactions = query.getResultList();
+        if (saleTransactions.size() == 0) {
+            throw new NoSaleTransactionException();
+        }
         SaleTransactionEntity selected = saleTransactions.get(0); //getting the latest transaction with no driver
         return selected;      
     } 
@@ -220,6 +225,7 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
         } else {
             saleTransaction.setDriver(driver);
             driver.getSaleTransaction().add(saleTransaction);
+            saleTransaction.setDeliveryStatus(DeliveryStatusEnum.INDELIVERY);
         }
     }
 
