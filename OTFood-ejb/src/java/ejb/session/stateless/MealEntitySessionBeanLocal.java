@@ -38,6 +38,6 @@ public interface MealEntitySessionBeanLocal {
 
     public void updateMeal(MealEntity meal) throws MealNotFoundException;
 
-    public List<MealEntity> retrieveAllMealsSortedByAvailability();
+    public List<BentoEntity> retrieveAllBentosSortedByAvailability();
 
 }

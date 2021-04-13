@@ -93,23 +93,24 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
 
     @Override
     public List<MealEntity> retrieveAllMeals() {
-        Query query = em.createQuery("SELECT m FROM MealEntity m");
+        Query query = em.createQuery("SELECT m FROM MealEntity m WHERE m.isAvailable = true");
         return query.getResultList();
     }
     
     
+    // TO include those that are not available as this is used by RESTFul for the admin side
     @Override        
-    public List<MealEntity> retrieveAllMealsSortedByAvailability() {
-        Query query = em.createQuery("SELECT m FROM MealEntity m");
-        List<MealEntity> mealEntities = query.getResultList();
-        Collections.sort(mealEntities, new SortByAvailability());
-        return mealEntities;
+    public List<BentoEntity> retrieveAllBentosSortedByAvailability() {
+        Query query = em.createQuery("SELECT b FROM BentoEntity b");
+        List<BentoEntity> bentoEntities = query.getResultList();
+        Collections.sort(bentoEntities, new SortByAvailability());
+        return bentoEntities;
     }
 
     
     @Override
     public List<BentoEntity> retriveAllBentos() { 
-        Query query = em.createQuery("SELECT b FROM BentoEntity b");
+        Query query = em.createQuery("SELECT b FROM BentoEntity b WHERE b.isAvailable = true");
         return query.getResultList();
     }
     
@@ -117,7 +118,7 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
     public List<BentoEntity> retrieveBentosByCategory(String category) {
         
         //Query query = em.createQuery("SELECT b FROM BentoEntity b WHERE :inCategory MEMBER OF (b.categories)"); //This is not possible because categories is not an entity
-        Query query = em.createQuery("SELECT b FROM BentoEntity b");
+        Query query = em.createQuery("SELECT b FROM BentoEntity b WHERE b.isAvailable = true");
         
         List<BentoEntity> bentos = query.getResultList();
         List<BentoEntity> res = new ArrayList<>();
@@ -143,15 +144,15 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
     }
 
     public List<MealEntity> sortMealEntityByRating() {
-        Query query = em.createQuery("SELECT meals FROM MealEntity meals ORDER BY meals.averageRating DESC");
+        Query query = em.createQuery("SELECT meals FROM MealEntity meals WHERE meals.isAvailable = true ORDER BY meals.averageRating DESC");
         return query.getResultList();
     }
 
     @Override
-    public List<MealEntity> retrieveTop5MealEntityByRating() {
+    public List<MealEntity> retrieveTop5MealEntityByRating() { // will just give 6 because of the layout of index.html
         List<MealEntity> sortedList = sortMealEntityByRating();
         List<MealEntity> top5Meals = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             top5Meals.add(sortedList.get(i));
         }
         return top5Meals;
@@ -169,7 +170,7 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
             }
             em.remove(mealToBeDeleted);
         } else {
-            throw new MealNotFoundException("the meal to be deleted contains sale transaction line items associated with it!");
+            throw new MealNotFoundException("You are unable to delete this meal as it contains sale transaction line items that are associated with it!");
         }
     }
     @Override

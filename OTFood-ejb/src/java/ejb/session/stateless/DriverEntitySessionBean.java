@@ -6,10 +6,12 @@
 package ejb.session.stateless;
 
 import entity.DriverEntity;
+import entity.SaleTransactionEntity;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -21,9 +23,11 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import util.exception.DriverAlreadyFoundException;
 import util.exception.DriverExistsException;
 import util.exception.DriverNotFoundException;
 import util.exception.InputDataValidationException;
+import util.exception.NoSaleTransactionFoundException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateDriverException;
@@ -36,6 +40,9 @@ import util.security.CryptographicHelper;
 @Stateless
 public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
 
+    @EJB(name = "SaleTransactionEntitySessionBeanLocal")
+    private SaleTransactionEntitySessionBeanLocal saleTransactionEntitySessionBeanLocal;
+
     @PersistenceContext(unitName = "OTFood-ejbPU")
     private EntityManager em;
 
@@ -46,6 +53,8 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
     }
+    
+    
 
     @Override
     public Long createNewDriver(DriverEntity driver) throws UnknownPersistenceException, InputDataValidationException, DriverExistsException {
@@ -193,6 +202,26 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
         throw new DriverNotFoundException("Driver ID: " + driverId + " does not exist!");
 
     }
+    
+    @Override
+    public SaleTransactionEntity retrieveOneSaleTransaction() {
+        Query query = em.createQuery("SELECT st FROM SaleTransactionEntity st WHERE st.driver IS NULL ORDER BY st.deliveryDateTime ASC");
+        List<SaleTransactionEntity> saleTransactions = query.getResultList();
+        SaleTransactionEntity selected = saleTransactions.get(0); //getting the latest transaction with no driver
+        return selected;      
+    } 
+    
+    @Override
+    public void setDriverToSaleTransaction(long driverId, long customerId, long saleTransactionId) throws DriverNotFoundException, NoSaleTransactionFoundException, DriverAlreadyFoundException {
+        DriverEntity driver = retrieveDriverById(driverId);
+        SaleTransactionEntity saleTransaction = saleTransactionEntitySessionBeanLocal.retrieveSaleTransactionByUserId(customerId, saleTransactionId);
+        if (saleTransaction.getDriver() != null) {
+            throw new DriverAlreadyFoundException("A driver is already assigned to this sale Transaction!");
+        } else {
+            saleTransaction.setDriver(driver);
+            driver.getSaleTransaction().add(saleTransaction);
+        }
+    }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<DriverEntity>> constraintViolations) {
         String msg = "Input data validation error!:";
@@ -203,5 +232,7 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
 
         return msg;
     }
+    
+    
 
 }

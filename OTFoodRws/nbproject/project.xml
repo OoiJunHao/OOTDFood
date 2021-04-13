@@ -21,15 +21,7 @@
                     <file>${reference.OTFood-ejb-1.dist}</file>
                 </library>
                 <library dirs="200">
-                    <file>${libs.Mimepull-1.9.10.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
                     <file>${libs.JasperReports_6.16.0.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
-                    <file>${libs.jsf20.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>
