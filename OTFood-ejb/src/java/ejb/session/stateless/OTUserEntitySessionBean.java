@@ -29,7 +29,7 @@ import util.security.CryptographicHelper;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Stateless
 public class OTUserEntitySessionBean implements OTUserEntitySessionBeanLocal {

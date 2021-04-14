@@ -31,7 +31,7 @@ import util.security.CryptographicHelper;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Named(value = "userManagementManagedBean")
 @ViewScoped

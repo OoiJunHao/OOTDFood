@@ -13,7 +13,7 @@ import javax.faces.event.ActionEvent;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Named(value = "footerManagedBean")
 @RequestScoped

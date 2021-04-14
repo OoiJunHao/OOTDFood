@@ -17,7 +17,7 @@ import util.exception.UserNotFoundException;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Local
 public interface OTUserEntitySessionBeanLocal {

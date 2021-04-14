@@ -9,7 +9,7 @@ import entity.DriverEntity;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 public class UpdateDriverReq {
 

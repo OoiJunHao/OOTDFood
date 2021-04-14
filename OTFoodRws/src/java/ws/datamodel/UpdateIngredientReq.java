@@ -9,7 +9,7 @@ import entity.IngredientEntity;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 public class UpdateIngredientReq {
 

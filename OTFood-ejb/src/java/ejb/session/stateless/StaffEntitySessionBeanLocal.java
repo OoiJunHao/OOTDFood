@@ -17,7 +17,7 @@ import util.exception.UpdateStaffException;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Local
 public interface StaffEntitySessionBeanLocal {

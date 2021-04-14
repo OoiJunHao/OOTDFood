@@ -40,7 +40,7 @@ import util.exception.PromotionNotFoundException;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Named(value = "cartManagedBean")
 @SessionScoped

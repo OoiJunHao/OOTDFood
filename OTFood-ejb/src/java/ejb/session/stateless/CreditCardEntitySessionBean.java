@@ -31,7 +31,7 @@ import util.exception.UserNotFoundException;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Stateless
 public class CreditCardEntitySessionBean implements CreditCardEntitySessionBeanLocal {

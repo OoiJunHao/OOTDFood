@@ -39,7 +39,7 @@ import ws.datamodel.UpdateStaffReq;
 /**
  * REST Web Service
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Path("staffManagement")
 public class StaffManagementResource {
