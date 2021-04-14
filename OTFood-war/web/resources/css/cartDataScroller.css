@@ -30,6 +30,16 @@ and open the template in the editor.
     font-weight: 700;
 }
 
+.order-list-detail {
+    display: table-cell;
+    padding: 3px 0 3px 9px;
+}
+
+.order-list-buttons {
+    padding-right: 13px;
+    padding: 3px 0 3px 9px;
+}
+
 .order-list-action {
     display: flex;
     flex-direction: column;
