@@ -64,8 +64,6 @@ public class DriverResource {
         try {
             DriverEntity driver = driverEntitySessionBean.driverLogin(username, password);
             driver.getSaleTransaction().clear();
-//            driver.setPassword(null);
-//            driver.setSalt(null);
             return Response.status(Response.Status.OK).entity(driver).build();
         } catch (InvalidLoginCredentialException ex) {
             return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
@@ -103,6 +101,7 @@ public class DriverResource {
         if (updateDriverReq != null) {
             try {
                 DriverEntity updatedDriver = driverEntitySessionBean.updateDriverIonic(updateDriverReq.getToUpdateDriver());
+                updatedDriver.getSaleTransaction().clear();
                 return Response.status(Response.Status.OK).entity(updatedDriver).build();
             } catch (UpdateDriverException | DriverNotFoundException | InputDataValidationException ex) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
