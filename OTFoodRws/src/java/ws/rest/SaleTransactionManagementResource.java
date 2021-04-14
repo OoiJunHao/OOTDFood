@@ -11,8 +11,7 @@ import ejb.session.stateless.StaffEntitySessionBeanLocal;
 import entity.SaleTransactionEntity;
 import entity.SaleTransactionLineEntity;
 import entity.StaffEntity;
-    import java.sql.SQLException;
-import java.util.Date;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,6 +32,7 @@ import javax.ws.rs.core.Response;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperRunManager;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.NoSaleTransactionException;
 import ws.datamodel.ReportReq;
 
 /**
@@ -104,20 +104,22 @@ public class SaleTransactionManagementResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response retreiveSaleTransaction() {
-        //try {
+        try {
+            //try {
             //StaffEntity staff = staffEntitySessionBeanLocal.staffLogin(username, password);
             SaleTransactionEntity retrievedSaleTransaction = driverEntitySessionBeanLocal.retrieveOneSaleTransaction();
             retrievedSaleTransaction.getUser().getSaleTransaction().clear();
             retrievedSaleTransaction.getUser().getReviews().clear();
             retrievedSaleTransaction.getUser().getAddress().clear();
             retrievedSaleTransaction.getUser().getCreditCard().clear();
+            retrievedSaleTransaction.setPromoCode(null);
             for (SaleTransactionLineEntity stle: retrievedSaleTransaction.getSaleTransactionLineItemEntities()) {
                 stle.getMeal().getReviews().clear();
             }
             return Response.status(Response.Status.OK).entity(retrievedSaleTransaction).build();
-        //} catch (InvalidLoginCredentialException ex) {
-            //return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
-        //}
+        } catch (NoSaleTransactionException ex) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Sorry there are no pending deliveries").build();
+        }
     }
 
     @Path("generateReport")

@@ -9,6 +9,7 @@ import entity.BentoEntity;
 import entity.MealEntity;
 import java.util.List;
 import javax.ejb.Local;
+import util.enumeration.CategoryEnum;
 import util.exception.InputDataValidationException;
 import util.exception.MealExistsException;
 import util.exception.MealNotFoundException;
@@ -39,5 +40,7 @@ public interface MealEntitySessionBeanLocal {
     public void updateMeal(MealEntity meal) throws MealNotFoundException;
 
     public List<BentoEntity> retrieveAllBentosSortedByAvailability();
+
+    public List<BentoEntity> retrieveBentosByCategories(List<CategoryEnum> enums);
 
 }

@@ -133,6 +133,32 @@ public class MealEntitySessionBean implements MealEntitySessionBeanLocal {
         
         return res;
     }
+    
+    @Override
+    public List<BentoEntity> retrieveBentosByCategories(List<CategoryEnum> enums) {
+        Query query = em.createQuery("SELECT b FROM BentoEntity b WHERE b.isAvailable = true");
+        List<BentoEntity> bentos = query.getResultList();
+        List<BentoEntity> res = new ArrayList<>();
+        int count = 0;
+        if (enums.size() == 0) {
+            return bentos;
+        }
+        for (int i = 0; i < bentos.size(); i++) {
+            int numberOfCategories = bentos.get(i).getCategories().size();
+            count = 0;
+            for (int t = 0; t < numberOfCategories; t++) {
+                if (enums.contains(bentos.get(i).getCategories().get(t))) {
+                    count++;
+                    if (count == enums.size()) {
+                        res.add(bentos.get(i));
+                        break;
+                    }
+                    
+                }
+            }
+        }
+        return res;
+    }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<MealEntity>> constraintViolations) {
         String msg = "Input data validation error!:";

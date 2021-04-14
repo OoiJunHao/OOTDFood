@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -44,6 +46,7 @@ import util.exception.MealExistsException;
 import util.exception.MealNotFoundException;
 import util.exception.UnknownPersistenceException;
 import ws.datamodel.CreateMealReq;
+import ws.datamodel.GetMealsByCategories;
 import ws.datamodel.UpdateMealReq;
 
 /**
@@ -113,7 +116,26 @@ public class BentoResource {
             return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
         }
     }
-
+    
+    @Path("retrieveByCategories")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMealsByCategories(GetMealsByCategories wrapper) {
+        try {
+            StaffEntity staffEntity = staffEntitySessionBeanLocal.staffLogin(wrapper.getUsername(), wrapper.getPassword());
+            List<BentoEntity> meals = mealEntitySessionBeanLocal.retrieveBentosByCategories(wrapper.getEnums());
+            for (MealEntity meal : meals) {
+                for (ReviewEntity review : meal.getReviews()) {
+                    review.setMeal(null);
+                    review.setUser(null);
+                }
+            }
+            return Response.status(Status.OK).entity(meals).build();
+    }   catch (InvalidLoginCredentialException ex) {
+            return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+        }
+    }
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
