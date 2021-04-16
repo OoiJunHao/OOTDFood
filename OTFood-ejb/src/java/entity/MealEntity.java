@@ -22,7 +22,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -44,9 +43,11 @@ public class MealEntity implements Serializable {
     @NotNull
     @DecimalMin("0.00")
     private BigDecimal price;
+    @NotNull
     @Lob
     @Column(nullable = false)
     private String description;
+    @Column(nullable = false)
     @NotNull
     @Min(0)
     private Integer calorie;

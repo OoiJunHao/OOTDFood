@@ -45,13 +45,20 @@ public class PromoCodeEntity implements Serializable {
     @NotNull
     private Date endDate;
     @Column(unique = true, nullable = false)
+    @NotNull
     private String discountCode;
+    @Column(nullable = false)
     @DecimalMin("0.00")
+    @NotNull
     private BigDecimal discountRate;
     @Enumerated(EnumType.STRING)
+    @NotNull
+    @Column(nullable = false)
     private PromoCodeTypeEnum discountCodeTypeEnum;
     @Column(nullable = false)
+    @NotNull
     private Boolean isAvailable;
+    
     @OneToMany(mappedBy = "promoCode", fetch=FetchType.EAGER)
     private List<SaleTransactionEntity> saleTransaction;
 

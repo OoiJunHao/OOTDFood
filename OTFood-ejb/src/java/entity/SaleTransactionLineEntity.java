@@ -6,7 +6,6 @@
 package entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,16 +34,6 @@ public class SaleTransactionLineEntity implements Serializable {
     @NotNull
     @Min(1)
     private Integer quantity;
-//    @Column(nullable = false, precision = 11, scale = 2)
-//    @NotNull
-//    @DecimalMin("0.00")
-//    @Digits(integer = 9, fraction = 2) // 11 - 2 digits to the left of the decimal point
-//    private BigDecimal unitPrice;
-//    @Column(nullable = false, precision = 11, scale = 2)
-//    @NotNull
-//    @DecimalMin("0.00")
-//    @Digits(integer = 9, fraction = 2) // 11 - 2 digits to the left of the decimal point
-//    private BigDecimal subTotal;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
@@ -56,8 +45,6 @@ public class SaleTransactionLineEntity implements Serializable {
 
     public SaleTransactionLineEntity(MealEntity meal, Integer quantity) {
         this.quantity = quantity;
-//        this.unitPrice = unitPrice;
-//        this.subTotal = subTotal;
         this.meal = meal;
     }
 

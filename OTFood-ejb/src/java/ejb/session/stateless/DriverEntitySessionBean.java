@@ -132,7 +132,6 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
                 if (driverToUpdate.getUsername().equals(driver.getUsername())) {
                     driverToUpdate.setFirstname(driver.getFirstname());
                     driverToUpdate.setLastName(driver.getLastName());
-                    driverToUpdate.setProfilePicture(driver.getProfilePicture());
                     driverToUpdate.setAge(driver.getAge());
                     driverToUpdate.setActive(driver.isActive());
                 } else {
@@ -160,9 +159,7 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
                 if (driverToUpdate.getUsername().equals(driver.getUsername())) {
                     driverToUpdate.setFirstname(driver.getFirstname());
                     driverToUpdate.setLastName(driver.getLastName());
-                    driverToUpdate.setProfilePicture(driver.getProfilePicture());
                     driverToUpdate.setAge(driver.getAge());
-                    driverToUpdate.setActive(driver.isActive());
                     return driverToUpdate;
                 } else {
                     throw new UpdateDriverException("Username of driver to be updated does not exist");
