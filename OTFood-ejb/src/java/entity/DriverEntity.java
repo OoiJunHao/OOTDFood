@@ -55,20 +55,13 @@ public class DriverEntity implements Serializable {
     private String password;
     @Column(columnDefinition = "CHAR(32) NOT NULL")
     private String salt;
-    @Column(nullable = true)
-    private String profilePicture;
     @Column(nullable = false, precision = 11, scale = 2)
     @NotNull
     @DecimalMin("0.00")
     @Digits(integer = 9, fraction = 2)
-    private BigDecimal monthlyEarnings;
-    @Column(nullable = false, precision = 11, scale = 2)
+    private BigDecimal wallet;
     @NotNull
-    @DecimalMin("0.00")
-    @Digits(integer = 9, fraction = 2)
-    private BigDecimal dailyEarnings;
-    @NotNull
-    @Column
+    @Column(nullable = false)
     private boolean active;
 
     @OneToMany(mappedBy = "driver", fetch = FetchType.EAGER)
@@ -78,19 +71,16 @@ public class DriverEntity implements Serializable {
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
         saleTransaction = new ArrayList<>();
         this.active = true;
-        this.profilePicture = "";
-        this.monthlyEarnings = new BigDecimal(0.0);
-        this.dailyEarnings = new BigDecimal(0.0);
+        this.wallet = new BigDecimal(0.0);
     }
 
-    public DriverEntity(String firstname, String lastName, Integer age, String username, String password, String profilePicture) {
+    public DriverEntity(String firstname, String lastName, Integer age, String username, String password) {
         this();
         this.firstname = firstname;
         this.lastName = lastName;
         this.age = age;
         this.username = username;
         this.password = password;
-        this.profilePicture = profilePicture;
         setPassword(password);
     }
 
@@ -146,28 +136,12 @@ public class DriverEntity implements Serializable {
         this.salt = salt;
     }
 
-    public String getProfilePicture() {
-        return profilePicture;
+    public BigDecimal getWallet() {
+        return wallet;
     }
 
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
-    }
-
-    public BigDecimal getMonthlyEarnings() {
-        return monthlyEarnings;
-    }
-
-    public void setMonthlyEarnings(BigDecimal monthlyEarnings) {
-        this.monthlyEarnings = monthlyEarnings;
-    }
-
-    public BigDecimal getDailyEarnings() {
-        return dailyEarnings;
-    }
-
-    public void setDailyEarnings(BigDecimal dailyEarnings) {
-        this.dailyEarnings = dailyEarnings;
+    public void setWallet(BigDecimal wallet) {
+        this.wallet = wallet;
     }
 
     public List<SaleTransactionEntity> getSaleTransaction() {
@@ -211,19 +185,12 @@ public class DriverEntity implements Serializable {
         return "entity.DriverEntity[ id=" + driverId + " ]";
     }
 
-    /**
-     * @return the active
-     */
     public boolean isActive() {
         return active;
     }
 
-    /**
-     * @param active the active to set
-     */
     public void setActive(boolean active) {
         this.active = active;
     }
-
-
+    
 }

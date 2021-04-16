@@ -8,7 +8,13 @@ package ws.rest;
 import ejb.session.stateless.DriverEntitySessionBeanLocal;
 import entity.DriverEntity;
 import entity.SaleTransactionEntity;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -110,7 +116,7 @@ public class DriverResource {
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid request").build();
         }
     }
-    
+
     @Path("getDriverTransactionDeliveries")
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
@@ -127,18 +133,18 @@ public class DriverResource {
                 st.setDriver(null);
                 st.setUser(null);
             }
-            driverTransactions.sort((y,x) -> x.getDeliveryDateTime().compareTo(y.getDeliveryDateTime()));
-            GenericEntity<List<SaleTransactionEntity>> genericDriverTransactions = new GenericEntity<List<SaleTransactionEntity>>(driverTransactions){};
+            driverTransactions.sort((y, x) -> x.getDeliveryDateTime().compareTo(y.getDeliveryDateTime()));
+            GenericEntity<List<SaleTransactionEntity>> genericDriverTransactions = new GenericEntity<List<SaleTransactionEntity>>(driverTransactions) {
+            };
             return Response.status(Response.Status.OK).entity(genericDriverTransactions).build();
         } catch (DriverNotFoundException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
         }
     }
-    
+
     @Path("setSaleToDriver/{driverId}/{customerId}/{saleTransactionId}")
     @GET
-    public Response updateDriverAndSale(@PathParam("driverId") long driverId, @PathParam("customerId")
-            long customerId, @PathParam("saleTransactionId") long saleTransactionId) {
+    public Response updateDriverAndSale(@PathParam("driverId") long driverId, @PathParam("customerId") long customerId, @PathParam("saleTransactionId") long saleTransactionId) {
         try {
             driverEntitySessionBean.setDriverToSaleTransaction(driverId, customerId, saleTransactionId);
             return Response.status(Response.Status.OK).build();
@@ -148,6 +154,38 @@ public class DriverResource {
             return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
         } catch (DriverAlreadyFoundException ex) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
+    @Path("uploadProfilePicture")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response uploadProfilePicture(@QueryParam("driverId") long driverId, String base64Image) {
+        try {
+            System.out.println("****** Uploading Profile Picture Image for Driver ID " + driverId + " ***************");
+            DriverEntity driver = this.driverEntitySessionBean.retrieveDriverById(driverId);
+            this.decoder(base64Image, driver.getUsername());
+            System.out.println("****** Profile Picture Image Upload for Driver ID " + driverId + " Complete ***************");
+            return Response.status(Response.Status.OK).build();
+        } catch (IOException ex) {
+            System.out.println("Exception while reading the Image " + ex);
+            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+        } catch (DriverNotFoundException ex) {
+            Logger.getLogger(DriverResource.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+        }
+    }
+
+    public void decoder(String base64Image, String name) throws IOException {
+        try (FileOutputStream imageOutFile = new FileOutputStream("C:/glassfish-5.1.0-uploadedFiles/uploadedFiles/drivers/" + name + ".jpg")) {
+            // Converting a Base64 String into Image byte array
+            base64Image = base64Image.replace("\n", "");
+            String partSeparator = ",";
+            if (base64Image.contains(partSeparator)) {
+                String encodedImg = base64Image.split(partSeparator)[1];
+                byte[] imageByteArray = Base64.getDecoder().decode(encodedImg);
+                imageOutFile.write(imageByteArray);
+            }
         }
     }
 }

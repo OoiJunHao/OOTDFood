@@ -25,7 +25,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import util.enumeration.DeliveryStatusEnum;
@@ -61,7 +60,7 @@ public class SaleTransactionEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     @NotNull
-    //@Future //removed to be able to dataInit those 'Past transactions'
+    //@Future // Commented out because of our data init creating 'past' transactions
     private Date deliveryDateTime;
     @Column(nullable = false)
     @NotNull

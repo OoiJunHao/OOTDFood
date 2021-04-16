@@ -192,12 +192,12 @@ public class DataInitializationSessionBean {
 
             // Create Driver
             List<DriverEntity> drivers = new ArrayList<>();
-            drivers.add(new DriverEntity("Pieck", "Finger", 24, "aliabdal1999", "password", "")); //1
-            drivers.add(new DriverEntity("Eren", "Yaeger", 26, "attacktitan", "password", "")); //2
-            drivers.add(new DriverEntity("Mikasa", "Ackermann", 30, "mikasa", "password", "")); //3
-            drivers.add(new DriverEntity("Levi", "Ackermann", 41, "levistrauss", "password", "")); //4
-            drivers.add(new DriverEntity("Armin", "Arlet", 21, "armin", "password", "")); //5
-            drivers.add(new DriverEntity("Hannge", "Zoe", 26, "hannge", "password", "")); //6
+            drivers.add(new DriverEntity("Pieck", "Finger", 24, "aliabdal1999", "password")); //1
+            drivers.add(new DriverEntity("Eren", "Yaeger", 26, "attacktitan", "password")); //2
+            drivers.add(new DriverEntity("Mikasa", "Ackermann", 30, "mikasa", "password")); //3
+            drivers.add(new DriverEntity("Levi", "Ackermann", 41, "levistrauss", "password")); //4
+            drivers.add(new DriverEntity("Armin", "Arlet", 21, "armin", "password")); //5
+            drivers.add(new DriverEntity("Hannge", "Zoe", 26, "hannge", "password")); //6
             for (DriverEntity driver : drivers) {
                 driverEntitySessionBeanLocal.createNewDriver(driver);
             }
