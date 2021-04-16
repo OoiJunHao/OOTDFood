@@ -164,7 +164,7 @@ public class DriverResource {
         try {
             System.out.println("****** Uploading Profile Picture Image for Driver ID " + driverId + " ***************");
             DriverEntity driver = this.driverEntitySessionBean.retrieveDriverById(driverId);
-            this.decoder(base64Image, driver.getUsername());
+            this.decoder(base64Image, String.valueOf(driver.getDriverId()));
             System.out.println("****** Profile Picture Image Upload for Driver ID " + driverId + " Complete ***************");
             return Response.status(Response.Status.OK).build();
         } catch (IOException ex) {
