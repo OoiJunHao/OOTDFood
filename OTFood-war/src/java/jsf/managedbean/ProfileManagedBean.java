@@ -152,6 +152,7 @@ public class ProfileManagedBean implements Serializable {
             Date updateDate = formatter.parse(profileDate);
             profile.setDob(updateDate);
             oTUserEntitySessionBeanLocal.updateUserDetails(profile);
+            this.updateLoggedInUser();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Profile updated successfully", ""));
 
             PrimeFaces.current().executeScript("PF('dialogUpdateDetails').hide()");
@@ -168,6 +169,7 @@ public class ProfileManagedBean implements Serializable {
             Long addressId = (Long) event.getComponent().getAttributes().get("addressId");
             addressEntitySessionBeanLocal.removeAddress(addressId);
             addresses = addressEntitySessionBeanLocal.retrieveAddressesByUserId(profile.getUserId());
+            this.updateLoggedInUser();
         } catch (NoAddressFoundException ex) {
             Logger.getLogger(ProfileManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -179,6 +181,7 @@ public class ProfileManagedBean implements Serializable {
             Long creditCardId = (Long) event.getComponent().getAttributes().get("cardId");
             creditCardEntitySessionBeanLocal.deleteCreditCard(creditCardId);
             creditCards = creditCardEntitySessionBeanLocal.retrieveAllCardByUser(profile.getUserId());
+            this.updateLoggedInUser();
         } catch (CreditCardNotFoundException ex) {
             Logger.getLogger(ProfileManagedBean.class.getName()).log(Level.SEVERE, null, ex); 
         }
@@ -191,6 +194,7 @@ public class ProfileManagedBean implements Serializable {
             addresses = addressEntitySessionBeanLocal.retrieveAddressesByUserId(profile.getUserId());
             region = null;
             newAddress = new AddressEntity();
+            this.updateLoggedInUser();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Address Added successfully", ""));
             PrimeFaces.current().executeScript("PF('dialogAddAddress').hide()");
         } catch (UserNotFoundException | InputDataValidationException | UnknownPersistenceException | AddressExistException ex) {
@@ -203,6 +207,7 @@ public class ProfileManagedBean implements Serializable {
             creditCardEntitySessionBeanLocal.createNewCreditCardForUser(newCreditCard, profile.getUserId());         
             newCreditCard = new CreditCardEntity();
             creditCards = creditCardEntitySessionBeanLocal.retrieveAllCardByUser(profile.getUserId());
+            this.updateLoggedInUser();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Credit Card Added successfully", ""));
             PrimeFaces.current().executeScript("PF('dialogAddCreditCard').hide()");
         } catch (UnknownPersistenceException | CreditCardExistException | InputDataValidationException | UserNotFoundException ex) {
@@ -217,7 +222,7 @@ public class ProfileManagedBean implements Serializable {
                 if (newPassword.equals(confirmPassword)) {
 
                     oTUserEntitySessionBeanLocal.updatePassword(profile, oldPassword, newPassword);
-
+                    this.updateLoggedInUser();
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Password changed successfully", null));
                 } else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "New password does not match", null));
@@ -230,6 +235,17 @@ public class ProfileManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating product: " + ex.getMessage(), null));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
+        }
+    }
+    
+    public void updateLoggedInUser() {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+            OTUserEntity user = (OTUserEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentUser");
+            OTUserEntity newUser = oTUserEntitySessionBeanLocal.retrieveUserById(user.getUserId());
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentUser", newUser);
+        } catch (UserNotFoundException ex) {
+            Logger.getLogger(ProfileManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
