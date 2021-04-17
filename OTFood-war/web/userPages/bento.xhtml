@@ -69,7 +69,7 @@
                         <h:outputText value="Select Rating"/>
                         <br/>
                         <p:rating value="#{viewBentoManagedBean.rating}" requiredMessage="Please select a rating" >
-                            <p:ajax event="rate" update="@this"/>                      
+                            <p:ajax event="rate" update="@this"/>
                         </p:rating>
                         <br/>
 
@@ -84,13 +84,13 @@
 
                 <!--
                 @All
-                
+
                     Because of the limitations of <p:dataScroller>, where it will only render initial values of the passed variable to value property, I am unable to dynamically
-                    load the new review data into the component via AJAX whenever there is a new Review being made. A possibility is to force load the data in the scroller with 
+                    load the new review data into the component via AJAX whenever there is a new Review being made. A possibility is to force load the data in the scroller with
                     the new data when there is a change, however due to the way the component is structured, it will only be pushed to the bottom.
-                    
+
                     As such, I have decided to just leave a small note below asking users to force reload the page in order to reconstruct the DOM and get the appropriate data shown.
-                
+
                     - Jun Hao
                 -->
 
@@ -98,9 +98,7 @@
                 <br/>
                 <p:outputLabel for="@next" value="Select Quantity: "/>
 
-                <p:spinner id="rotate" value="#{viewBentoManagedBean.selectedBentoQuantity}" min="1" max="10" rotate="true" requiredMessage="Please select a valid quantity">
-                    <p:ajax event="change" process="@this" />
-                </p:spinner>
+                <p:spinner id="rotate" value="#{viewBentoManagedBean.selectedBentoQuantity}" min="1" max="50" required="true" requiredMessage="Please select a valid quantity"/>
 
                 &nbsp;
                 <p:commandButton value="Add to Cart" actionListener="#{viewBentoManagedBean.addBentoToCart}" icon="fa fa-shopping-cart" update="@form" onclick="PF('bentoReviewDlg').hide();"/>
@@ -111,8 +109,8 @@
 
             </p:dialog>
 
-
-
+            <!--        </h:form>
+                    <h:form>-->
             <p:tabView value="#{viewBentoManagedBean.listOfCategories}" var="bentoCategory" cache="false">
 
                 <p:ajax event="tabChange" listener="#{viewBentoManagedBean.refreshListByTabSelected}" update="@form"/>
@@ -140,7 +138,7 @@
                                     <h:outputText value="Calories: #{bentoEntity.calorie} kCal"/><br/><br/>
                                     <p:outputLabel value="$#{bentoEntity.price}"/><br/><br/>
 
-                                    <p:commandButton value="Add to Cart" actionListener="#{viewBentoManagedBean.addSingleBentoToCart}" icon="fa fa-shopping-cart">                     
+                                    <p:commandButton value="Add to Cart" actionListener="#{viewBentoManagedBean.addSingleBentoToCart}" icon="fa fa-shopping-cart">
                                         <f:attribute value="#{bentoEntity}" name="selected"/>
                                     </p:commandButton>
                                     &nbsp;
@@ -167,7 +165,7 @@
                                 </div>
                                 <div style="display:inline-block; float:right;">
 
-                                    <p:commandButton value="Add to Cart" actionListener="#{viewBentoManagedBean.addSingleBentoToCart}" icon="fa fa-shopping-cart">                     
+                                    <p:commandButton value="Add to Cart" actionListener="#{viewBentoManagedBean.addSingleBentoToCart}" icon="fa fa-shopping-cart">
                                         <f:attribute value="#{bentoEntity}" name="selected"/>
                                     </p:commandButton>
 
@@ -175,9 +173,9 @@
                                         <f:setPropertyActionListener value="#{bentoEntity}" target="#{viewBentoManagedBean.selectedBento}"/>
                                     </p:commandButton>
                                 </div>
-                                </div>
-                                <p:separator/>
-                            
+                            </div>
+                            <p:separator/>
+
                         </p:dataViewListItem>
 
                     </p:dataView>
