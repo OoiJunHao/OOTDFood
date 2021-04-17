@@ -32,7 +32,7 @@ public interface DriverEntitySessionBeanLocal {
 
     public List<DriverEntity> retrieveDriverByName(String driverName);
 
-    public Long createNewDriver(DriverEntity driver) throws UnknownPersistenceException, InputDataValidationException, DriverExistsException;
+    public DriverEntity createNewDriver(DriverEntity driver) throws UnknownPersistenceException, InputDataValidationException, DriverExistsException;
 
     public boolean setDriverActiveToFalse(Long driverId) throws DriverNotFoundException;
 
@@ -40,13 +40,17 @@ public interface DriverEntitySessionBeanLocal {
 
     public SaleTransactionEntity retrieveOneSaleTransaction() throws NoSaleTransactionException ;
 
-    public void setDriverToSaleTransaction(long driverId, long saleTransactionId, long customerId) throws DriverNotFoundException, NoSaleTransactionFoundException, DriverAlreadyFoundException;
+    public DriverEntity setDriverToSaleTransaction(long driverId, long saleTransactionId, long customerId) throws DriverNotFoundException, NoSaleTransactionFoundException, DriverAlreadyFoundException;
 
     public DriverEntity retrieveDriverByUsername(String username) throws DriverNotFoundException;
 
     public DriverEntity driverLogin(String username, String password) throws InvalidLoginCredentialException;
 
     public DriverEntity updateDriverIonic(DriverEntity driver) throws UpdateDriverException, InputDataValidationException, DriverNotFoundException;
+
+    public DriverEntity completeDelivery(long driverId, long saleTransactionId) throws DriverNotFoundException, NoSaleTransactionFoundException;
+
+    public DriverEntity cashOutEarnings(long driverId) throws DriverNotFoundException;
 
 
 }

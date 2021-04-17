@@ -60,9 +60,16 @@ public class DriverEntity implements Serializable {
     @DecimalMin("0.00")
     @Digits(integer = 9, fraction = 2)
     private BigDecimal wallet;
+    @Column(nullable = false)
+    @NotNull
+    private long currentDelivery;
     @NotNull
     @Column(nullable = false)
     private boolean active;
+    @NotNull
+    @Column(nullable = false, length = 15)
+    @Size(max = 15, min = 7)
+    private String bankAccountNumber;
 
     @OneToMany(mappedBy = "driver", fetch = FetchType.EAGER)
     private List<SaleTransactionEntity> saleTransaction;
@@ -72,15 +79,17 @@ public class DriverEntity implements Serializable {
         saleTransaction = new ArrayList<>();
         this.active = true;
         this.wallet = new BigDecimal(0.0);
+        this.currentDelivery = 0l;
     }
 
-    public DriverEntity(String firstname, String lastName, Integer age, String username, String password) {
+    public DriverEntity(String firstname, String lastName, Integer age, String username, String password, String bankAccountNumber) {
         this();
         this.firstname = firstname;
         this.lastName = lastName;
         this.age = age;
         this.username = username;
         this.password = password;
+        this.bankAccountNumber = bankAccountNumber;
         setPassword(password);
     }
 
@@ -191,6 +200,28 @@ public class DriverEntity implements Serializable {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+    
+    public long getCurrentDelivery() {
+        return currentDelivery;
+    }
+
+    public void setCurrentDelivery(long currentDelivery) {
+        this.currentDelivery = currentDelivery;
+    }
+
+    /**
+     * @return the bankAccountNumber
+     */
+    public String getBankAccountNumber() {
+        return bankAccountNumber;
+    }
+
+    /**
+     * @param bankAccountNumber the bankAccountNumber to set
+     */
+    public void setBankAccountNumber(String bankAccountNumber) {
+        this.bankAccountNumber = bankAccountNumber;
     }
     
 }

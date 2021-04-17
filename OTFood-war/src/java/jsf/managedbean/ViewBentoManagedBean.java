@@ -99,7 +99,6 @@ public class ViewBentoManagedBean implements Serializable {
     }
 
     public void addBentoToCart(ActionEvent event) {
-        System.out.println(selectedBentoQuantity);
         cartManagedBean.setAmtToCart(selectedBentoQuantity);
         cartManagedBean.addToCart(selectedBento);
         selectedBentoQuantity = 1;

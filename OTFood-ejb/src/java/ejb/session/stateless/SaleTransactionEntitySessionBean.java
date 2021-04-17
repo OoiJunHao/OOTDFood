@@ -221,12 +221,21 @@ public class SaleTransactionEntitySessionBean implements SaleTransactionEntitySe
             throw new UpdateSaleTransactionException("Error: No sale Transaction detected!");
         }
     }
-
-    //delete?  will add later on -JH
-    public void persist(Object object) {
-        em.persist(object);
+    
+ 
+    @Override
+    public SaleTransactionEntity retrieveSaleTransactionById(Long saleTransactionId) throws NoSaleTransactionFoundException {
+          try {
+            Query query = em.createQuery("SELECT st FROM SaleTransactionEntity st WHERE st.saleTransactionId = :tranId");
+            query.setParameter("tranId", saleTransactionId);
+            SaleTransactionEntity saleTransaction = (SaleTransactionEntity) query.getSingleResult();
+            return saleTransaction;
+        } catch (NoResultException | NonUniqueResultException ex) {
+            throw new NoSaleTransactionFoundException("No Sale Transaction Found. ID: " + saleTransactionId);
+        }
     }
     
+    @Override
     public List<SaleTransactionLineEntity> retrieveSaleTransactionLineItemsByMealId(Long mealId) {
         Query query = em.createQuery("SELECT lineItems from SaleTransactionLineEntity lineItems WHERE lineItems.meal.mealId = :mealId");
         query.setParameter("mealId", mealId);

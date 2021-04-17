@@ -129,12 +129,12 @@ public class DataInitializationSessionBean {
 
             // Create Users
             List<OTUserEntity> users = new ArrayList<>();
-            users.add(new OTUserEntity("bennyphoe1998@gmail.com", "password", 90909090l, "Benny", "Phoe", new Date(), "")); // ID: 1
-            users.add(new OTUserEntity("guyuntian1998@gmail.com", "password", 98989898l, "Yuntian", "Gu", new Date(), "")); // ID: 2
-            users.add(new OTUserEntity("ongbikjeun1998@gmail.com", "password", 91234231l, "Bik Jeun", "Ong", new Date(), "")); // ID: 3 
-            users.add(new OTUserEntity("ooijunhao1998@gmail.com", "password", 98021252l, "Jun Hao", "Ooi", new Date(), "")); // ID: 4
-            users.add(new OTUserEntity("tanwk@comp.nus.edu.sg", "password", 95470641l, "Wee Kek", "Tan", new Date(), "")); // ID: 5
-            users.add(new OTUserEntity("joebiden@gmail.com", "password", 95406652l, "Joe", "Biden", new Date(), "")); // ID: 6
+            users.add(new OTUserEntity("bennyphoe1998@gmail.com", "password", 90909090l, "Benny", "Phoe", new Date(), "hange.png")); // ID: 1
+            users.add(new OTUserEntity("guyuntian1998@gmail.com", "password", 98989898l, "Yuntian", "Gu", new Date(), "zeke.png")); // ID: 2
+            users.add(new OTUserEntity("ongbikjeun1998@gmail.com", "password", 91143682l, "Bik Jeun", "Ong", new Date(), "pieck.png")); // ID: 3 
+            users.add(new OTUserEntity("ooijunhao1998@gmail.com", "password", 98021252l, "Jun Hao", "Ooi", new Date(), "jean.png")); // ID: 4
+            users.add(new OTUserEntity("tanwk@comp.nus.edu.sg", "password", 95470641l, "Wee Kek", "Tan", new Date(), "annie.png")); // ID: 5
+            users.add(new OTUserEntity("joebiden@gmail.com", "password", 95406652l, "Joe", "Biden", new Date(), "connie.png")); // ID: 6
             for (OTUserEntity user : users) {
                 oTUserEntitySessionBeanLocal.createNewUser(user);
             }
@@ -192,12 +192,12 @@ public class DataInitializationSessionBean {
 
             // Create Driver
             List<DriverEntity> drivers = new ArrayList<>();
-            drivers.add(new DriverEntity("Pieck", "Finger", 24, "aliabdal1999", "password")); //1
-            drivers.add(new DriverEntity("Eren", "Yaeger", 26, "attacktitan", "password")); //2
-            drivers.add(new DriverEntity("Mikasa", "Ackermann", 30, "mikasa", "password")); //3
-            drivers.add(new DriverEntity("Levi", "Ackermann", 41, "levistrauss", "password")); //4
-            drivers.add(new DriverEntity("Armin", "Arlet", 21, "armin", "password")); //5
-            drivers.add(new DriverEntity("Hannge", "Zoe", 26, "hannge", "password")); //6
+            drivers.add(new DriverEntity("Pieck", "Finger", 24, "aliabdal1999", "password", "5634054399")); //1
+            drivers.add(new DriverEntity("Eren", "Yaeger", 26, "attacktitan", "password", "6590183821")); //2
+            drivers.add(new DriverEntity("Mikasa", "Ackermann", 30, "mikasa", "password", "1893621041")); //3
+            drivers.add(new DriverEntity("Levi", "Ackermann", 41, "levistrauss", "password", "3747743362")); //4
+            drivers.add(new DriverEntity("Armin", "Arlet", 21, "armin", "password", "1883291380")); //5
+            drivers.add(new DriverEntity("Hannge", "Zoe", 26, "hannge", "password", "3943012628")); //6
             for (DriverEntity driver : drivers) {
                 driverEntitySessionBeanLocal.createNewDriver(driver);
             }

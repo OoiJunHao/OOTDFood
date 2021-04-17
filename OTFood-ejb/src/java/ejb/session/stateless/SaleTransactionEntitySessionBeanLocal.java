@@ -34,5 +34,7 @@ public interface SaleTransactionEntitySessionBeanLocal {
     public Long createNewSaleTransactionWithPromo(Long userId, Long ccId, Long adressId, Long promoId, SaleTransactionEntity saleTransaction) throws CreateNewSaleTransactionException, InputDataValidationException;
 
     public List<SaleTransactionLineEntity> retrieveSaleTransactionLineItemsByMealId(Long mealId);
+
+    public SaleTransactionEntity retrieveSaleTransactionById(Long saleTransactionId) throws NoSaleTransactionFoundException;
     
 }

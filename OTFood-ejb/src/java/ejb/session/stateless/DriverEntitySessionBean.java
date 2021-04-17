@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.DriverEntity;
 import entity.SaleTransactionEntity;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -59,7 +60,7 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
     
 
     @Override
-    public Long createNewDriver(DriverEntity driver) throws UnknownPersistenceException, InputDataValidationException, DriverExistsException {
+    public DriverEntity createNewDriver(DriverEntity driver) throws UnknownPersistenceException, InputDataValidationException, DriverExistsException {
         Set<ConstraintViolation<DriverEntity>> constraintViolations = validator.validate(driver);
         if (constraintViolations.isEmpty()) {
             try {
@@ -67,7 +68,7 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
                 em.persist(driver);
                 em.flush();
 
-                return driver.getDriverId();
+                return driver;
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
@@ -134,6 +135,7 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
                     driverToUpdate.setLastName(driver.getLastName());
                     driverToUpdate.setAge(driver.getAge());
                     driverToUpdate.setActive(driver.isActive());
+                    driverToUpdate.setBankAccountNumber(driver.getBankAccountNumber());
                 } else {
                     throw new UpdateDriverException("Username of driver to be updated does not exist");
                 }
@@ -160,6 +162,7 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
                     driverToUpdate.setFirstname(driver.getFirstname());
                     driverToUpdate.setLastName(driver.getLastName());
                     driverToUpdate.setAge(driver.getAge());
+                    driverToUpdate.setBankAccountNumber(driver.getBankAccountNumber());
                     return driverToUpdate;
                 } else {
                     throw new UpdateDriverException("Username of driver to be updated does not exist");
@@ -214,7 +217,7 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
     } 
     
     @Override
-    public void setDriverToSaleTransaction(long driverId, long customerId, long saleTransactionId) throws DriverNotFoundException, NoSaleTransactionFoundException, DriverAlreadyFoundException {
+    public DriverEntity setDriverToSaleTransaction(long driverId, long customerId, long saleTransactionId) throws DriverNotFoundException, NoSaleTransactionFoundException, DriverAlreadyFoundException {
         DriverEntity driver = retrieveDriverById(driverId);
         SaleTransactionEntity saleTransaction = saleTransactionEntitySessionBeanLocal.retrieveSaleTransactionByUserId(customerId, saleTransactionId);
         if (saleTransaction.getDriver() != null) {
@@ -222,10 +225,33 @@ public class DriverEntitySessionBean implements DriverEntitySessionBeanLocal {
         } else {
             saleTransaction.setDriver(driver);
             driver.getSaleTransaction().add(saleTransaction);
+            driver.setCurrentDelivery(saleTransactionId);
             saleTransaction.setDeliveryStatus(DeliveryStatusEnum.INDELIVERY);
+            return driver;
         }
     }
-
+    
+    @Override
+    public DriverEntity completeDelivery(long driverId, long saleTransactionId) throws DriverNotFoundException, NoSaleTransactionFoundException {
+        DriverEntity driver = retrieveDriverById(driverId);
+        if (driver.getCurrentDelivery() != saleTransactionId) {
+            throw new NoSaleTransactionFoundException("Current delivery and provided sale transaction ID do not match");
+        }
+        SaleTransactionEntity saleTransaction = saleTransactionEntitySessionBeanLocal.retrieveSaleTransactionById(saleTransactionId);
+        saleTransaction.setDeliveryStatus(DeliveryStatusEnum.DELIVERED);
+        driver.setWallet(driver.getWallet().add(BigDecimal.valueOf(10)));
+        driver.setCurrentDelivery(0l);
+        return driver;
+    }
+    
+    @Override
+    public DriverEntity cashOutEarnings(long driverId) throws DriverNotFoundException {
+        DriverEntity driver = retrieveDriverById(driverId);
+        driver.setWallet(BigDecimal.valueOf(0));
+        // simulating cash out to account here
+        return driver;
+    }
+    
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<DriverEntity>> constraintViolations) {
         String msg = "Input data validation error!:";
 

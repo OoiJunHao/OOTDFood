@@ -6,11 +6,14 @@
 package ws.rest;
 
 import ejb.session.stateless.DriverEntitySessionBeanLocal;
+import ejb.session.stateless.SaleTransactionEntitySessionBeanLocal;
 import entity.DriverEntity;
 import entity.SaleTransactionEntity;
-import java.io.FileNotFoundException;
+import entity.SaleTransactionLineEntity;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.List;
 import java.util.logging.Level;
@@ -37,6 +40,7 @@ import util.exception.NoSaleTransactionFoundException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateDriverException;
 import ws.datamodel.CreateDriverReq;
+import ws.datamodel.ImageWrapper;
 import ws.datamodel.UpdateDriverReqIonic;
 
 /**
@@ -48,6 +52,7 @@ import ws.datamodel.UpdateDriverReqIonic;
 public class DriverResource {
 
     DriverEntitySessionBeanLocal driverEntitySessionBean;
+    SaleTransactionEntitySessionBeanLocal saleTransactionEntitySessionBean;
     private final SessionBeanLookup sessionBeanLookup;
 
     @Context
@@ -59,6 +64,7 @@ public class DriverResource {
     public DriverResource() {
         sessionBeanLookup = new SessionBeanLookup();
         driverEntitySessionBean = sessionBeanLookup.driverEntitySessionBean;
+        saleTransactionEntitySessionBean = sessionBeanLookup.saleTransactionEntitySessionBean;
     }
 
     @Path("driverLogin")
@@ -86,13 +92,10 @@ public class DriverResource {
 
         if (createDriverReq != null) {
             try {
-                Long driverId = driverEntitySessionBean.createNewDriver(createDriverReq.getNewDriver());
-                return Response.status(Response.Status.OK).entity(driverId).build();
-            } catch (UnknownPersistenceException ex) {
-                return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
-            } catch (InputDataValidationException ex) {
-                return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
-            } catch (DriverExistsException ex) {
+                DriverEntity driver = driverEntitySessionBean.createNewDriver(createDriverReq.getNewDriver());
+                driver.getSaleTransaction().clear();
+                return Response.status(Response.Status.OK).entity(driver).build();
+            } catch (UnknownPersistenceException | InputDataValidationException | DriverExistsException ex) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
             }
         } else {
@@ -144,10 +147,12 @@ public class DriverResource {
 
     @Path("setSaleToDriver/{driverId}/{customerId}/{saleTransactionId}")
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public Response updateDriverAndSale(@PathParam("driverId") long driverId, @PathParam("customerId") long customerId, @PathParam("saleTransactionId") long saleTransactionId) {
         try {
-            driverEntitySessionBean.setDriverToSaleTransaction(driverId, customerId, saleTransactionId);
-            return Response.status(Response.Status.OK).build();
+            DriverEntity driver = driverEntitySessionBean.setDriverToSaleTransaction(driverId, customerId, saleTransactionId);
+            driver.getSaleTransaction().clear();
+            return Response.status(Response.Status.OK).entity(driver).build();
         } catch (DriverNotFoundException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
         } catch (NoSaleTransactionFoundException ex) {
@@ -155,6 +160,46 @@ public class DriverResource {
         } catch (DriverAlreadyFoundException ex) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
+    }
+
+    @Path("completeDelivery/{driverId}/{saleTransactionId}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response completeDelivery(@PathParam("driverId") long driverId, @PathParam("saleTransactionId") long saleTransactionId) {
+        try {
+            DriverEntity driver = driverEntitySessionBean.completeDelivery(driverId, saleTransactionId);
+            driver.getSaleTransaction().clear();
+            return Response.status(Response.Status.OK).entity(driver).build();
+        } catch (DriverNotFoundException | NoSaleTransactionFoundException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+        }
+    }
+
+    @Path("getCurrentDelivery/{driverId}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCurrentDelivery(@PathParam("driverId") long driverId) {
+        try {
+            DriverEntity driver = this.driverEntitySessionBean.retrieveDriverById(driverId);
+            if (driver.getCurrentDelivery() == 0l) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("No current delivery").build();
+            } else {
+                SaleTransactionEntity st = saleTransactionEntitySessionBean.retrieveSaleTransactionById(driver.getCurrentDelivery());
+                st.getUser().getSaleTransaction().clear();
+                st.getUser().getReviews().clear();
+                st.getUser().getAddress().clear();
+                st.getUser().getCreditCard().clear();
+                st.setPromoCode(null);
+                st.getDriver().getSaleTransaction().clear();
+                for (SaleTransactionLineEntity stle : st.getSaleTransactionLineItemEntities()) {
+                    stle.getMeal().getReviews().clear();
+                }
+                return Response.status(Response.Status.OK).entity(st).build();
+            }
+        } catch (DriverNotFoundException | NoSaleTransactionFoundException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+        }
+
     }
 
     @Path("uploadProfilePicture")
@@ -187,5 +232,47 @@ public class DriverResource {
                 imageOutFile.write(imageByteArray);
             }
         }
+    }
+
+    @Path("retrieveProfilePicture")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveProfilePicture(@QueryParam("driverId") long driverId) {
+        try {
+            byte[] array = Files.readAllBytes(Paths.get("C:/glassfish-5.1.0-uploadedFiles/uploadedFiles/drivers/" + driverId + ".jpg"));
+            String encodedString = Base64
+                    .getEncoder()
+                    .encodeToString(array);
+            return Response.status(Response.Status.OK).entity(new ImageWrapper(encodedString)).build();
+        } catch (IOException ex) {
+            try {
+                // it means image does not exist
+                byte[] array = Files.readAllBytes(Paths.get("C:/glassfish-5.1.0-uploadedFiles/uploadedFiles/drivers/userDefault.png"));
+                String encodedString = Base64
+                        .getEncoder()
+                        .encodeToString(array);
+                return Response.status(Response.Status.OK).entity(new ImageWrapper(encodedString)).build();
+            } catch (IOException ex1) {
+                // it means really got error
+                System.out.println("*************** Error in retrieving profile picture *************");
+                ex.printStackTrace();
+                return Response.status(Response.Status.BAD_REQUEST).entity(ex1.getMessage()).build();
+            }
+        }
+    }
+
+    @Path("cashOutEarnings")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response cashOutEarnings(@QueryParam("driverId") long driverId) {
+        try {
+            System.out.println("****** Cashing out for Driver ID " + driverId + " ***************");
+            DriverEntity driver = driverEntitySessionBean.cashOutEarnings(driverId);
+            driver.getSaleTransaction().clear();
+            return Response.status(Response.Status.OK).entity(driver).build();
+        } catch (DriverNotFoundException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+        }
+
     }
 }
