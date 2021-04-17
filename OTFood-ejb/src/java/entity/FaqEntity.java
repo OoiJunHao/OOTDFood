@@ -15,7 +15,7 @@ import javax.persistence.Lob;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Entity
 public class FaqEntity implements Serializable {

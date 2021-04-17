@@ -46,7 +46,7 @@ import ws.datamodel.UpdateDriverReqIonic;
 /**
  * REST Web Service
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Path("Driver")
 public class DriverResource {

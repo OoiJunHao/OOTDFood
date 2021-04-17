@@ -24,7 +24,7 @@ import util.exception.InvalidLoginCredentialException;
 /**
  * REST Web Service
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Path("reviewManagement")
 public class ReviewManagementResource {

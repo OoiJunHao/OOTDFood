@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @WebFilter(filterName = "SecurityFilter", urlPatterns = {"/*"})
 public class SecurityFilter implements Filter {

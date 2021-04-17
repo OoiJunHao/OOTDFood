@@ -16,7 +16,7 @@ import javax.enterprise.context.RequestScoped;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Named(value = "faqManagedBean")
 @RequestScoped

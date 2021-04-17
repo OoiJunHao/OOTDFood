@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSessionListener;
 /**
  * Web application lifecycle listener.
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @WebListener
 public class OOTDFoodListener implements ServletContextListener, HttpSessionListener {

@@ -14,7 +14,7 @@ import javax.faces.view.ViewScoped;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Named(value = "dateManagedBean")
 @ViewScoped

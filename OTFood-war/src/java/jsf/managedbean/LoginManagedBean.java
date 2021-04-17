@@ -23,7 +23,7 @@ import util.exception.UserNotFoundException;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Named(value = "loginManagedBean")
 @RequestScoped

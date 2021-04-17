@@ -14,7 +14,7 @@ import util.exception.UnknownPersistenceException;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Local
 public interface FaqSessionBeanLocal {

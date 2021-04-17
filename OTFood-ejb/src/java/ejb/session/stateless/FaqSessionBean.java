@@ -19,7 +19,7 @@ import util.exception.UnknownPersistenceException;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Stateless
 public class FaqSessionBean implements FaqSessionBeanLocal {

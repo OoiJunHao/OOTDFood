@@ -16,7 +16,7 @@
             <div id="mainIntroduction" class="ui-g-12">
                 <h:outputText class="slogan" value="Eat Fresh, Be Happy"/>
                 <h:outputText class="appname" value="OOTD Food"/>
-                <p:commandButton class="orderbutton" value="Order Now"></p:commandButton>
+                <p:commandButton class="orderbutton" actionListener="#{indexManagedBean.redirectToBentoPage}" value="Order Now"></p:commandButton>
             </div>
             <p:separator />
             <h1 style="text-align: center; font-size: 40px; color: white">BENEFITS</h1>
@@ -48,7 +48,7 @@
                 </p:dataView>
             </h:form>
             <p:separator/>
-             <h1 style="text-align: center; font-size: 40px; color: white; font-family: Camphor,Open Sans,Segoe UI,sans-serif;">LATEST REVIEWS</h1>
+            <h1 style="text-align: center; font-size: 40px; color: white; font-family: Camphor,Open Sans,Segoe UI,sans-serif;">LATEST REVIEWS</h1>
             <div id="reviews" class="ui-g-12">
                 <p:carousel value="#{indexManagedBean.latestReviews}" var="product" responsive="true">
                     <div class="product">

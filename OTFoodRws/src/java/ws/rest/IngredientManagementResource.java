@@ -41,7 +41,7 @@ import ws.datamodel.UpdateIngredientReq;
 /**
  * REST Web Service
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Path("ingredientManagement")
 public class IngredientManagementResource {

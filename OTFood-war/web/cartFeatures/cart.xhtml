@@ -24,17 +24,21 @@
                         <div class="orderItems">
                             <div class="order-list-item p-p-5">
                                 <p:graphicImage class="image" url="/uploadedFiles/bentos/#{orders.meal.image}.jpg" alt="image" />
-                                <div class="order-list-detail">
-                                    <div class="meal-name">#{orders.meal.name}</div>
-                                    <div class="meal-quantity">Qty: #{orders.quantity}</div>
+                                <div class="order-list-wrapper">
+                                    <div class="order-list-detail">
+                                        <div class="meal-name">#{orders.meal.name}</div>
+                                        <div class="meal-quantity">Qty: #{orders.quantity}</div>
+                                    </div>
                                 </div>
-                                <div class="order-list-action">
-                                    <h:outputText value="#{orders.meal.price * orders.quantity}" styleClass="product-price">
-                                        <f:convertNumber currencySymbol="$" type="currency"/>
-                                    </h:outputText>
-                                    <p:commandButton value="Remove" icon="fa fa-remove" actionListener="#{cartManagedBean.removeFromCart}" process="@this" update="@form" style="font-size: 15px">
-                                        <f:attribute name="bento" value="#{orders.meal}"/>
-                                    </p:commandButton>
+                                <div class="order-list-buttons">
+                                    <div class="order-list-action">
+                                        <h:outputText value="#{orders.meal.price * orders.quantity}" styleClass="product-price">
+                                            <f:convertNumber currencySymbol="$" type="currency"/>
+                                        </h:outputText>
+                                        <p:commandButton value="Remove" icon="fa fa-remove" actionListener="#{cartManagedBean.removeFromCart}" process="@this" update="@form" style="font-size: 15px">
+                                            <f:attribute name="bento" value="#{orders.meal}"/>
+                                        </p:commandButton>
+                                    </div>
                                 </div>
                             </div>
                         </div>

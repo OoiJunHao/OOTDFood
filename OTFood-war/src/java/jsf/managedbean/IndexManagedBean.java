@@ -10,12 +10,15 @@ import ejb.session.stateless.MealEntitySessionBeanLocal;
 import ejb.session.stateless.ReviewEntitySessionBeanLocal;
 import entity.MealEntity;
 import entity.ReviewEntity;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
 /**
  *
@@ -30,25 +33,29 @@ public class IndexManagedBean {
 
     @EJB(name = "MealEntitySessionBeanLocal")
     private MealEntitySessionBeanLocal mealEntitySessionBeanLocal;
-      
+
     private List<MealEntity> top5Meals;
     private List<ReviewEntity> latestReviews;
     private List<RankingMeal> mealsWithRank;
-   
+
     public IndexManagedBean() {
         mealsWithRank = new ArrayList<>();
         top5Meals = new ArrayList<>();
         mealsWithRank = new ArrayList<>();
     }
-    
+
     @PostConstruct
     public void postConstruct() {
         top5Meals = mealEntitySessionBeanLocal.retrieveTop5MealEntityByRating();
         latestReviews = reviewEntitySessionBeanLocal.retrieveLatestReviews();
         for (int i = 0; i < top5Meals.size(); i++) {
-            mealsWithRank.add(new RankingMeal(top5Meals.get(i), i+1));
+            mealsWithRank.add(new RankingMeal(top5Meals.get(i), i + 1));
         }
-        
+
+    }
+
+    public void redirectToBentoPage(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/userPages/bento.xhtml");
     }
 
     public List<MealEntity> getTop5Meals() {
@@ -73,6 +80,6 @@ public class IndexManagedBean {
 
     public void setLatestReviews(List<ReviewEntity> latestReviews) {
         this.latestReviews = latestReviews;
-    }  
-        
+    }
+
 }

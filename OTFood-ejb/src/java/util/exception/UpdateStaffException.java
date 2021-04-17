@@ -7,7 +7,7 @@ package util.exception;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 public class UpdateStaffException extends Exception {
 

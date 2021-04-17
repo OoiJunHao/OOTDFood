@@ -33,7 +33,7 @@ import ws.datamodel.UpdateDriverReq;
 /**
  * REST Web Service
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Path("driverManagement")
 public class DriverManagementResource {

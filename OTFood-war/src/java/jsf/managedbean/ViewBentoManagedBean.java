@@ -99,6 +99,7 @@ public class ViewBentoManagedBean implements Serializable {
     }
 
     public void addBentoToCart(ActionEvent event) {
+        System.out.println(selectedBentoQuantity);
         cartManagedBean.setAmtToCart(selectedBentoQuantity);
         cartManagedBean.addToCart(selectedBento);
         selectedBentoQuantity = 1;
@@ -118,6 +119,7 @@ public class ViewBentoManagedBean implements Serializable {
         currentBentoReviews = selectedBento.getReviews();
 
         class comp implements Comparator<ReviewEntity> {
+
             @Override
             public int compare(ReviewEntity o1, ReviewEntity o2) {
                 if (o1.getReviewDate().after(o2.getReviewDate())) {

@@ -29,7 +29,7 @@ import util.security.CryptographicHelper;
 
 /**
  *
- * @author Mitsuki
+ * @author Ong Bik Jeun
  */
 @Stateless
 public class StaffEntitySessionBean implements StaffEntitySessionBeanLocal {
@@ -107,14 +107,14 @@ public class StaffEntitySessionBean implements StaffEntitySessionBeanLocal {
         try {
             StaffEntity staff = retrieveStaffByUsername(username);
             String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + staff.getSalt()));
-
+            System.out.println(passwordHash);
             if (staff.getPassword().equals(passwordHash)) {
                 return staff;
             } else {
                 throw new InvalidLoginCredentialException("Username does not exist or invalid password");
             }
         } catch (StaffNotFoundException ex) {
-            throw new InvalidLoginCredentialException("Username does not exist or invalid password");
+            throw new InvalidLoginCredentialException("Staff not found: " + ex.getMessage());
         }
     }
 
@@ -130,7 +130,7 @@ public class StaffEntitySessionBean implements StaffEntitySessionBeanLocal {
                 if (staffToUpdate.getUsername().equals(staff.getUsername())) {
                     staffToUpdate.setFirstname(staff.getFirstname());
                     staffToUpdate.setLastName(staff.getLastName());
-                    staffToUpdate.setType(staff.getType());                
+                    staffToUpdate.setType(staff.getType());
                 } else {
                     throw new UpdateStaffException("Username of staff to be updated does not match exiting records");
                 }
