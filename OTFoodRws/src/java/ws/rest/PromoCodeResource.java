@@ -7,13 +7,10 @@ package ws.rest;
 
 import ejb.session.stateless.PromoSessionBeanLocal;
 import ejb.session.stateless.StaffEntitySessionBeanLocal;
-import entity.MealEntity;
 import entity.PromoCodeEntity;
 import entity.SaleTransactionEntity;
 import entity.StaffEntity;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -67,6 +64,7 @@ public class PromoCodeResource {
                    saleTransaction.setDriver(null);
                    saleTransaction.setAddress(null);
                    saleTransaction.setCreditCardEntity(null);
+                   saleTransaction.setUser(null);
                }
            }
            GenericEntity<List<PromoCodeEntity>> genericEntity = new GenericEntity<List<PromoCodeEntity>>(listOfPromoCodes){};
