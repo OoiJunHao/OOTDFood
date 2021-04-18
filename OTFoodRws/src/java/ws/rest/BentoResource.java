@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.FacesContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -116,7 +117,7 @@ public class BentoResource {
             return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
         }
     }
-    
+
     @Path("retrieveByCategories")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -132,10 +133,11 @@ public class BentoResource {
                 }
             }
             return Response.status(Status.OK).entity(meals).build();
-    }   catch (InvalidLoginCredentialException ex) {
+        } catch (InvalidLoginCredentialException ex) {
             return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
         }
     }
+
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -225,9 +227,11 @@ public class BentoResource {
 
         System.out.println("************* Image being uploaded ******************");
 
-        //String uploadedFileLocation = "C:/glassfish-5.1.0-uploadedFiles/" + fileDetail.getFileName();
+        /*
+         * MAC Users please change the file path here to the correct one
+         */
         String uploadedFileLocation = "C:/glassfish-5.1.0-uploadedFiles/uploadedFiles/bentos/" + name + ".jpg";
-        // save it
+
         saveToFile(uploadedInputStream, uploadedFileLocation);
 
         String output = "File uploaded via Jersey based RESTFul Webservice to: " + uploadedFileLocation;

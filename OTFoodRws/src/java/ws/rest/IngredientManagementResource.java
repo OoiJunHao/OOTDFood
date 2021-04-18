@@ -129,9 +129,11 @@ public class IngredientManagementResource {
 
         System.out.println("************* Image being uploaded ******************");
 
-        //String uploadedFileLocation = "C:/glassfish-5.1.0-uploadedFiles/" + fileDetail.getFileName();
+        /*
+         * MAC Users please change the file path here to the correct one
+         */
         String uploadedFileLocation = "C:/glassfish-5.1.0-uploadedFiles/uploadedFiles/ingredients/" + name + ".jpg";
-        // save it
+
         saveToFile(uploadedInputStream, uploadedFileLocation);
 
         String output = "File uploaded via Jersey based RESTFul Webservice to: " + uploadedFileLocation;

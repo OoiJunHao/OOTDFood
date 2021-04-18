@@ -222,6 +222,9 @@ public class DriverResource {
     }
 
     public void decoder(String base64Image, String name) throws IOException {
+        /*
+         * MAC Users please change the file path here to the correct one
+         */ 
         try (FileOutputStream imageOutFile = new FileOutputStream("C:/glassfish-5.1.0-uploadedFiles/uploadedFiles/drivers/" + name + ".jpg")) {
             // Converting a Base64 String into Image byte array
             base64Image = base64Image.replace("\n", "");
@@ -238,6 +241,9 @@ public class DriverResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveProfilePicture(@QueryParam("driverId") long driverId) {
+        /*
+         * MAC Users please change the file path here to the correct one
+         */
         try {
             byte[] array = Files.readAllBytes(Paths.get("C:/glassfish-5.1.0-uploadedFiles/uploadedFiles/drivers/" + driverId + ".jpg"));
             String encodedString = Base64

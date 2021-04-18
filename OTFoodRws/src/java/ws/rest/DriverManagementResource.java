@@ -141,9 +141,7 @@ public class DriverManagementResource {
         try {
             driverEntitySessionBean.setDriverToSaleTransaction(driverId, customerId, saleTransactionId);
             return Response.status(Response.Status.OK).build();
-        } catch (DriverNotFoundException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
-        } catch (NoSaleTransactionFoundException ex) {
+        } catch (DriverNotFoundException | NoSaleTransactionFoundException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
         } catch (DriverAlreadyFoundException ex) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
